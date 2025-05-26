@@ -1,11 +1,20 @@
 import { defineApp } from 'rwsdk/worker'
-import { index, render } from 'rwsdk/router'
-import { timeRoutes } from './app/time/timeRoutes'
+import { index, render, route } from 'rwsdk/router'
+import { realtimeRoute } from 'rwsdk/realtime/worker'
+export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
 import { Document } from './app/Document'
 import { Home } from './app/Home'
-export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
+import { Chat } from './app/chat/Chat'
+import { Time } from './app/time/Time'
+import { timeApi } from './app/time/api'
+import { env } from 'cloudflare:workers'
 
 export default defineApp([
-  render(Document, [index(Home)]),
-  ...timeRoutes
+  realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
+  render(Document, [
+    index(Home),
+    route('/chat', Chat),
+    route('/time', Time)
+  ]),
+  ...timeApi
 ])
