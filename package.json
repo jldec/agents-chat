@@ -1,5 +1,5 @@
 {
-  "name": "redwood-minimal-rsc",
+  "name": "agents-chat",
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
@@ -12,10 +12,12 @@
     "types": "wrangler types --include-runtime false"
   },
   "dependencies": {
+    "agents": "^0.0.93",
+    "ai": "^4.3.16",
     "rwsdk": "0.0.85"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250522.0",
+    "@cloudflare/workers-types": "^4.20250525.0",
     "@tailwindcss/vite": "^4.1.7",
     "@types/node": "^22.15.21",
     "@types/react": "^19.1.5",

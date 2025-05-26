@@ -6,10 +6,10 @@ export function Home() {
         Time
       </a>
       <a
-        href="https://github.com/jldec/redwood-minimal-rsc#readme"
+        href="https://github.com/jldec/agents-chat#readme"
         className="text-blue-600 p-2 underline mb-8 text-base"
       >
-        github.com/jldec/redwood-minimal-rsc
+        github.com/jldec/agents-chat
       </a>
     </div>
   )
