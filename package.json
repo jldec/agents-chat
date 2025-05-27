@@ -14,8 +14,11 @@
     "@ai-sdk/react": "^1.2.12",
     "agents": "^0.0.93",
     "ai": "^4.3.16",
+    "clsx": "^2.1.1",
+    "eventsource-parser": "^3.0.2",
     "nanoid": "^5.1.5",
     "rwsdk": "0.0.85",
+    "tailwind-merge": "^3.3.0",
     "workers-ai-provider": "^0.5.2"
   },
   "devDependencies": {
