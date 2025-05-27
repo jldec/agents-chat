@@ -8,6 +8,7 @@ export function MessageInput() {
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (input.trim() === '') return
     const lastId = await newMessage(input)
     setLastId(lastId)
     setInput('')
