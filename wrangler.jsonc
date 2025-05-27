@@ -7,12 +7,17 @@
   "observability": {
     "enabled": true
   },
+  "ai": { "binding": "AI" },
   "vars": {},
   "durable_objects": {
     "bindings": [
       {
         "name": "REALTIME_DURABLE_OBJECT",
         "class_name": "RealtimeDurableObject"
+      },
+      {
+        "name": "CHAT_DURABLE_OBJECT",
+        "class_name": "ChatDurableObject"
       }
     ]
   },
@@ -20,6 +25,10 @@
     {
       "tag": "v1",
       "new_classes": ["RealtimeDurableObject"]
+    },
+    {
+      "tag": "v1",
+      "new_classes": ["ChatDurableObject"]
     }
   ]
 }
