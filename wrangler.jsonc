@@ -24,11 +24,7 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_classes": ["RealtimeDurableObject"]
-    },
-    {
-      "tag": "v1",
-      "new_classes": ["ChatDurableObject"]
+      "new_classes": ["RealtimeDurableObject", "ChatDurableObject"]
     }
   ]
 }
