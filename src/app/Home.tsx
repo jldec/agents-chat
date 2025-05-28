@@ -3,8 +3,11 @@ export function Home() {
     <div className="flex flex-col items-center min-h-screen text-sm">
       <h1 className="text-xl font-bold my-2">RedwoodSDK minimal RSC demo</h1>
       <div className="flex flex-row gap-2">
-        <a href="chat" className="text-blue-600 p-2 underline mb-8 text-base">
-          Chat
+      <a href="chat" className="text-blue-600 p-2 underline mb-8 text-base">
+          Chat RSC
+        </a>
+        <a href="chat-client" className="text-blue-600 p-2 underline mb-8 text-base">
+          Chat client
         </a>
         <a href="time" className="text-blue-600 p-2 underline mb-8 text-base">
           Time

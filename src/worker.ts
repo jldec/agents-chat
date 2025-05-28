@@ -15,8 +15,9 @@ export default defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
   render(Document, [
     index(Home),
-    route('/chat', Chat),
-    route('/time', Time)
+    route('/chat', Chat), // realtime RSC
+    route('/chat-client', Chat), // client-side react app
+    route('/time', Time) // realtime RSC
   ]),
   ...timeApi
 ])

@@ -18,6 +18,7 @@ export async function newMessage(prompt: string) {
   await chat.setMessage(message)
   console.log('newMessage', message.id)
   await askAI(chat)
+  await syncRealtimeClients()
   return message.id
 }
 
@@ -29,11 +30,20 @@ export async function getMessages() {
 export async function clearMessages() {
   const chat = resolve(CHAT_ID)
   await chat.clearMessages()
+  await syncRealtimeClients()
 }
 
 function resolve(chatID: string) {
   const id: DurableObjectId = env.CHAT_DURABLE_OBJECT.idFromName(chatID)
   return env.CHAT_DURABLE_OBJECT.get(id)
+}
+
+async function syncRealtimeClients() {
+  // TODO: throttle
+  await renderRealtimeClients({
+    durableObjectNamespace: env.REALTIME_DURABLE_OBJECT,
+    key: REALTIME_KEY
+  })
 }
 
 async function askAI(chat: DurableObjectStub<ChatDurableObject>) {
@@ -67,11 +77,7 @@ async function askAI(chat: DurableObjectStub<ChatDurableObject>) {
       if (event.data !== '[DONE]') {
         aiMessage.content += JSON.parse(event.data).response
         await chat.setMessage(aiMessage)
-        // TODO: throttle?
-        await renderRealtimeClients({
-          durableObjectNamespace: env.REALTIME_DURABLE_OBJECT,
-          key: REALTIME_KEY
-        })
+        await syncRealtimeClients()
         console.log('aiMessage updated')
       } else {
         break
