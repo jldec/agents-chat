@@ -6,13 +6,12 @@ import { ChatClient } from './ChatClient'
 
 export async function Chat() {
   const isRSC = !requestInfo.request.url.includes('/chat-client')
-  console.log(`Chat ${isRSC ? 'RSC' : 'Client'} route`)
   return (
     <div className="text-sm p-2 relative max-w-2xl mx-auto">
       <a href="/" className="text-blue-600 underline text-base absolute top-0 right-0 pt-4 pr-3">
         Home
       </a>
-      <h1 className="text-xl font-bold my-2">RedwoodSDK {isRSC ? 'RSC' : 'Client'} Chat</h1>
+      <h1 className="text-xl font-bold my-2">RedwoodSDK {isRSC ? 'RSC' : 'WIP Client'} Chat</h1>
       <div className="w-full text-left">
         {isRSC ? (
           <>

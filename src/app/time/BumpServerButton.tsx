@@ -3,11 +3,9 @@
 import { useState } from 'react'
 
 export function BumpServerButton() {
-  console.log('BumpServerButton')
   const [val, setVal] = useState('Cross-client realtime update')
 
   async function handleClick() {
-    console.log('BumpServerButton clicked - calling /api/bump')
       const res = await fetch('/api/bump')
       const text = await res.text()
       setVal(`fetch /api/bump: ${text}`)

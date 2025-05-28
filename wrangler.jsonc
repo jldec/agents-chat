@@ -18,6 +18,10 @@
       {
         "name": "CHAT_DURABLE_OBJECT",
         "class_name": "ChatDurableObject"
+      },
+      {
+        "name": "WEBSOCKET_AGENT",
+        "class_name": "WebsocketAgent"
       }
     ]
   },
@@ -25,6 +29,10 @@
     {
       "tag": "v1",
       "new_classes": ["RealtimeDurableObject", "ChatDurableObject"]
+    },
+    {
+      "tag": "v2",
+      "new_sqlite_classes": ["WebsocketAgent"]
     }
   ]
 }

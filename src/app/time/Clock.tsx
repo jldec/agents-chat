@@ -4,7 +4,6 @@ import { time } from './utils'
 import { useState, useEffect } from 'react'
 
 export function Clock() {
-  console.log('Clock')
   const [val, setVal] = useState('Clock')
 
   useEffect(() => {

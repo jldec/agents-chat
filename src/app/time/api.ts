@@ -4,7 +4,6 @@ import { env } from 'cloudflare:workers'
 import { time } from './utils'
 
 async function handleBump() {
-  console.log('handle /api/bump')
   await renderRealtimeClients({
     durableObjectNamespace: env.REALTIME_DURABLE_OBJECT,
     key: 'rwsdk-realtime-demo'
@@ -13,7 +12,6 @@ async function handleBump() {
 }
 
 async function handleTime() {
-  console.log('handle /api/time')
   return new Response(time())
 }
 

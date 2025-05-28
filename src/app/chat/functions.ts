@@ -7,6 +7,7 @@ import { renderRealtimeClients } from 'rwsdk/realtime/worker'
 
 const CHAT_ID = 'agents-chat'
 const REALTIME_KEY = 'rwsdk-realtime-chat'
+const WEBSOCKET_AGENT_NAME = 'rwsdk-chat-client'
 
 export async function newMessage(prompt: string) {
   const message: Message = {
@@ -16,7 +17,6 @@ export async function newMessage(prompt: string) {
   }
   const chat = resolve(CHAT_ID)
   await chat.setMessage(message)
-  console.log('newMessage', message.id)
   await askAI(chat)
   await syncRealtimeClients()
   return message.id
@@ -78,7 +78,6 @@ async function askAI(chat: DurableObjectStub<ChatDurableObject>) {
         aiMessage.content += JSON.parse(event.data).response
         await chat.setMessage(aiMessage)
         await syncRealtimeClients()
-        console.log('aiMessage updated')
       } else {
         break
       }
