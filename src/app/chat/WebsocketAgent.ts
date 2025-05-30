@@ -1,9 +1,9 @@
-import { Agent, Connection, type ConnectionContext, type WSMessage } from "agents";
+import { Agent, Connection, type ConnectionContext, type WSMessage } from 'agents'
+import type { Message } from './ChatStore'
 
 // https://developers.cloudflare.com/agents/api-reference/agents-api/
 // https://developers.cloudflare.com/agents/api-reference/websockets/
 export class WebsocketAgent extends Agent<Env> {
-
   async onConnect(connection: Connection, ctx: ConnectionContext) {
     console.log('onConnect', connection.server)
   }
@@ -13,8 +13,13 @@ export class WebsocketAgent extends Agent<Env> {
     await connection.send(message) // echo
   }
 
-  async syncClients() {
-    console.log('syncClients')
+  async bumpClients() {
+    console.log('bump')
     this.broadcast('bump')
+  }
+
+  async syncMessage(message: Message) {
+    console.log('syncMessage', message.id)
+    this.broadcast(JSON.stringify(message))
   }
 }

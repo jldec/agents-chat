@@ -14,9 +14,25 @@ export function ChatClient() {
     agent: "websocket-agent",
     name: "rwsdk-chat-client",
     onMessage: (message) => {
-      console.log(message.data);
       if (message.data === 'bump') {
         setBump((bump) => bump + 1)
+        console.log('bump', bump)
+      }
+      if (message.data.startsWith('{')) {
+        const msg = JSON.parse(message.data) as Message
+        console.log('message', msg.content.length)
+        setMessages((messages) => {
+          const index = messages.findIndex(m => m.id === msg.id);
+          if (index !== -1) {
+            // Update the existing message
+            const updatedMessages = [...messages];
+            updatedMessages[index] = msg;
+            return updatedMessages;
+          } else {
+            // Add the new message
+            return [...messages, msg];
+          }
+        });
       }
     },
     onOpen: () => console.log("Connection established"),
@@ -24,6 +40,7 @@ export function ChatClient() {
   });
 
   useEffect(() => {
+    console.log('fetching messages')
     async function fetchMessages() {
       const msgs = await getMessages()
       setMessages(msgs as Message[])
