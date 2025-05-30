@@ -3,6 +3,7 @@ import { Agent, Connection, type ConnectionContext, type WSMessage } from "agent
 // https://developers.cloudflare.com/agents/api-reference/agents-api/
 // https://developers.cloudflare.com/agents/api-reference/websockets/
 export class WebsocketAgent extends Agent<Env> {
+
   async onConnect(connection: Connection, ctx: ConnectionContext) {
     console.log('onConnect', connection.server)
   }
@@ -10,5 +11,10 @@ export class WebsocketAgent extends Agent<Env> {
   async onMessage(connection: Connection, message: WSMessage) {
     console.log('onMessage', message)
     await connection.send(message) // echo
+  }
+
+  async syncClients() {
+    console.log('syncClients')
+    this.broadcast('bump')
   }
 }

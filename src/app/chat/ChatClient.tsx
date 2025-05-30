@@ -8,12 +8,16 @@ import { useAgent } from "agents/react";
 
 export function ChatClient() {
   const [messages, setMessages] = useState<Message[]>([])
+  const [bump, setBump] = useState(0)
 
   const connection = useAgent({
     agent: "websocket-agent",
     name: "rwsdk-chat-client",
     onMessage: (message) => {
-      console.log("Understanding received:", message.data);
+      console.log(message.data);
+      if (message.data === 'bump') {
+        setBump((bump) => bump + 1)
+      }
     },
     onOpen: () => console.log("Connection established"),
     onClose: () => console.log("Connection closed"),
@@ -25,7 +29,7 @@ export function ChatClient() {
       setMessages(msgs as Message[])
     }
     fetchMessages()
-  }, [])
+  }, [bump])
 
   function handleSend(message: string) {
     connection.send(message)

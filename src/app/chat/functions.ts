@@ -15,27 +15,39 @@ export async function newMessage(prompt: string) {
     role: 'user',
     content: prompt
   }
-  const chat = resolve(CHAT_ID)
-  await chat.setMessage(message)
-  await askAI(chat)
+  const chatStore = resolveChatStore(CHAT_ID)
+  await chatStore.setMessage(message)
+  await askAI(chatStore)
   await syncRealtimeClients()
+  await syncWebsocketAgentClients(WEBSOCKET_AGENT_NAME)
   return message.id
 }
 
 export async function getMessages() {
-  const chat = resolve(CHAT_ID)
-  return chat.getMessages()
+  const chatStore = resolveChatStore(CHAT_ID)
+  return chatStore.getMessages()
 }
 
 export async function clearMessages() {
-  const chat = resolve(CHAT_ID)
-  await chat.clearMessages()
+  const chatStore = resolveChatStore(CHAT_ID)
+  await chatStore.clearMessages()
   await syncRealtimeClients()
+  await syncWebsocketAgentClients(WEBSOCKET_AGENT_NAME)
 }
 
-function resolve(chatID: string) {
+function resolveChatStore(chatID: string) {
   const id: DurableObjectId = env.CHAT_DURABLE_OBJECT.idFromName(chatID)
   return env.CHAT_DURABLE_OBJECT.get(id)
+}
+
+function resolveWebsocketAgent(agentName: string) {
+  const id: DurableObjectId = env.WEBSOCKET_AGENT.idFromName(agentName)
+  return env.WEBSOCKET_AGENT.get(id)
+}
+
+async function syncWebsocketAgentClients(agentName: string) {
+  const agent = resolveWebsocketAgent(agentName)
+  await agent.syncClients()
 }
 
 async function syncRealtimeClients() {
@@ -78,6 +90,7 @@ async function askAI(chat: DurableObjectStub<ChatDurableObject>) {
         aiMessage.content += JSON.parse(event.data).response
         await chat.setMessage(aiMessage)
         await syncRealtimeClients()
+        await syncWebsocketAgentClients(WEBSOCKET_AGENT_NAME)
       } else {
         break
       }
