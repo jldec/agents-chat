@@ -48,15 +48,10 @@ export function ChatClient() {
     fetchMessages()
   }, [bump])
 
-  function handleSend(message: string) {
-    connection.send(message)
-  }
-
   return (
     <>
       <MessageList messages={messages} />
       <MessageInput />
-      <button onClick={() => handleSend('Hello, world!')} className="border-blue-500 cursor-pointer hover:translate-y-0.5 border-1 p-2 rounded-md mt-2">Send</button>
     </>
   )
 }
