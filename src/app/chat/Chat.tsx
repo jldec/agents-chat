@@ -3,6 +3,7 @@ import { MessageInput } from './MessageInput'
 import { requestInfo } from 'rwsdk/worker'
 import { getMessages } from './functions'
 import { ChatClient } from './ChatClient'
+import { ObserveDOM } from './ObserveDOM'
 
 export async function Chat() {
   const isRSC = !requestInfo.request.url.includes('/chat-client')
@@ -22,6 +23,7 @@ export async function Chat() {
           <ChatClient />
         )}
       </div>
+      <ObserveDOM nodeId="message-list" />
     </div>
   )
 }
