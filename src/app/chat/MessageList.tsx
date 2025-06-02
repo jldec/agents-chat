@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import type { Message } from './ChatStore'
 
-// No hooks - component runs in both RSC and client
+// No hooks - component can run in both RSC and client
 export function MessageList({ messages }: { messages: Message[] }) {
   return (
     <div id="message-list" className="flex flex-col gap-2 max-w-2xl">

@@ -5,8 +5,9 @@ import { Document } from './app/Document'
 import { Home } from './app/Home'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { ChatAgent } from './app/chat-agent/ChatAgent'
+import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { Time } from './app/time/Time'
-import { timeApi } from './app/time/api'
+import { timeApiRoutes } from './app/time/api-routes'
 import { env } from 'cloudflare:workers'
 import { routeAgentRequest } from 'agents'
 import { redirectRoutes } from './app/utils/redirects'
@@ -17,7 +18,7 @@ export { WebsocketAgent } from './app/chat-agent/WebsocketAgent'
 
 export default defineApp([
   // https://developers.cloudflare.com/agents/api-reference/calling-agents/
-  route('/agents/*', async ({ request }) => {
+  route(`/agents/${env.WEBSOCKET_AGENT_PATH}/${env.WEBSOCKET_AGENT_NAME}`, async ({ request }) => {
     return (await routeAgentRequest(request, env)) || Response.json({ msg: 'no agent here' }, { status: 404 })
   }),
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
@@ -27,9 +28,10 @@ export default defineApp([
     route('/chat-agent', ChatAgent), // client-side react app
     route('/time', Time) // realtime RSC
   ]),
+  ...chatAgentApiRoutes,
+  ...timeApiRoutes,
   ...redirectRoutes([
     { from: '/chat', to: '/chat-rsc' },
     { from: '/chat-client', to: '/chat-agent' }
-  ]),
-  ...timeApi
+  ])
 ])

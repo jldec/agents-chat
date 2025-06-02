@@ -1,8 +1,12 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { newMessage, clearMessages } from '../chat-rsc/functions'
 
-export function MessageInput() {
+interface MessageInputProps {
+  onSubmit: (prompt: string) => Promise<void>
+  onClear: () => Promise<void>
+}
+
+export function MessageInput({ onSubmit, onClear }: MessageInputProps) {
   const [input, setInput] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -20,12 +24,14 @@ export function MessageInput() {
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (input.trim() === '') return
+    const prompt = input
     setInput('')
-    await newMessage(input)
+    await onSubmit(prompt)
   }
+
   async function clear(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault()
-    await clearMessages()
+    await onClear()
   }
   return (
     <form onSubmit={submit} className="mt-2 mb-[10vh] flex flex-row gap-2 max-w-2xl">

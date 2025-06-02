@@ -15,7 +15,7 @@ async function handleTime() {
   return new Response(time())
 }
 
-export const timeApi = [
+export const timeApiRoutes = [
   route('/api/time', handleTime),
   route('/api/bump', handleBump)
 ]
