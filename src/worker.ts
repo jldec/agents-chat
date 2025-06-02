@@ -1,4 +1,5 @@
 import { defineApp } from 'rwsdk/worker'
+import type { RequestInfo } from 'rwsdk/worker'
 import { index, render, route } from 'rwsdk/router'
 import { realtimeRoute } from 'rwsdk/realtime/worker'
 import { Document } from './app/Document'
@@ -33,5 +34,13 @@ export default defineApp([
   ...redirectRoutes([
     { from: '/chat', to: '/chat-rsc' },
     { from: '/chat-client', to: '/chat-agent' }
-  ])
+  ]),
+  route('/echo', async (requestInfo: RequestInfo) => {
+    return Response.json({
+      url: requestInfo.request.url,
+      method: requestInfo.request.method,
+      headers: Object.fromEntries(requestInfo.request.headers),
+      body: await requestInfo.request.text()
+    })
+  })
 ])
