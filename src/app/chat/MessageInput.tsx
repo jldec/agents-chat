@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { newMessage, clearMessages } from './functions'
+import { newMessage, clearMessages } from '../chat-rsc/functions'
 
 export function MessageInput() {
   const [input, setInput] = useState('')

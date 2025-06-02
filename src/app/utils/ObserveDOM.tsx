@@ -1,11 +1,8 @@
 'use client'
 import { useEffect } from 'react'
 
-interface ObserveDOMProps {
-  nodeId: string
-}
-
-export function ObserveDOM({ nodeId }: ObserveDOMProps) {
+// Utility component to observe DOM changes
+export function ObserveDOM({ nodeId }: { nodeId: string }) {
   useEffect(() => {
     const node = document.getElementById(nodeId)
     if (!node) return

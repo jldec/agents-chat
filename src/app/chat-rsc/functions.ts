@@ -2,7 +2,7 @@
 import { env } from 'cloudflare:workers'
 import { nanoid } from 'nanoid'
 import { EventSourceParserStream } from 'eventsource-parser/stream'
-import type { ChatDurableObject, Message } from './ChatStore'
+import type { ChatDurableObject, Message } from '../chat/ChatStore'
 import { renderRealtimeClients } from 'rwsdk/realtime/worker'
 
 const CHAT_ID = 'agents-chat'

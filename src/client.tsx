@@ -1,18 +1,21 @@
 import { initRealtimeClient } from 'rwsdk/realtime/client'
-import { initClient } from "rwsdk/client";
+import { initClient } from 'rwsdk/client'
 
 switch (window.location.pathname) {
-  case '/chat':
+  case '/chat-rsc':
     initRealtimeClient({
-      key: 'rwsdk-realtime-chat',
+      key: 'rwsdk-realtime-chat'
     })
     break
   case '/time':
     initRealtimeClient({
-      key: 'rwsdk-realtime-demo',
+      key: 'rwsdk-realtime-demo'
     })
     break
-  case '/chat-client':
-    initClient();
+  case '/chat-agent':
+  case '/':
+    initClient()
     break
+  default:
+    console.error(new Error(`no rwsdk client init for ${window.location.pathname}`))
 }

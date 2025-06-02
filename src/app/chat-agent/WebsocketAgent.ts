@@ -1,5 +1,5 @@
 import { Agent, Connection, type ConnectionContext, type WSMessage } from 'agents'
-import type { Message } from './ChatStore'
+import type { Message } from '../chat/ChatStore'
 
 // https://developers.cloudflare.com/agents/api-reference/agents-api/
 // https://developers.cloudflare.com/agents/api-reference/websockets/

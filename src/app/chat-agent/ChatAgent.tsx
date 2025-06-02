@@ -1,12 +1,13 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { MessageList } from './MessageList'
-import { MessageInput } from './MessageInput'
-import { getMessages } from './functions'
-import type { Message } from './ChatStore'
+import { MessageList } from '../chat/MessageList'
+import { MessageInput } from '../chat/MessageInput'
+import { ChatLayout } from '../chat/ChatLayout'
+import { getMessages } from '../chat-rsc/functions'
+import type { Message } from '../chat/ChatStore'
 import { useAgent } from "agents/react";
 
-export function ChatClient() {
+export function ChatAgent() {
   const [messages, setMessages] = useState<Message[]>([])
   const [bump, setBump] = useState(0)
 
@@ -49,9 +50,9 @@ export function ChatClient() {
   }, [bump])
 
   return (
-    <>
+    <ChatLayout title="RedwoodSDK Agent Chat">
       <MessageList messages={messages} />
       <MessageInput />
-    </>
+    </ChatLayout>
   )
 }
