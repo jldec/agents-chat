@@ -4,6 +4,7 @@ import type { Message } from '../chat/ChatStore'
 import { askAI } from '../chat/askAI'
 import { route } from 'rwsdk/router'
 import type { RequestInfo } from 'rwsdk/worker'
+import type { WebsocketAgent } from './WebsocketAgent'
 
 async function GET() {
   try {
@@ -19,7 +20,7 @@ async function DELETE() {
   try {
     const chatStore = resolveChatStore(env.CHAT_ID)
     await chatStore.clearMessages()
-    await syncWebsocketAgentClients(env.WEBSOCKET_AGENT_NAME)
+    await syncWebsocketAgentClients()
     return Response.json({ success: true })
   } catch (error) {
     return Response.json({ error: 'Failed to clear messages' }, { status: 500 })
@@ -62,8 +63,8 @@ async function newMessage(prompt: string) {
   }
   const chatStore = resolveChatStore(env.CHAT_ID)
   await chatStore.setMessage(message)
-  await syncWebsocketAgentClients(env.WEBSOCKET_AGENT_NAME)
-  await askAI(chatStore, syncMessage)
+  await syncWebsocketAgentClients()
+  await askAI({ chatStore, onUpdate, saveBeforeUpdate: false })
 }
 
 function resolveChatStore(chatID: string) {
@@ -71,17 +72,25 @@ function resolveChatStore(chatID: string) {
   return env.CHAT_DURABLE_OBJECT.get(id)
 }
 
-function resolveWebsocketAgent(agentName: string) {
-  const id: DurableObjectId = env.WEBSOCKET_AGENT.idFromName(agentName)
-  return env.WEBSOCKET_AGENT.get(id)
+// TODO: figure out how to memoize properly
+// let websocketAgentMemo: DurableObjectStub<WebsocketAgent> | null = null
+// if (websocketAgentMemo) {
+//   return websocketAgentMemo
+// }
+// websocketAgentMemo = agent
+
+function resolveWebsocketAgent() {
+  const id = env.WEBSOCKET_AGENT.idFromName(env.WEBSOCKET_AGENT_NAME)
+  const agent = env.WEBSOCKET_AGENT.get(id)
+  return agent
 }
 
-async function syncWebsocketAgentClients(agentName: string) {
-  const agent = resolveWebsocketAgent(agentName)
+async function syncWebsocketAgentClients() {
+  const agent = resolveWebsocketAgent()
   await agent.bumpClients()
 }
 
-async function syncMessage(message: Message) {
-  const agent = resolveWebsocketAgent(env.WEBSOCKET_AGENT_NAME)
-  await agent.syncMessage(message)
+function onUpdate(message: Message) {
+  const agent = resolveWebsocketAgent()
+  agent.syncMessage(message) // INTENTIONALLY NOT AWAITED to improve streaming performance
 }

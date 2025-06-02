@@ -3,7 +3,15 @@ import { EventSourceParserStream } from 'eventsource-parser/stream'
 import { nanoid } from 'nanoid'
 import type { ChatDurableObject, Message } from '../chat/ChatStore'
 
-export async function askAI(chatStore: DurableObjectStub<ChatDurableObject>, onUpdate: (message: Message) => Promise<void>) {
+export async function askAI({
+  chatStore,
+  onUpdate,
+  saveBeforeUpdate: saveBeforeUpdate = true
+}: {
+  chatStore: DurableObjectStub<ChatDurableObject>
+  onUpdate: (message: Message) => void // INTENTIONALLY NOT AWAITED to improve streaming performance
+  saveBeforeUpdate: boolean
+}) {
   const messages = await chatStore.getMessages()
   const systemMessage = {
     role: 'system',
@@ -13,15 +21,10 @@ export async function askAI(chatStore: DurableObjectStub<ChatDurableObject>, onU
     // @ts-expect-error (small llama model is no longer in the catalog)
     const aiMessageStream = (await env.AI.run('@cf/meta/llama-3.1-8b-instruct-fp8-fast', {
       stream: true,
-      messages: [
-        systemMessage,
-        ...messages
-      ]
+      messages: [systemMessage, ...messages]
     })) as ReadableStream
 
-    const eventStream = aiMessageStream
-      .pipeThrough(new TextDecoderStream())
-      .pipeThrough(new EventSourceParserStream())
+    const eventStream = aiMessageStream.pipeThrough(new TextDecoderStream()).pipeThrough(new EventSourceParserStream())
 
     const aiMessage: Message = {
       id: nanoid(8),
@@ -33,10 +36,13 @@ export async function askAI(chatStore: DurableObjectStub<ChatDurableObject>, onU
     for await (const event of eventStream) {
       if (event.data !== '[DONE]') {
         aiMessage.content += JSON.parse(event.data).response
-        await chatStore.setMessage(aiMessage)
-        await onUpdate(aiMessage)
+        if (saveBeforeUpdate) {
+          await chatStore.setMessage(aiMessage)
+        }
+        onUpdate(aiMessage)
       } else {
-        break
+        await chatStore.setMessage(aiMessage)
+        onUpdate(aiMessage)
       }
     }
     return aiMessage

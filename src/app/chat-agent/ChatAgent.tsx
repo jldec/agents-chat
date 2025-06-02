@@ -17,11 +17,11 @@ export function ChatAgent() {
     onMessage: (message) => {
       if (message.data === 'bump') {
         setBump((bump) => bump + 1)
-        console.log('bump', bump)
       }
+      // Very lazy way to detect update messages
+      // TODO: message types
       if (message.data.startsWith('{')) {
         const msg = JSON.parse(message.data) as Message
-        console.log('message', msg.content.length)
         setMessages((messages) => {
           const index = messages.findIndex((m) => m.id === msg.id)
           if (index !== -1) {
@@ -41,7 +41,6 @@ export function ChatAgent() {
   })
 
   useEffect(() => {
-    console.log('fetching messages')
     async function fetchMessages() {
       const msgs = await getMessages()
       setMessages(msgs as Message[])

@@ -19,7 +19,6 @@ export class WebsocketAgent extends Agent<Env> {
   }
 
   async syncMessage(message: Message) {
-    console.log('syncMessage', message.id, message.content.length)
     this.broadcast(JSON.stringify(message))
   }
 }

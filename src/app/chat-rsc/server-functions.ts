@@ -14,7 +14,7 @@ export async function newMessage(prompt: string): Promise<void> {
   const chatStore = resolveChatStore(env.CHAT_ID)
   await chatStore.setMessage(message)
   await syncRealtimeClients()
-  await askAI(chatStore, syncMessage)
+  await askAI({ chatStore, onUpdate, saveBeforeUpdate: true })
 }
 
 export async function getMessages(): Promise<Message[]> {
@@ -41,6 +41,6 @@ async function syncRealtimeClients() {
   })
 }
 
-async function syncMessage(message: Message) {
-  await syncRealtimeClients()
+function onUpdate(message: Message) {
+  syncRealtimeClients() // INTENTIONALLY NOT AWAITED to improve streaming performance
 }

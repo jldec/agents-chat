@@ -1,5 +1,3 @@
-import { ObserveDOM } from '../utils/ObserveDOM'
-
 interface ChatLayoutProps {
   title: string
   children: React.ReactNode
@@ -15,7 +13,6 @@ export function ChatLayout({ title, children }: ChatLayoutProps) {
       <div className="w-full text-left">
         {children}
       </div>
-      <ObserveDOM nodeId="message-list" />
     </div>
   )
 }
