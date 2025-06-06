@@ -15,8 +15,10 @@
     "clsx": "^2.1.1",
     "eventsource-parser": "^3.0.2",
     "nanoid": "^5.1.5",
+    "reconnecting-websocket": "^4.4.0",
     "rwsdk": "0.0.88",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "tinybase": "^6.2.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250601.0",

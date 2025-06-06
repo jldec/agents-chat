@@ -12,7 +12,8 @@
     "CHAT_ID": "agents-chat-agent",
     "REALTIME_KEY": "rwsdk-realtime-chat",
     "WEBSOCKET_AGENT_PATH": "websocket-agent", // matches class-name, duplicated in ChatAgent.tsx
-    "WEBSOCKET_AGENT_NAME": "rwsdk-chat-client" // duplicated in ChatAgent.tsx
+    "WEBSOCKET_AGENT_NAME": "rwsdk-chat-client", // duplicated in ChatAgent.tsx
+    "TINYBASE_SYNC_ROUTE": "/tinybase/websocket/sync" // duplicated in ChatTinybase.tsx
   },
   "durable_objects": {
     "bindings": [
@@ -27,6 +28,10 @@
       {
         "name": "WEBSOCKET_AGENT",
         "class_name": "WebsocketAgent"
+      },
+      {
+        "name": "TINYBASE_DO",
+        "class_name": "TinyBaseDurableObject"
       }
     ]
   },
@@ -38,6 +43,10 @@
     {
       "tag": "v2",
       "new_sqlite_classes": ["WebsocketAgent"]
+    },
+    {
+      "tag": "v3",
+      "new_sqlite_classes": ["TinyBaseDurableObject"]
     }
   ]
 }
