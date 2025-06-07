@@ -1,18 +1,27 @@
 import { env } from 'cloudflare:workers'
 import { EventSourceParserStream } from 'eventsource-parser/stream'
 import { nanoid } from 'nanoid'
-import type { ChatDurableObject, Message } from '../chat/ChatStore'
+import type { Message } from '../chat/ChatStore'
 
+/**
+ * Asks the AI for a response based on the provided messages.
+ *
+ * @param {Object} params - The parameters for the function.
+ * @param {Message[]} params.messages - An array of messages to send to the AI.
+ * @param {function} params.onUpdate - A callback function that is called with each update from the AI.
+ *
+ * @returns {Promise<Message>} A promise that resolves to the final AI message.
+ *
+ * @throws {Error} Throws an error if the AI request fails.
+ */
 export async function askAI({
-  chatStore,
-  onUpdate,
-  saveBeforeUpdate: saveBeforeUpdate = true
+  messages,
+  onUpdate
 }: {
-  chatStore: DurableObjectStub<ChatDurableObject>
+  messages: Message[]
   onUpdate: (message: Message) => void // INTENTIONALLY NOT AWAITED to improve streaming performance
-  saveBeforeUpdate: boolean
 }) {
-  const messages = await chatStore.getMessages()
+  console.log('askAI', messages)
   const systemMessage = {
     role: 'system',
     content: 'You are a helpful and delightful assistant'
@@ -36,14 +45,8 @@ export async function askAI({
     for await (const event of eventStream) {
       if (event.data !== '[DONE]') {
         aiMessage.content += JSON.parse(event.data).response
-        if (saveBeforeUpdate) {
-          await chatStore.setMessage(aiMessage)
-        }
-        onUpdate(aiMessage)
-      } else {
-        await chatStore.setMessage(aiMessage)
-        onUpdate(aiMessage)
       }
+      onUpdate(aiMessage)
     }
     return aiMessage
   } catch (err) {

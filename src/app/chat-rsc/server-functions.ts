@@ -14,7 +14,10 @@ export async function newMessage(prompt: string): Promise<void> {
   const chatStore = resolveChatStore(env.CHAT_ID)
   await chatStore.setMessage(message)
   await syncRealtimeClients()
-  await askAI({ chatStore, onUpdate, saveBeforeUpdate: true })
+  await askAI({ messages: await chatStore.getMessages(), onUpdate: (aiMessage) => {
+    chatStore.setMessage(aiMessage)
+    syncRealtimeClients()
+  }})
 }
 
 export async function getMessages(): Promise<Message[]> {
@@ -39,8 +42,4 @@ async function syncRealtimeClients() {
     durableObjectNamespace: env.REALTIME_DURABLE_OBJECT,
     key: env.REALTIME_KEY
   })
-}
-
-function onUpdate(message: Message) {
-  syncRealtimeClients() // INTENTIONALLY NOT AWAITED to improve streaming performance
 }

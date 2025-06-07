@@ -69,7 +69,11 @@ async function newMessage(prompt: string) {
   const chatStore = resolveChatStore(env.CHAT_ID)
   await chatStore.setMessage(message)
   await syncWebsocketAgentClients()
-  await askAI({ chatStore, onUpdate, saveBeforeUpdate: false })
+  const agent = resolveWebsocketAgent()
+  let aiResponse = await askAI({ messages: await chatStore.getMessages(), onUpdate: agent.syncMessage })
+  if (aiResponse) {
+    await chatStore.setMessage(aiResponse)
+  }
 }
 
 function resolveChatStore(chatID: string) {
@@ -93,9 +97,4 @@ function resolveWebsocketAgent() {
 async function syncWebsocketAgentClients() {
   const agent = resolveWebsocketAgent()
   await agent.bumpClients()
-}
-
-function onUpdate(message: Message) {
-  const agent = resolveWebsocketAgent()
-  agent.syncMessage(message) // INTENTIONALLY NOT AWAITED to improve streaming performance
 }
