@@ -1,4 +1,5 @@
 // https://grok.com/share/bGVnYWN5_021e85a1-a199-4ac9-bcfb-29233b50a72e
+// TODO: not super happy with the logic for pulling lines out of the stream
 export async function* streamToText(stream: ReadableStream<Uint8Array>): AsyncIterableIterator<string> {
   const decoder = new TextDecoder()
   const reader = stream.getReader()
@@ -40,6 +41,7 @@ export async function* streamToText(stream: ReadableStream<Uint8Array>): AsyncIt
     }
 
     // Process any remaining buffer
+    // TODO: tempted to remove this
     if (buffer.startsWith('data: ')) {
       const data = buffer.slice(6).trim()
       if (data && data !== '[DONE]') {
