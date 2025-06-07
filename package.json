@@ -13,7 +13,6 @@
   "dependencies": {
     "agents": "^0.0.94",
     "clsx": "^2.1.1",
-    "eventsource-parser": "^3.0.2",
     "nanoid": "^5.1.5",
     "reconnecting-websocket": "^4.4.0",
     "rwsdk": "0.0.88",
