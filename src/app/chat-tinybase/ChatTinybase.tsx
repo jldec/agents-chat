@@ -19,13 +19,14 @@ export function ChatTinybase() {
   const [messages, setMessages] = useState<Message[]>([])
 
   const store = useCreateMergeableStore(() => {
-    return createMergeableStore().setTablesSchema({
-      messages: {
-        id: { type: 'string' },
-        content: { type: 'string' },
-        role: { type: 'string', default: 'user' }
-      }
-    })
+    return createMergeableStore()
+    // .setTablesSchema({
+    //   messages: {
+    //     id: { type: 'string' },
+    //     content: { type: 'string', default: '' },
+    //     role: { type: 'string', default: 'user' }
+    //   }
+    // })
   })
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export function ChatTinybase() {
     }
   }, [])
 
-  useCreatePersister(
+  const persister = useCreatePersister(
     store,
     (store) => createLocalPersister(store, 'local:' + TINYBASE_SYNC_ROUTE),
     [],
@@ -68,12 +69,16 @@ export function ChatTinybase() {
   const newMessage = async (prompt: string) => {
     const id = store.addRow('messages', {
       id: nanoid(8),
+      role: 'user',
       content: prompt
-    })
+    }, false) // always append
   }
 
   const clearMessages = async () => {
     store.delTable('messages')
+    store.delTablesSchema()
+    await persister.save()
+    console.log('messages cleared', store.getContent())
   }
 
   return (

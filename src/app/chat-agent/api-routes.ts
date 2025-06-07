@@ -6,6 +6,7 @@ import { route } from 'rwsdk/router'
 import type { RequestInfo } from 'rwsdk/worker'
 import { routeAgentRequest } from 'agents'
 import type { WebsocketAgent } from './WebsocketAgent'
+import { streamToText } from '../utils/stream'
 
 async function GET() {
   try {
@@ -21,7 +22,8 @@ async function DELETE() {
   try {
     const chatStore = resolveChatStore(env.CHAT_ID)
     await chatStore.clearMessages()
-    await syncWebsocketAgentClients()
+    const agent = resolveWebsocketAgent()
+    await agent.bumpClients()
     return Response.json({ success: true })
   } catch (error) {
     return Response.json({ error: 'Failed to clear messages' }, { status: 500 })
@@ -61,19 +63,29 @@ export const chatAgentApiRoutes = [
 ]
 
 async function newMessage(prompt: string) {
-  const message: Message = {
+  const promptMessage: Message = {
     id: nanoid(8),
     role: 'user',
     content: prompt
   }
-  const chatStore = resolveChatStore(env.CHAT_ID)
-  await chatStore.setMessage(message)
-  await syncWebsocketAgentClients()
-  const agent = resolveWebsocketAgent()
-  let aiResponse = await askAI({ messages: await chatStore.getMessages(), onUpdate: agent.syncMessage })
-  if (aiResponse) {
-    await chatStore.setMessage(aiResponse)
+  const aiResponse: Message = {
+    id: nanoid(8),
+    role: 'assistant',
+    content: ''
   }
+  const chatStore = resolveChatStore(env.CHAT_ID)
+  const agent = resolveWebsocketAgent()
+
+  await chatStore.setMessage(promptMessage)
+  await chatStore.setMessage(aiResponse)
+  await agent.bumpClients()
+
+  const stream = await askAI(await chatStore.getMessages())
+  for await (const chunk of streamToText(stream)) {
+    aiResponse.content += chunk
+    agent.syncMessage(aiResponse)
+  }
+  await chatStore.setMessage(aiResponse)
 }
 
 function resolveChatStore(chatID: string) {
@@ -81,20 +93,8 @@ function resolveChatStore(chatID: string) {
   return env.CHAT_DURABLE_OBJECT.get(id)
 }
 
-// TODO: figure out how to memoize properly
-// let websocketAgentMemo: DurableObjectStub<WebsocketAgent> | null = null
-// if (websocketAgentMemo) {
-//   return websocketAgentMemo
-// }
-// websocketAgentMemo = agent
-
 function resolveWebsocketAgent() {
   const id = env.WEBSOCKET_AGENT.idFromName(env.WEBSOCKET_AGENT_NAME)
   const agent = env.WEBSOCKET_AGENT.get(id)
   return agent
-}
-
-async function syncWebsocketAgentClients() {
-  const agent = resolveWebsocketAgent()
-  await agent.bumpClients()
 }

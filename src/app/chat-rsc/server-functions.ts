@@ -4,6 +4,7 @@ import { renderRealtimeClients } from 'rwsdk/realtime/worker'
 import { nanoid } from 'nanoid'
 import type { Message } from '../chat/ChatStore'
 import { askAI } from '../chat/askAI'
+import { streamToText } from '../utils/stream'
 
 export async function newMessage(prompt: string): Promise<void> {
   const message: Message = {
@@ -11,13 +12,21 @@ export async function newMessage(prompt: string): Promise<void> {
     role: 'user',
     content: prompt
   }
+  const aiMessage: Message = {
+    id: nanoid(8),
+    role: 'assistant',
+    content: ''
+  }
   const chatStore = resolveChatStore(env.CHAT_ID)
   await chatStore.setMessage(message)
+  await chatStore.setMessage(aiMessage)
   await syncRealtimeClients()
-  await askAI({ messages: await chatStore.getMessages(), onUpdate: (aiMessage) => {
-    chatStore.setMessage(aiMessage)
+  const stream = await askAI(await chatStore.getMessages())
+  for await (const chunk of streamToText(stream)) {
+    aiMessage.content += chunk
+    await chatStore.setMessage(aiMessage)
     syncRealtimeClients()
-  }})
+  }
 }
 
 export async function getMessages(): Promise<Message[]> {
