@@ -10,35 +10,15 @@ import ReconnectingWebSocket from 'reconnecting-websocket'
 import { createMergeableStore, MergeableStore } from 'tinybase'
 import { createLocalPersister } from 'tinybase/persisters/persister-browser'
 import { createWsSynchronizer } from 'tinybase/synchronizers/synchronizer-ws-client'
-import { useCreateMergeableStore, useCreatePersister, useCreateSynchronizer } from 'tinybase/ui-react'
+import { useCreateMergeableStore, useCreatePersister, useCreateSynchronizer, useTable } from 'tinybase/ui-react'
 
 const TINYBASE_SYNC_ROUTE = '/tinybase/websocket/sync'
 
 // singleton component, hardwired to the tinybase sync route and store
+// from https://github.com/tinyplex/vite-tinybase-ts-react-sync-durable-object/blob/main/client/src/App.tsx
 export function ChatTinybase() {
-  const [messages, setMessages] = useState<Message[]>([])
-
-  const store = useCreateMergeableStore(() => {
-    return createMergeableStore()
-    // .setTablesSchema({
-    //   messages: {
-    //     id: { type: 'string' },
-    //     content: { type: 'string', default: '' },
-    //     role: { type: 'string', default: 'user' }
-    //   }
-    // })
-  })
-
-  useEffect(() => {
-    const listener = store.addTableListener('messages', () => {
-      const messages = Object.values(store.getTable('messages')) as unknown as Message[]
-      console.log('messages changed:', messages)
-      setMessages(messages)
-    })
-    return () => {
-      store.delListener(listener)
-    }
-  }, [])
+  const store = useCreateMergeableStore(createMergeableStore)
+  const messages = useTable('messages', store)
 
   const persister = useCreatePersister(
     store,
@@ -76,14 +56,12 @@ export function ChatTinybase() {
 
   const clearMessages = async () => {
     store.delTable('messages')
-    store.delTablesSchema()
-    await persister.save()
-    console.log('messages cleared', store.getContent())
+    await persister.save() // TODO: not sure if this is needed
   }
 
   return (
     <ChatLayout title="RedwoodSDK Tinybase Chat">
-      <MessageList messages={messages} />
+      <MessageList messages={Object.values(messages) as Message[]} />
       <MessageInput onSubmit={newMessage} onClear={clearMessages} />
     </ChatLayout>
   )
