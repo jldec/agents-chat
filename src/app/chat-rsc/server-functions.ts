@@ -3,7 +3,7 @@ import { env } from 'cloudflare:workers'
 import { renderRealtimeClients } from 'rwsdk/realtime/worker'
 import { nanoid } from 'nanoid'
 import type { Message } from '../shared/ChatStore'
-import { askAI, streamToText } from '../../lib/askAI'
+import { askAI, streamToText } from '@/lib/askAI'
 
 let messagesMemo: Message[] | null = null
 

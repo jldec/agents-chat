@@ -2,7 +2,7 @@
 import { createMergeableStore } from 'tinybase'
 import { createDurableObjectStoragePersister } from 'tinybase/persisters/persister-durable-object-storage'
 import { WsServerDurableObject } from 'tinybase/synchronizers/synchronizer-ws-server-durable-object'
-import { askAI, streamToText } from '../../lib/askAI'
+import { askAI, streamToText } from '@/lib/askAI'
 import type { Message } from '../shared/ChatStore'
 import { nanoid } from 'nanoid'
 
