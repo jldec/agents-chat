@@ -1,7 +1,7 @@
 import { renderRealtimeClients } from 'rwsdk/realtime/worker'
 import { route } from 'rwsdk/router'
 import { env } from 'cloudflare:workers'
-import { time } from './utils'
+import { time } from '@/lib/time'
 
 async function handleBump() {
   await renderRealtimeClients({

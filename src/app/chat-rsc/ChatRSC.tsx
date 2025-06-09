@@ -1,6 +1,6 @@
-import { MessageList } from '../chat/MessageList'
-import { MessageInput } from '../chat/MessageInput'
-import { ChatLayout } from '../chat/ChatLayout'
+import { MessageList } from '../shared/MessageList'
+import { MessageInput } from '../shared/MessageInput'
+import { ChatLayout } from '../shared/ChatLayout'
 import { getMessages, newMessage, clearMessages } from './server-functions'
 
 export async function ChatRSC() {

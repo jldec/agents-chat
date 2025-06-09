@@ -9,7 +9,8 @@
   },
   "ai": { "binding": "AI" },
   "vars": {
-    "CHAT_ID": "agents-chat-agent",
+    "AGENTS_CHAT": "rwsdk-agents-chat",
+    "REALTIME_CHAT": "rwsdk-realtime-chat",
     "REALTIME_KEY": "rwsdk-realtime-chat",
     "WEBSOCKET_AGENT_PATH": "websocket-agent", // matches class-name, duplicated in ChatAgent.tsx
     "WEBSOCKET_AGENT_NAME": "rwsdk-chat-client", // duplicated in ChatAgent.tsx

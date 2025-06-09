@@ -2,9 +2,8 @@
 import { env } from 'cloudflare:workers'
 import { renderRealtimeClients } from 'rwsdk/realtime/worker'
 import { nanoid } from 'nanoid'
-import type { Message } from '../chat/ChatStore'
-import { askAI } from '../chat/askAI'
-import { streamToText } from '../utils/stream'
+import type { Message } from '../shared/ChatStore'
+import { askAI, streamToText } from '../../lib/askAI'
 
 let messagesMemo: Message[] | null = null
 
@@ -19,7 +18,7 @@ export async function newMessage(prompt: string) {
     role: 'assistant',
     content: '...'
   }
-  const chatStore = resolveChatStore(env.CHAT_ID)
+  const chatStore = resolveChatStore(env.REALTIME_CHAT)
   const promptIndex = await chatStore.setMessage(promptMessage)
   const aiIndex = await chatStore.setMessage(aiResponse)
   messagesMemo = await chatStore.getMessages()
@@ -40,13 +39,13 @@ export async function newMessage(prompt: string) {
 
 export async function getMessages(): Promise<Message[]> {
   if (messagesMemo) return messagesMemo
-  const chatStore = resolveChatStore(env.CHAT_ID)
+  const chatStore = resolveChatStore(env.REALTIME_CHAT)
   return chatStore.getMessages()
 }
 
 export async function clearMessages(): Promise<void> {
   messagesMemo = []
-  const chatStore = resolveChatStore(env.CHAT_ID)
+  const chatStore = resolveChatStore(env.REALTIME_CHAT)
   await chatStore.clearMessages()
   await syncRealtimeClients()
 }

@@ -1,10 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { MessageList } from '../chat/MessageList'
-import { MessageInput } from '../chat/MessageInput'
-import { ChatLayout } from '../chat/ChatLayout'
+import { MessageList } from '../shared/MessageList'
+import { MessageInput } from '../shared/MessageInput'
+import { ChatLayout } from '../shared/ChatLayout'
 import { getMessages, newMessage, clearMessages } from './client-functions'
-import type { Message } from '../chat/ChatStore'
+import type { Message } from '../shared/ChatStore'
 import { useAgent } from 'agents/react'
 
 export function ChatAgent() {

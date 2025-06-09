@@ -1,16 +1,16 @@
 import { env } from 'cloudflare:workers'
 import { nanoid } from 'nanoid'
-import type { Message } from '../chat/ChatStore'
-import { askAI } from '../chat/askAI'
+import type { Message } from '../shared/ChatStore'
+import { askAI, streamToText } from '../../lib/askAI'
+
 import { route } from 'rwsdk/router'
 import type { RequestInfo } from 'rwsdk/worker'
 import { routeAgentRequest } from 'agents'
 import type { WebsocketAgent } from './WebsocketAgent'
-import { streamToText } from '../utils/stream'
 
 async function GET() {
   try {
-    const chatStore = resolveChatStore(env.CHAT_ID)
+    const chatStore = resolveChatStore(env.AGENTS_CHAT)
     const messages = await chatStore.getMessages()
     return Response.json(messages)
   } catch (error) {
@@ -20,7 +20,7 @@ async function GET() {
 
 async function DELETE() {
   try {
-    const chatStore = resolveChatStore(env.CHAT_ID)
+    const chatStore = resolveChatStore(env.AGENTS_CHAT)
     await chatStore.clearMessages()
     const agent = resolveWebsocketAgent()
     await agent.bumpClients()
@@ -73,7 +73,7 @@ async function newMessage(prompt: string) {
     role: 'assistant',
     content: '...'
   }
-  const chatStore = resolveChatStore(env.CHAT_ID)
+  const chatStore = resolveChatStore(env.AGENTS_CHAT)
   const agent = resolveWebsocketAgent()
   await chatStore.setMessage(promptMessage)
   await chatStore.setMessage(aiResponse)

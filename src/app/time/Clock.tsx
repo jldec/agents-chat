@@ -1,6 +1,6 @@
 'use client'
 
-import { time } from './utils'
+import { time } from '@/lib/time'
 import { useState, useEffect } from 'react'
 
 export function Clock() {
