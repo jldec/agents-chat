@@ -16,20 +16,32 @@ export class ChatDurableObject extends DurableObject {
     })
   }
 
+  /**
+   * Returns the messages array.
+   */
   getMessages() {
     return this.messages
   }
 
-  setMessage(message: Message) {
-    const index = this.messages.findIndex((m) => m.id === message.id)
+  /**
+   * Sets a message in the chat store. If a message with the same ID already exists,
+   * it updates that message; otherwise, it adds the new message to the store.
+   * Returns the index of the message in the messages array.
+   */
+  setMessage(message: Message): number {
+    let index = this.messages.findIndex((m) => m.id === message.id)
     if (index !== -1) {
       this.messages[index] = message
     } else {
-      this.messages.push(message)
+      index = this.messages.push(message) - 1
     }
     this.onUpdate()
+    return index
   }
 
+  /**
+   * Clears all messages from the chat store.
+   */
   clearMessages() {
     this.messages = []
     this.onUpdate()

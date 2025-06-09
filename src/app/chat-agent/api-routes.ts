@@ -71,16 +71,16 @@ async function newMessage(prompt: string) {
   const aiResponse: Message = {
     id: nanoid(8),
     role: 'assistant',
-    content: ''
+    content: '...'
   }
   const chatStore = resolveChatStore(env.CHAT_ID)
   const agent = resolveWebsocketAgent()
-
   await chatStore.setMessage(promptMessage)
   await chatStore.setMessage(aiResponse)
   await agent.bumpClients()
 
   const stream = await askAI(await chatStore.getMessages())
+  aiResponse.content = '' // remove ... when stream starts
   for await (const chunk of streamToText(stream)) {
     aiResponse.content += chunk
     agent.syncMessage(aiResponse)

@@ -6,35 +6,46 @@ import type { Message } from '../chat/ChatStore'
 import { askAI } from '../chat/askAI'
 import { streamToText } from '../utils/stream'
 
-export async function newMessage(prompt: string): Promise<void> {
-  const message: Message = {
+let messagesMemo: Message[] | null = null
+
+export async function newMessage(prompt: string) {
+  const promptMessage: Message = {
     id: nanoid(8),
     role: 'user',
     content: prompt
   }
-  const aiMessage: Message = {
+  const aiResponse: Message = {
     id: nanoid(8),
     role: 'assistant',
-    content: ''
+    content: '...'
   }
   const chatStore = resolveChatStore(env.CHAT_ID)
-  await chatStore.setMessage(message)
-  await chatStore.setMessage(aiMessage)
+  const promptIndex = await chatStore.setMessage(promptMessage)
+  const aiIndex = await chatStore.setMessage(aiResponse)
+  messagesMemo = await chatStore.getMessages()
+  messagesMemo[promptIndex] = promptMessage
+  messagesMemo[aiIndex] = aiResponse
   await syncRealtimeClients()
+
   const stream = await askAI(await chatStore.getMessages())
+  aiResponse.content = '' // remove ... when stream starts
+  // operate on memoized messages during streaming
   for await (const chunk of streamToText(stream)) {
-    aiMessage.content += chunk
-    await chatStore.setMessage(aiMessage)
+    aiResponse.content += chunk
     syncRealtimeClients()
   }
+  // update the chat store with the final response
+  await chatStore.setMessage(aiResponse)
 }
 
 export async function getMessages(): Promise<Message[]> {
+  if (messagesMemo) return messagesMemo
   const chatStore = resolveChatStore(env.CHAT_ID)
   return chatStore.getMessages()
 }
 
 export async function clearMessages(): Promise<void> {
+  messagesMemo = []
   const chatStore = resolveChatStore(env.CHAT_ID)
   await chatStore.clearMessages()
   await syncRealtimeClients()
