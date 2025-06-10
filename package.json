@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite dev --force",
     "build": "RWSDK_DEPLOY=1 vite build",
     "ship": "vite build && wrangler deploy",
     "types": "wrangler types --include-runtime false --strict-vars false"
@@ -16,7 +16,7 @@
     "markdown-it": "^14.1.0",
     "nanoid": "^5.1.5",
     "reconnecting-websocket": "^4.4.0",
-    "rwsdk": "0.0.88",
+    "rwsdk": "0.1.0-alpha.5",
     "tailwind-merge": "^3.3.0",
     "tinybase": "^6.2.1"
   },
