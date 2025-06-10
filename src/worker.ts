@@ -16,7 +16,7 @@ import { tinybaseApiRoutes } from './app/chat-tinybase/api-routes'
 
 export { ChatDurableObject } from './app/shared/ChatStore'
 export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
-export { WebsocketAgent } from './app/chat-agent/WebsocketAgent'
+export { ChatAgentDurableObject } from './app/chat-agent/ChatAgentDO'
 export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 
 export default defineApp([
