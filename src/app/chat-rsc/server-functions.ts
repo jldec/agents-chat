@@ -19,7 +19,7 @@ export async function newMessage(prompt: string) {
     role: 'assistant',
     content: '...'
   }
-  const chatStore = resolveChatStore(env.REALTIME_CHAT)
+  const chatStore = resolveChatStore(env.RWSDK_CHATSTORE)
   const promptIndex = await chatStore.setMessage(promptMessage)
   const aiIndex = await chatStore.setMessage(aiResponse)
   messagesMemo = await chatStore.getMessages()
@@ -40,20 +40,20 @@ export async function newMessage(prompt: string) {
 
 export async function getMessages(): Promise<Message[]> {
   if (messagesMemo) return messagesMemo
-  const chatStore = resolveChatStore(env.REALTIME_CHAT)
+  const chatStore = resolveChatStore(env.RWSDK_CHATSTORE)
   return chatStore.getMessages()
 }
 
 export async function clearMessages(): Promise<void> {
   messagesMemo = []
-  const chatStore = resolveChatStore(env.REALTIME_CHAT)
+  const chatStore = resolveChatStore(env.RWSDK_CHATSTORE)
   await chatStore.clearMessages()
   await syncRealtimeClients()
 }
 
 function resolveChatStore(chatID: string) {
-  const id: DurableObjectId = env.CHAT_DURABLE_OBJECT.idFromName(chatID)
-  return env.CHAT_DURABLE_OBJECT.get(id)
+  const id: DurableObjectId = env.CHATSTORE_DURABLE_OBJECT.idFromName(chatID)
+  return env.CHATSTORE_DURABLE_OBJECT.get(id)
 }
 
 async function syncRealtimeClients() {

@@ -9,11 +9,11 @@
   },
   "ai": { "binding": "AI" },
   "vars": {
-    "AGENTS_CHAT": "rwsdk-agents-chat",
-    "REALTIME_CHAT": "rwsdk-realtime-chat",
+    "AGENTS_CHATSTORE": "rwsdk-agents-chat",
+    "RWSDK_CHATSTORE": "rwsdk-realtime-chat",
     "REALTIME_KEY": "rwsdk-realtime-chat",
-    "WEBSOCKET_AGENT_PATH": "websocket-agent", // matches class-name, duplicated in ChatAgent.tsx
-    "WEBSOCKET_AGENT_NAME": "rwsdk-chat-client", // duplicated in ChatAgent.tsx
+    "WEBSOCKET_AGENT_NAMESPACE": "websocket-durable-object", // matches binding name, duplicated in ChatAgent.tsx
+    "WEBSOCKET_AGENT_NAME": "rwsdk-chat-agent", // duplicated in ChatAgent.tsx
     "TINYBASE_SYNC_ROUTE": "/tinybase/websocket/sync" // duplicated in ChatTinybase.tsx
   },
   "durable_objects": {
@@ -23,15 +23,15 @@
         "class_name": "RealtimeDurableObject"
       },
       {
-        "name": "CHAT_DURABLE_OBJECT",
+        "name": "CHATSTORE_DURABLE_OBJECT",
         "class_name": "ChatDurableObject"
       },
       {
-        "name": "WEBSOCKET_AGENT",
+        "name": "WEBSOCKET_DURABLE_OBJECT",
         "class_name": "WebsocketAgent"
       },
       {
-        "name": "TINYBASE_DO",
+        "name": "TINYBASE_DURABLE_OBJECT",
         "class_name": "TinyBaseDurableObject"
       }
     ]

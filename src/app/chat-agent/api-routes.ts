@@ -11,7 +11,7 @@ import type { WebsocketAgent } from './WebsocketAgent'
 
 async function GET() {
   try {
-    const chatStore = resolveChatStore(env.AGENTS_CHAT)
+    const chatStore = resolveChatStore(env.AGENTS_CHATSTORE)
     const messages = await chatStore.getMessages()
     return Response.json(messages)
   } catch (error) {
@@ -21,7 +21,7 @@ async function GET() {
 
 async function DELETE() {
   try {
-    const chatStore = resolveChatStore(env.AGENTS_CHAT)
+    const chatStore = resolveChatStore(env.AGENTS_CHATSTORE)
     await chatStore.clearMessages()
     const agent = resolveWebsocketAgent()
     await agent.bumpClients()
@@ -46,7 +46,7 @@ async function POST(request: Request) {
 
 export const chatAgentApiRoutes = [
   // https://developers.cloudflare.com/agents/api-reference/calling-agents/
-  route(`/agents/${env.WEBSOCKET_AGENT_PATH}/${env.WEBSOCKET_AGENT_NAME}`, async ({ request }) => {
+  route(`/agents/${env.WEBSOCKET_AGENT_NAMESPACE}/${env.WEBSOCKET_AGENT_NAME}`, async ({ request }) => {
     return (await routeAgentRequest(request, env)) || Response.json({ msg: 'no agent here' }, { status: 404 })
   }),
   route('/api/chat-agent', (requestInfo: RequestInfo) => {
@@ -74,7 +74,7 @@ async function newMessage(prompt: string) {
     role: 'assistant',
     content: '...'
   }
-  const chatStore = resolveChatStore(env.AGENTS_CHAT)
+  const chatStore = resolveChatStore(env.AGENTS_CHATSTORE)
   const agent = resolveWebsocketAgent()
   await chatStore.setMessage(promptMessage)
   await chatStore.setMessage(aiResponse)
@@ -90,12 +90,12 @@ async function newMessage(prompt: string) {
 }
 
 function resolveChatStore(chatID: string) {
-  const id: DurableObjectId = env.CHAT_DURABLE_OBJECT.idFromName(chatID)
-  return env.CHAT_DURABLE_OBJECT.get(id)
+  const id: DurableObjectId = env.CHATSTORE_DURABLE_OBJECT.idFromName(chatID)
+  return env.CHATSTORE_DURABLE_OBJECT.get(id)
 }
 
 function resolveWebsocketAgent() {
-  const id = env.WEBSOCKET_AGENT.idFromName(env.WEBSOCKET_AGENT_NAME)
-  const agent = env.WEBSOCKET_AGENT.get(id)
+  const id = env.WEBSOCKET_DURABLE_OBJECT.idFromName(env.WEBSOCKET_AGENT_NAME)
+  const agent = env.WEBSOCKET_DURABLE_OBJECT.get(id)
   return agent
 }

@@ -20,8 +20,8 @@ export function ChatAgent() {
   }, [bump])
 
   const connection = useAgent({
-    agent: 'websocket-agent',
-    name: 'rwsdk-chat-client',
+    agent: 'websocket-durable-object',
+    name: 'rwsdk-chat-agent',
     onMessage: (message) => {
       if (message.data === 'bump') {
         setBump((bump) => bump + 1)
