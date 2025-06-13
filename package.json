@@ -5,20 +5,23 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite dev --force",
     "build": "RWSDK_DEPLOY=1 vite build",
     "ship": "vite build && wrangler deploy",
     "types": "wrangler types --include-runtime false --strict-vars false"
   },
   "dependencies": {
+    "@ai-sdk/react": "^1.2.12",
     "agents": "^0.0.95",
+    "ai": "^4.3.16",
     "clsx": "^2.1.1",
     "markdown-it": "^14.1.0",
     "nanoid": "^5.1.5",
     "reconnecting-websocket": "^4.4.0",
-    "rwsdk": "0.0.88",
+    "rwsdk": "0.1.0-alpha.9",
     "tailwind-merge": "^3.3.0",
-    "tinybase": "^6.2.1"
+    "tinybase": "^6.2.1",
+    "workers-ai-provider": "^0.6.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250607.0",

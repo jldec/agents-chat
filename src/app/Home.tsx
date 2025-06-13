@@ -9,6 +9,9 @@ export function Home() {
         <a href="chat-agent" className="text-blue-600 p-2 underline mb-8 text-base">
           Agent Chat
         </a>
+        <a href="chat-agent-sdk" className="text-blue-600 p-2 underline mb-8 text-base">
+          Agent SDK Chat
+        </a>
         <a href="chat-tinybase" className="text-blue-600 p-2 underline mb-8 text-base">
           TinyBase Chat
         </a>
