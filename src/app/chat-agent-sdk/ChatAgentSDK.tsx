@@ -17,9 +17,6 @@ export function ChatAgentSDK() {
   const { messages, input, handleInputChange, handleSubmit, clearHistory } = useAgentChat({
     agent,
     maxSteps: 5,
-    // context(justinvdm): Avoid fetch() as side-effect of SSR render
-    // https://github.com/cloudflare/agents/blob/398c7f5411f3a63f450007f83db7e3f29b6ed4c2/packages/agents/src/ai-react.tsx#L85-L88
-    getInitialMessages: typeof window === 'undefined' ? null : undefined
   })
 
   function mapUIMessages(messages: UIMessage[]): Message[] {
@@ -33,24 +30,6 @@ export function ChatAgentSDK() {
   return (
     <ChatLayout title="RedwoodSDK Agent Chat">
       <MessageList messages={mapUIMessages(messages)} />
-      {/* <div id="message-list" className="messages-wrapper">
-        {messages?.map((m: Message) => (
-          <div key={m.id} className="message">
-            <strong>{`${m.role}: `}</strong>
-            {m.parts?.map((part, i) => {
-              switch (part.type) {
-                case 'text':
-                  return (
-                    <div key={i} className="message-content">
-                      {part.text}
-                    </div>
-                  )
-              }
-            })}
-            <br />
-          </div>
-        ))}
-      </div> */}
       <MessageInput value={input} onChange={handleInputChange} onSubmit={handleSubmit} onClear={clearHistory} />
     </ChatLayout>
   )
