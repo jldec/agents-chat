@@ -26,7 +26,7 @@ export function ChatTinybase() {
   return (
     <ChatLayout title="RedwoodSDK TinyBase Chat">
       <MessageList messages={Object.values(messages) as Message[]} />
-      <MessageInput onSubmit={newMessage} onClear={clearMessages} />
+      <MessageInput newMessage={newMessage} onClear={clearMessages} />
     </ChatLayout>
   )
 }

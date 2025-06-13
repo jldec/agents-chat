@@ -7,7 +7,7 @@ export async function ChatRSC() {
   return (
     <ChatLayout title="RedwoodSDK RSC Chat">
       <MessageList messages={await getMessages()} />
-      <MessageInput onSubmit={newMessage} onClear={clearMessages} />
+      <MessageInput newMessage={newMessage} onClear={clearMessages} />
     </ChatLayout>
   )
 }
