@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "vite dev --force",
+    "dev": "vite dev",
     "build": "RWSDK_DEPLOY=1 vite build",
     "ship": "vite build && wrangler deploy",
     "types": "wrangler types --include-runtime false --strict-vars false"

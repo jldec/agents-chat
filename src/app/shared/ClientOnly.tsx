@@ -11,7 +11,7 @@ export function ClientOnly({ children, fallback = null }: ClientOnlyProps) {
   useEffect(() => {
     setIsClient(true)
   }, [])
-  fallback = fallback ?? <div className="flex justify-center items-center h-screen">Loading...</div>
+  fallback = fallback ?? <div className="flex justify-center items-center p-4">Loading...</div>
 
   return isClient ? children : fallback
 }
