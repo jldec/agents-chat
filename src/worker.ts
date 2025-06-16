@@ -2,7 +2,7 @@ import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { ChatTinybase } from './app/chat-tinybase/ChatTinybase'
-import { ClientOnlyChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
+import { ChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
 import { defineApp } from 'rwsdk/worker'
 import { Document } from './app/Document'
 import { echoHandler } from './lib/echo'
@@ -28,10 +28,12 @@ export default defineApp([
     index(Home),
     route('/chat-rsc', ChatRSC), // realtime RSC
     route('/chat-agent', ChatAgent), // client-side react app
-    route('/chat-agent-sdk', ClientOnlyChatAgentSDK), // client-side react app
     route('/chat-tinybase', ChatTinybase), // client-side react app
     route('/time', Time) // realtime RSC
   ]),
+  render(Document, [
+    route('/chat-agent-sdk', ChatAgentSDK), // client-side react app
+  ], {ssr: false}), // disable ssr for chat-agent-sdk
   // handle requests for both /chat-agent and /chat-agent-sdk
   async ({ request }) => {
     const response = await routeAgentRequest(request, env)

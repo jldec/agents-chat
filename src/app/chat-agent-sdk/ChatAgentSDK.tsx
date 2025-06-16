@@ -23,11 +23,3 @@ export function ChatAgentSDK() {
     </ChatLayout>
   )
 }
-
-export function ClientOnlyChatAgentSDK() {
-  return (
-    <ClientOnly>
-      <ChatAgentSDK />
-    </ClientOnly>
-  )
-}
