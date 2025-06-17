@@ -1,13 +1,15 @@
 import { AIChatAgent } from 'agents/ai-chat-agent'
-import { createWorkersAI } from 'workers-ai-provider'
-import { env } from 'cloudflare:workers'
+// import { createWorkersAI } from 'workers-ai-provider'
+// import { env } from 'cloudflare:workers'
 import { createDataStreamResponse, streamText, type StreamTextOnFinishCallback, type ToolSet } from 'ai'
 import { processToolCalls } from './utils'
 import { tools, executions } from './tools'
+import { openai } from '@ai-sdk/openai'
 
 export class ChatAgentAgentDO extends AIChatAgent<Env> {
   async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
-    const workersai = createWorkersAI({ binding: env.AI })
+    // const workersai = createWorkersAI({ binding: env.AI })
+    const model = openai('gpt-4o-2024-11-20')
 
     // Create a streaming response that handles both text and tool outputs
     // credit https://github.com/cloudflare/agents-starter
@@ -24,8 +26,9 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
 
         // Stream the AI response
         const result = streamText({
-          // @ts-expect-error (this 🦙 is not typed in ts)
-          model: workersai('@cf/meta/llama-3.1-8b-instruct-fp8-fast'),
+          // ts-expect-error (this 🦙 is not typed in ts)
+          // model: workersai('@cf/meta/llama-3.1-8b-instruct-fp8-fast'),
+          model,
           system: 'You are a helpful and delightful assistant that can use tools to help users.',
           messages: processedMessages,
           tools,

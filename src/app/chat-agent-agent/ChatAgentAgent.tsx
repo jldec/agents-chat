@@ -17,7 +17,7 @@ export function ChatAgentAgent() {
   })
 
   return (
-    <ChatLayout title="RedwoodSDK Agent SDK Chat">
+    <ChatLayout title="RedwoodSDK Agent Agent Chat">
       <MessageList messages={messages} />
       <MessageInput value={input} onChange={handleInputChange} onSubmit={handleSubmit} onClear={clearHistory} />
     </ChatLayout>
