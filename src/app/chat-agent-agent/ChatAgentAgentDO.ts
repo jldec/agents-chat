@@ -11,6 +11,12 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     // const workersai = createWorkersAI({ binding: env.AI })
     const model = openai('gpt-4o-2024-11-20')
 
+    // Collect all tools, including MCP tools
+    const allTools = {
+      ...tools,
+      ...this.mcp.unstable_getAITools()
+    }
+
     // Create a streaming response that handles both text and tool outputs
     // credit https://github.com/cloudflare/agents-starter
     const dataStreamResponse = createDataStreamResponse({
@@ -20,7 +26,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
         const processedMessages = await processToolCalls({
           messages: this.messages,
           dataStream,
-          tools,
+          tools: allTools,
           executions
         })
 
@@ -31,7 +37,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
           model,
           system: 'You are a helpful and delightful assistant that can use tools to help users.',
           messages: processedMessages,
-          tools,
+          tools: allTools,
           onFinish: async (args) => {
             onFinish(args as Parameters<StreamTextOnFinishCallback<ToolSet>>[0])
           },
