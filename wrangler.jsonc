@@ -34,6 +34,10 @@
         "class_name": "ChatAgentSDKDO"
       },
       {
+        "name": "CHAT_AGENT_AGENT_DURABLE_OBJECT",
+        "class_name": "ChatAgentAgentDO"
+      },
+      {
         "name": "TINYBASE_DURABLE_OBJECT",
         "class_name": "TinyBaseDurableObject"
       }
@@ -55,6 +59,10 @@
     {
       "tag": "v4",
       "new_sqlite_classes": ["ChatAgentSDKDO"]
+    },
+    {
+      "tag": "v5",
+      "new_sqlite_classes": ["ChatAgentAgentDO"]
     }
   ]
 }

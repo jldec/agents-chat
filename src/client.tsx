@@ -15,6 +15,7 @@ switch (window.location.pathname) {
   case '/chat-agent':
   case '/chat-agent-sdk':
   case '/chat-tinybase':
+  case '/chat-agent-agent':
   case '/':
     initClient()
     break

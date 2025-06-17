@@ -2,6 +2,7 @@ import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { ChatTinybase } from './app/chat-tinybase/ChatTinybase'
+import { ClientOnlyChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
 import { ClientOnlyChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
 import { defineApp } from 'rwsdk/worker'
 import { Document } from './app/Document'
@@ -20,6 +21,7 @@ export { ChatDurableObject } from './app/shared/ChatStore'
 export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
 export { WebsocketAgent } from './app/chat-agent/WebsocketAgent'
 export { ChatAgentSDKDO } from './app/chat-agent-sdk/ChatAgentSDKDO'
+export { ChatAgentAgentDO } from './app/chat-agent-agent/ChatAgentAgentDO'
 export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 
 export default defineApp([
@@ -29,6 +31,7 @@ export default defineApp([
     route('/chat-rsc', ChatRSC), // realtime RSC
     route('/chat-agent', ChatAgent), // client-side react app
     route('/chat-agent-sdk', ClientOnlyChatAgentSDK), // client-side react app
+    route('/chat-agent-agent', ClientOnlyChatAgentAgent), // client-side react app
     route('/chat-tinybase', ChatTinybase), // client-side react app
     route('/time', Time) // realtime RSC
   ]),
