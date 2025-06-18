@@ -52,7 +52,11 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
         result.mergeIntoDataStream(dataStream)
       }
     })
-
     return dataStreamResponse
+  }
+
+  async getMessages() {
+    console.log('getMessages', this.messages)
+    return this.messages
   }
 }

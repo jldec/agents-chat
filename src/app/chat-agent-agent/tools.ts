@@ -3,9 +3,10 @@
  * Tools can either require human confirmation or execute automatically
  * credit https://github.com/cloudflare/agents-starter
  */
+import { env } from 'cloudflare:workers'
 import { tool } from 'ai'
 import { z } from 'zod'
-import { getCurrentAgent } from 'agents'
+import { getCurrentAgent, getAgentByName } from 'agents'
 import { ChatAgentAgentDO } from './ChatAgentAgentDO'
 /**
  * Local time tool that executes automatically
@@ -18,6 +19,26 @@ const getLocalTime = tool({
   execute: async ({ location }) => {
     console.log(`Getting local time for ${location}`)
     return `The current time in ${location} is ${new Date().toLocaleTimeString()}`
+  }
+})
+
+/**
+ * Call the onChatMessage method of a Chat instance with name "subagent"
+ */
+const getAgentMessages = tool({
+  description: 'get the messages of an agent or subagent',
+  parameters: z.object({
+    name: z.string().describe('The name of the agent or subagent').default('rwsdk-agent-agent-main')
+  }),
+  execute: async ({ name }) => {
+    const agent = await getAgentByName(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name)
+    try {
+      // @ts-expect-error wtf
+      return await agent.getMessages()
+    } catch (error) {
+      console.error(`Error calling subagent ${name}`, error)
+      return `Error calling subagent ${name}: ${error}`
+    }
   }
 })
 
@@ -79,6 +100,7 @@ const listMCPServers = tool({
  */
 export const tools = {
   getLocalTime,
+  getAgentMessages,
   addMCPServerUrl,
   removeMCPServerUrl,
   listMCPServers
