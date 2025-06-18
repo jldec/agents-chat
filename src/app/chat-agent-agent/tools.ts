@@ -21,12 +21,12 @@ const getLocalTime = tool({
 const getAgentMessages = tool({
   description: 'get the messages of an agent or subagent',
   parameters: z.object({
-    name: z.string().describe('The name of the agent or subagent').default('rwsdk-agent-agent-main')
+    name: z.string().describe('The name of the agent or subagent').default('main')
   }),
   execute: async ({ name }) => {
     const agent = await getAgentByName(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name)
     try {
-      // @ts-expect-error wtf
+      // @ts-expect-error
       return await agent.getMessages()
     } catch (error) {
       console.error(`Error calling subagent ${name}`, error)
@@ -51,7 +51,23 @@ const subagentGetMessages = tool({
   }
 })
 
-// @ts-expect-error wtf
+// const agentNewMessage = tool({
+//   description: 'send a message to the main agent',
+//   parameters: z.object({
+//     message: z.string().describe('The message to send to the main agent')
+//   }),
+//   execute: async ({ message }) => {
+//     const agent = await getAgentByName(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, 'main')
+//     try {
+//       return await agent.newMessage(message)
+//     } catch (error) {
+//       console.error(`Error calling main agent`, error)
+//       return `Error calling main agent: ${error}`
+//     }
+//   }
+// })
+
+// @ts-expect-error
 const subagentNewMessage = tool({
   description: 'send a message to a subagent',
   parameters: z.object({
@@ -86,14 +102,14 @@ const subagentClearMessages = tool({
   }
 })
 
-/**
- * Add a MCP server URL to the MCP client
- */
 const addMCPServerUrl = tool({
-  description: 'add a MCP server URL to the MCP client',
-  parameters: z.object({ url: z.string() }),
-  execute: async ({ url }) => {
-    const { agent } = getCurrentAgent<ChatAgentAgentDO>()
+  description: 'add a MCP server URL to the MCP client in the named (or default) agent',
+  parameters: z.object({
+    name: z.string().describe('The name of the subagent, default = main agent').default('main'),
+    url: z.string()
+  }),
+  execute: async ({ name, url }) => {
+    const agent = await getAgentByName(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name)
     try {
       const { id } = await agent!.addMcpServer(url, url, 'mcp-demo-host')
       return `Added MCP url: ${url} with id: ${id}`
@@ -104,14 +120,14 @@ const addMCPServerUrl = tool({
   }
 })
 
-/**
- * Remove a MCP server by id from the MCP client
- */
 const removeMCPServerUrl = tool({
-  description: 'remove a MCP server by id from the MCP client',
-  parameters: z.object({ id: z.string() }),
-  execute: async ({ id }) => {
-    const { agent } = getCurrentAgent<ChatAgentAgentDO>()
+  description: 'remove a MCP server by id from the MCP client in the named (or default) agent',
+  parameters: z.object({
+    name: z.string().describe('The name of the subagent, default = main agent').default('main'),
+    id: z.string()
+  }),
+  execute: async ({ name, id }) => {
+    const agent = await getAgentByName(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name)
     try {
       await agent!.removeMcpServer(id)
       return `Removed MCP server with id: ${id}`
@@ -122,14 +138,13 @@ const removeMCPServerUrl = tool({
   }
 })
 
-/**
- * List all MCP server URLs known to the MCP client
- */
 const listMCPServers = tool({
-  description: 'List all MCP server URLs known to the MCP client',
-  parameters: z.object({}),
-  execute: async () => {
-    const { agent } = getCurrentAgent<ChatAgentAgentDO>()
+  description: 'List all MCP server URLs known to the MCP client in the named (or default) agent',
+  parameters: z.object({
+    name: z.string().describe('The name of the subagent, default = main agent').default('main')
+  }),
+  execute: async ({ name }) => {
+    const agent = await getAgentByName(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name)
     try {
       return agent!.getMcpServers()
     } catch (error) {

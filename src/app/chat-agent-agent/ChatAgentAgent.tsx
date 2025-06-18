@@ -9,7 +9,7 @@ import { ClientOnly } from '../shared/ClientOnly'
 export function ChatAgentAgent() {
   const agent = useAgent({
     agent: 'chat-agent-agent-durable-object', // kebab-cased binding name
-    name: 'rwsdk-agent-agent-main' // see src/app/chat-agent-agent/tools.ts
+    name: 'main' // see src/app/chat-agent-agent/tools.ts
   })
 
   const { messages, input, handleInputChange, handleSubmit, clearHistory } = useAgentChat({
