@@ -29,13 +29,13 @@ export default defineApp([
   render(Document, [
     index(Home),
     route('/chat-rsc', ChatRSC), // realtime RSC
-    route('/chat-agent', ChatAgent), // client-side react app
-    route('/chat-agent-sdk', ClientOnlyChatAgentSDK), // client-side react app
-    route('/chat-agent-agent', ClientOnlyChatAgentAgent), // client-side react app
-    route('/chat-tinybase', ChatTinybase), // client-side react app
+    route('/chat-agent', ChatAgent),
+    route('/chat-agent-sdk', ClientOnlyChatAgentSDK),
+    route('/chat-agent-agent', ClientOnlyChatAgentAgent),
+    route('/chat-tinybase', ChatTinybase),
     route('/time', Time) // realtime RSC
   ]),
-  // handle requests for both /chat-agent and /chat-agent-sdk
+  // handle websockets for /chat-agent, /chat-agent-sdk, /chat-agent-agent
   async ({ request }) => {
     const response = await routeAgentRequest(request, env)
     if (response) {

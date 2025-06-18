@@ -5,6 +5,7 @@ import { createDataStreamResponse, streamText, type StreamTextOnFinishCallback, 
 import { processToolCalls } from './utils'
 import { tools, executions } from './tools'
 import { openai } from '@ai-sdk/openai'
+import { nanoid } from 'nanoid'
 
 export class ChatAgentAgentDO extends AIChatAgent<Env> {
   async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
@@ -58,5 +59,24 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   async getMessages() {
     console.log('getMessages', this.messages)
     return this.messages
+  }
+
+  async newMessage(message: string) {
+    console.log('newMessage', message)
+    // https://github.com/cloudflare/agents/blob/398c7f5411f3a63f450007f83db7e3f29b6ed4c2/packages/agents/src/ai-chat-agent.ts#L185
+    await this.saveMessages([
+      ...this.messages,
+      {
+        id: nanoid(8),
+        content: message,
+        role: 'user' // TODO: add role for agent calling subagent
+        // TODO check timestamps etc.
+      }
+    ])
+    return this.messages[this.messages.length - 1] // TODO: stream baby stream
+  }
+
+  async clearMessages() {
+    await this.saveMessages([])
   }
 }

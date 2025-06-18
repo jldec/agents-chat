@@ -8,11 +8,7 @@ import { tool } from 'ai'
 import { z } from 'zod'
 import { getCurrentAgent, getAgentByName } from 'agents'
 import { ChatAgentAgentDO } from './ChatAgentAgentDO'
-/**
- * Local time tool that executes automatically
- * Since it includes an execute function, it will run without user confirmation
- * This is suitable for low-risk operations that don't need oversight
- */
+
 const getLocalTime = tool({
   description: 'get the local time for a specified location',
   parameters: z.object({ location: z.string() }),
@@ -22,9 +18,6 @@ const getLocalTime = tool({
   }
 })
 
-/**
- * Call the onChatMessage method of a Chat instance with name "subagent"
- */
 const getAgentMessages = tool({
   description: 'get the messages of an agent or subagent',
   parameters: z.object({
@@ -35,6 +28,57 @@ const getAgentMessages = tool({
     try {
       // @ts-expect-error wtf
       return await agent.getMessages()
+    } catch (error) {
+      console.error(`Error calling subagent ${name}`, error)
+      return `Error calling subagent ${name}: ${error}`
+    }
+  }
+})
+
+const subagentGetMessages = tool({
+  description: 'get the messages of a subagent',
+  parameters: z.object({
+    name: z.string().describe('The name of the subagent').default('subagent')
+  }),
+  execute: async ({ name }) => {
+    const agent = await getAgentByName(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name)
+    try {
+      return await agent.getMessages()
+    } catch (error) {
+      console.error(`Error calling subagent ${name}`, error)
+      return `Error calling subagent ${name}: ${error}`
+    }
+  }
+})
+
+// @ts-expect-error wtf
+const subagentNewMessage = tool({
+  description: 'send a message to a subagent',
+  parameters: z.object({
+    name: z.string().describe('The name of the subagent').default('subagent'),
+    message: z.string().describe('The message to send to the subagent')
+  }),
+  execute: async ({ name, message }) => {
+    const agent = await getAgentByName(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name)
+    try {
+      return await agent.newMessage(message)
+    } catch (error) {
+      console.error(`Error calling subagent ${name}`, error)
+      return `Error calling subagent ${name}: ${error}`
+    }
+  }
+})
+
+const subagentClearMessages = tool({
+  description: 'clear the messages of a subagent',
+  parameters: z.object({
+    name: z.string().describe('The name of the subagent').default('subagent')
+  }),
+  execute: async ({ name }) => {
+    const agent = await getAgentByName(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name)
+    try {
+      await agent.clearMessages()
+      return `Cleared messages of subagent ${name}`
     } catch (error) {
       console.error(`Error calling subagent ${name}`, error)
       return `Error calling subagent ${name}: ${error}`
@@ -70,6 +114,7 @@ const removeMCPServerUrl = tool({
     const { agent } = getCurrentAgent<ChatAgentAgentDO>()
     try {
       await agent!.removeMcpServer(id)
+      return `Removed MCP server with id: ${id}`
     } catch (error) {
       console.error('Error removing MCP server', error)
       return `Error removing MCP server: ${error}`
@@ -101,6 +146,9 @@ const listMCPServers = tool({
 export const tools = {
   getLocalTime,
   getAgentMessages,
+  subagentGetMessages,
+  subagentNewMessage,
+  subagentClearMessages,
   addMCPServerUrl,
   removeMCPServerUrl,
   listMCPServers
