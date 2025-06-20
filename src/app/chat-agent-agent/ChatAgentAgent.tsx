@@ -4,7 +4,6 @@ import { MessageInput } from '../shared/MessageInput'
 import { MessageList } from '../shared/MessageList'
 import { useAgent } from 'agents/react'
 import { useAgentChat } from 'agents/ai-react'
-import { ClientOnly } from '../shared/ClientOnly'
 
 export function ChatAgentAgent() {
   const agent = useAgent({
@@ -21,13 +20,5 @@ export function ChatAgentAgent() {
       <MessageList messages={messages} />
       <MessageInput value={input} onChange={handleInputChange} onSubmit={handleSubmit} onClear={clearHistory} />
     </ChatLayout>
-  )
-}
-
-export function ClientOnlyChatAgentAgent() {
-  return (
-    <ClientOnly>
-      <ChatAgentAgent />
-    </ClientOnly>
   )
 }

@@ -2,8 +2,8 @@ import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { ChatTinybase } from './app/chat-tinybase/ChatTinybase'
-import { ClientOnlyChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
-import { ClientOnlyChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
+import { ChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
+import { ChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
 import { defineApp } from 'rwsdk/worker'
 import { Document } from './app/Document'
 import { echoHandler } from './lib/echo'
@@ -30,11 +30,13 @@ export default defineApp([
     index(Home),
     route('/chat-rsc', ChatRSC), // realtime RSC
     route('/chat-agent', ChatAgent),
-    route('/chat-agent-sdk', ClientOnlyChatAgentSDK),
-    route('/chat-agent-agent', ClientOnlyChatAgentAgent),
     route('/chat-tinybase', ChatTinybase),
     route('/time', Time) // realtime RSC
   ]),
+  render(Document, [
+    route('/chat-agent-sdk', ChatAgentSDK),
+    route('/chat-agent-agent', ChatAgentAgent)
+  ], { ssr: false }),
   // handle websockets for /chat-agent, /chat-agent-sdk, /chat-agent-agent
   async ({ request }) => {
     const response = await routeAgentRequest(request, env)
