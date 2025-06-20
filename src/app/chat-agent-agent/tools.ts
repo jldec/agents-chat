@@ -164,7 +164,7 @@ export const tools = {
   subagentGetMessages,
   subagentNewMessage,
   subagentClearMessages,
-  addMCPServerUrl,
+  ...(env.ENV === 'dev' ? { addMCPServerUrl } : {}), // until with add MCP auth
   removeMCPServerUrl,
   listMCPServers
 }

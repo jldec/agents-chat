@@ -1,24 +1,13 @@
-'use client'
+import { Suspense } from 'react'
 import { ChatLayout } from '../shared/ChatLayout'
-import { MessageInput } from '../shared/MessageInput'
-import { MessageList } from '../shared/MessageList'
-import { useAgent } from 'agents/react'
-import { useAgentChat } from 'agents/ai-react'
+import { ChatAgentAgentClient } from './ChatAgentAgentClient'
 
 export function ChatAgentAgent() {
-  const agent = useAgent({
-    agent: 'chat-agent-agent-durable-object', // kebab-cased binding name
-    name: 'main' // see src/app/chat-agent-agent/tools.ts
-  })
-
-  const { messages, input, handleInputChange, handleSubmit, clearHistory } = useAgentChat({
-    agent
-  })
-
   return (
     <ChatLayout title="RedwoodSDK Agent Agent Chat">
-      <MessageList messages={messages} />
-      <MessageInput value={input} onChange={handleInputChange} onSubmit={handleSubmit} onClear={clearHistory} />
+      <Suspense fallback={<div className="text-gray-500">Loading...</div>}>
+        <ChatAgentAgentClient />
+      </Suspense>
     </ChatLayout>
   )
 }

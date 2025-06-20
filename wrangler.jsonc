@@ -9,6 +9,7 @@
   },
   "ai": { "binding": "AI" },
   "vars": {
+    "ENV": "production",
     "AGENTS_CHATSTORE": "rwsdk-agents-chat",
     "RWSDK_CHATSTORE": "rwsdk-realtime-chat",
     "REALTIME_KEY": "rwsdk-realtime-chat",
