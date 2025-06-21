@@ -23,8 +23,8 @@
     "reconnecting-websocket": "^4.4.0",
     "rwsdk": "0.1.0-alpha.18",
     "tailwind-merge": "^3.3.1",
-    "tinybase": "^6.2.1",
-    "workers-ai-provider": "^0.6.5",
+    "tinybase": "^6.3.0",
+    "workers-ai-provider": "^0.7.0",
     "zod": "^3.25.67"
   },
   "devDependencies": {
@@ -38,7 +38,7 @@
     "tailwindcss": "^4.1.10",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
-    "wrangler": "^4.20.4"
+    "wrangler": "^4.20.5"
   },
   "prettier": {
     "printWidth": 120,
