@@ -3,9 +3,11 @@ import { AIChatAgent } from 'agents/ai-chat-agent'
 // import { env } from 'cloudflare:workers'
 import { createDataStreamResponse, streamText, type StreamTextOnFinishCallback, type ToolSet } from 'ai'
 import { processToolCalls } from './utils'
-import { tools, executions } from './tools'
 import { openai } from '@ai-sdk/openai'
 import { nanoid } from 'nanoid'
+import { env } from 'cloudflare:workers'
+import { tool } from 'ai'
+import { z } from 'zod'
 
 export class ChatAgentAgentDO extends AIChatAgent<Env> {
   async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
@@ -14,7 +16,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
 
     // Collect all tools, including MCP tools
     const allTools = {
-      ...tools,
+      ...this.tools,
       ...this.mcp.unstable_getAITools()
     }
 
@@ -28,7 +30,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
           messages: this.messages,
           dataStream,
           tools: allTools,
-          executions
+          executions: this.executions
         })
 
         // Stream the AI response
@@ -79,4 +81,172 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   async clearMessages() {
     await this.saveMessages([])
   }
+
+  async getTime() {
+    return `The current time for the agent is ${new Date().toLocaleTimeString()}`
+  }
+
+  // Built-in tools below can operate on this or other agent instances
+  // by passing the name of the agent to the tool
+  // Unfortunatelythis.name is not available in subagents
+  // see  https://github.com/cloudflare/workerd/issues/2240
+  private agentByName(
+    name: string,
+    options?: {
+      jurisdiction?: DurableObjectJurisdiction
+      locationHint?: DurableObjectLocationHint
+    }
+  ): ChatAgentAgentDO {
+    if (name === this.name) return this
+    const id = env.CHAT_AGENT_AGENT_DURABLE_OBJECT.idFromName(name)
+    const agent =  env.CHAT_AGENT_AGENT_DURABLE_OBJECT.get(id, options)
+    agent.setName(name)
+    return agent as unknown as ChatAgentAgentDO
+  }
+
+  private getAgentTime = tool({
+    description: 'get the time',
+    parameters: z.object({
+      name: z.string().describe('The name of the agent').default('main'),
+      location: z
+        .union([
+          z.literal('wnam'),
+          z.literal('enam'),
+          z.literal('sam'),
+          z.literal('weur'),
+          z.literal('eeur'),
+          z.literal('apac'),
+          z.literal('oc'),
+          z.literal('afr'),
+          z.literal('me')
+        ])
+        .describe(
+          'The optional DurableObjectLocationHint for this agent: "wnam" | "enam" | "sam" | "weur" | "eeur" | "apac" | "oc" | "afr" | "me"'
+        )
+        .optional()
+    }),
+    execute: async ({ name, location }) => {
+      try {
+        const agent = this.agentByName(name, { locationHint: location ?? undefined })
+        return await agent.getTime()
+      } catch (error) {
+        console.error(`Error calling agent ${name}`, error)
+        return `Error calling agent ${name}: ${error}`
+      }
+    }
+  })
+
+  private subagentGetMessages = tool({
+    description: 'get the messages of a subagent',
+    parameters: z.object({
+      name: z.string().describe('The name of the subagent').default('subagent')
+    }),
+    execute: async ({ name }) => {
+      try {
+        const agent = this.agentByName(name)
+        return await agent.getMessages()
+      } catch (error) {
+        console.error(`Error calling subagent ${name}`, error)
+        return `Error calling subagent ${name}: ${error}`
+      }
+    }
+  })
+
+  private subagentNewMessage = tool({
+    description: 'send a message to a subagent',
+    parameters: z.object({
+      name: z.string().describe('The name of the subagent').default('subagent'),
+      message: z.string().describe('The message to send to the subagent')
+    }),
+    execute: async ({ name, message }) => {
+      try {
+        const agent = this.agentByName(name)
+        return await agent.newMessage(message)
+      } catch (error) {
+        console.error(`Error calling subagent ${name}`, error)
+        return `Error calling subagent ${name}: ${error}`
+      }
+    }
+  })
+
+  private subagentClearMessages = tool({
+    description: 'clear the messages of a subagent',
+    parameters: z.object({
+      name: z.string().describe('The name of the subagent').default('subagent')
+    }),
+    execute: async ({ name }) => {
+      try {
+        const agent = this.agentByName(name)
+        await agent.clearMessages()
+        return `Cleared messages of subagent ${name}`
+      } catch (error) {
+        console.error(`Error calling subagent ${name}`, error)
+        return `Error calling subagent ${name}: ${error}`
+      }
+    }
+  })
+
+  private addMCPServerUrl = tool({
+    description: 'add a MCP server URL to the MCP client in the named (or default) agent',
+    parameters: z.object({
+      name: z.string().describe('The name of the subagent, default = main agent').default('main'),
+      url: z.string()
+    }),
+    execute: async ({ name, url }) => {
+      try {
+        const agent = this.agentByName(name)
+        const { id } = await agent.addMcpServer(url, url, 'mcp-demo-host')
+        return `Added MCP url: ${url} with id: ${id}`
+      } catch (error) {
+        console.error('Error adding MCP server', error)
+        return `Error adding MCP at ${url}: ${error}`
+      }
+    }
+  })
+
+  private removeMCPServerUrl = tool({
+    description: 'remove a MCP server by id from the MCP client in the named (or default) agent',
+    parameters: z.object({
+      name: z.string().describe('The name of the subagent, default = main agent').default('main'),
+      id: z.string()
+    }),
+    execute: async ({ name, id }) => {
+      try {
+        const agent = this.agentByName(name)
+        await agent.removeMcpServer(id)
+        return `Removed MCP server with id: ${id}`
+      } catch (error) {
+        console.error('Error removing MCP server', error)
+        return `Error removing MCP server: ${error}`
+      }
+    }
+  })
+
+  private listMCPServers = tool({
+    description: 'List all MCP server URLs known to the MCP client in the named (or default) agent',
+    parameters: z.object({
+      name: z.string().describe('The name of the subagent, default = main agent').default('main')
+    }),
+    execute: async ({ name }) => {
+      try {
+        const agent = this.agentByName(name)
+        return agent.getMcpServers()
+      } catch (error) {
+        console.error('Error getting MCP servers', error)
+        return `Error getting MCP servers: ${error}`
+      }
+    }
+  })
+
+  private tools = {
+    getAgentTime: this.getAgentTime,
+    subagentGetMessages: this.subagentGetMessages,
+    subagentNewMessage: this.subagentNewMessage,
+    subagentClearMessages: this.subagentClearMessages,
+    ...(env.ENV === 'dev' ? { addMCPServerUrl: this.addMCPServerUrl } : {}), // unsafe without auth
+    removeMCPServerUrl: this.removeMCPServerUrl,
+    listMCPServers: this.listMCPServers
+  }
+
+  private executions = {}
 }

@@ -15,7 +15,7 @@
     "@ai-sdk/openai": "^1.3.22",
     "@ai-sdk/react": "^1.2.12",
     "@ai-sdk/ui-utils": "^1.2.11",
-    "agents": "0.0.95",
+    "agents": "0.0.96",
     "ai": "^4.3.16",
     "clsx": "^2.1.1",
     "markdown-it": "^14.1.0",
