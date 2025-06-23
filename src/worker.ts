@@ -55,12 +55,32 @@ const app = defineApp([
 
 export default {
   fetch: async (request, env, ctx) => {
-    const path = new URL(request.url).pathname
-    const response = await app.fetch(request, env, ctx)
-    if (path === '/time' && response.headers.get('Content-Type')?.startsWith('text/html')) {
-      response.headers.set('Cache-Control', 'public, max-age=3600')
-      response.cf = { cacheEverything: true }
+    const url = new URL(request.url)
+    let cache: Cache | undefined = undefined
+
+    try {
+      // check cache on specific routes, GET only
+      if (url.pathname === '/time' && request.method === 'GET') {
+        cache = await caches.open('default')
+        const cachedResponse = await cache.match(request)
+        if (cachedResponse) {
+          console.log('cache hit', url.pathname)
+          return cachedResponse
+        }
+      }
+      // perform expensive render
+      let response = await app.fetch(request, env, ctx)
+      // set cache if we checked it earlier and if response is ok
+      if (cache && response.status === 200) {
+        response = new Response(response.body, response)
+        response.headers.append('Cache-Control', 's-maxage=3600')
+        console.log('cache set', url.pathname)
+        ctx.waitUntil(cache.put(request, response.clone()))
+      }
+      return response
+    } catch (error: any) {
+      console.error(error)
+      return new Response(error.stack || error.message || 'Internal Server Error', { status: 500 })
     }
-    return response
   }
 } satisfies ExportedHandler<Env>
