@@ -17,18 +17,20 @@ export function cacheRoutes(
       ) {
         cache = await caches.open('default')
         if (request.headers.get('pragma')?.includes('no-cache')) {
-          // this exposes cache clearing to the client - not ideal but practical
-          await cache.delete(request)
-          console.log(`cache delete ${url.pathname} ${JSON.stringify(Object.fromEntries(request.headers), null, 2)}`)
+          try {
+            // this exposes cache clearing to the client - not ideal but practical
+            ctx.waitUntil(cache.delete(request))
+            console.log(`cache delete ${url.pathname}`)
+          } catch (error: any) {
+            console.error(`cache delete error ${url.pathname}`, error)
+          }
         } else {
           const cachedResponse = await cache.match(request)
           if (cachedResponse) {
-            console.log(`cache hit ${url.pathname} ${JSON.stringify(Object.fromEntries(request.headers), null, 2)}`)
+            console.log(`cache hit ${url.pathname}`)
             return cachedResponse
           } else {
-            console.log(
-              `cache miss ${url.pathname}${url.search} ${JSON.stringify(Object.fromEntries(request.headers), null, 2)}`
-            )
+            console.log(`cache miss ${url.pathname}${url.search}`)
           }
         }
       }
@@ -37,23 +39,12 @@ export function cacheRoutes(
       let response = await fetch(request, env, ctx)
 
       // cache only matching routes with cache-control: public
-      if (
-        cache &&
-        response.status === 200 &&
-        response.headers.get('cache-control')?.includes('public')
-      ) {
+      if (cache && response.status === 200 && response.headers.get('cache-control')?.includes('public')) {
         try {
           ctx.waitUntil(cache.put(request, response.clone()))
-          console.log(`cache set ${url.pathname} ${JSON.stringify(Object.fromEntries(response.headers), null, 2)}`)
+          console.log(`cache set ${url.pathname}`)
         } catch (error: any) {
-          console.error(
-            `cache set error, returning response anyway ${url.pathname} ${JSON.stringify(
-              Object.fromEntries(response.headers),
-              null,
-              2
-            )}`,
-            error
-          )
+          console.error(`cache set error ${url.pathname}`, error)
         }
       }
       return response

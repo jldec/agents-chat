@@ -55,5 +55,5 @@ const app = defineApp([
 ])
 
 export default {
-  fetch: cacheRoutes(app.fetch, { exclude: /\/api\// })
+  fetch: cacheRoutes(app.fetch, { exclude: /tinybase|agent-agent|\/api\/|^\/agents\// })
 } satisfies ExportedHandler<Env>
