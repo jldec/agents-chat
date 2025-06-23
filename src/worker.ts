@@ -24,7 +24,7 @@ export { ChatAgentSDKDO } from './app/chat-agent-sdk/ChatAgentSDKDO'
 export { ChatAgentAgentDO } from './app/chat-agent-agent/ChatAgentAgentDO'
 export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 
-export default defineApp([
+const app = defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
   render(Document, [
     index(Home),
@@ -33,10 +33,9 @@ export default defineApp([
     route('/chat-tinybase', ChatTinybase),
     route('/time', Time) // realtime RSC
   ]),
-  render(Document, [
-    route('/chat-agent-sdk', ChatAgentSDK),
-    route('/chat-agent-agent', ChatAgentAgent)
-  ], { ssr: false }),
+  render(Document, [route('/chat-agent-sdk', ChatAgentSDK), route('/chat-agent-agent', ChatAgentAgent)], {
+    ssr: false
+  }),
   // handle websockets for /chat-agent, /chat-agent-sdk, /chat-agent-agent
   async ({ request }) => {
     const response = await routeAgentRequest(request, env)
@@ -53,3 +52,15 @@ export default defineApp([
   ]),
   route('/echo', echoHandler)
 ])
+
+export default {
+  fetch: async (request, env, ctx) => {
+    const path = new URL(request.url).pathname
+    const response = await app.fetch(request, env, ctx)
+    if (path === '/time' && response.headers.get('Content-Type')?.startsWith('text/html')) {
+      response.headers.set('Cache-Control', 'public, max-age=3600')
+      response.cf = { cacheEverything: true }
+    }
+    return response
+  }
+} satisfies ExportedHandler<Env>
