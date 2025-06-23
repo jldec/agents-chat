@@ -37,7 +37,7 @@ const app = defineApp([
   render(Document, [route('/chat-agent-sdk', ChatAgentSDK), route('/chat-agent-agent', ChatAgentAgent)], {
     ssr: false
   }),
-  // handle websockets for /chat-agent, /chat-agent-sdk, /chat-agent-agent
+  // websockets handlers for /chat-agent, /chat-agent-sdk, /chat-agent-agent
   async ({ request }) => {
     const response = await routeAgentRequest(request, env)
     if (response) {
@@ -55,5 +55,5 @@ const app = defineApp([
 ])
 
 export default {
-  fetch: cacheRoutes(app.fetch, ['/time'])
+  fetch: cacheRoutes(app.fetch, { exclude: /\/api\// })
 } satisfies ExportedHandler<Env>
