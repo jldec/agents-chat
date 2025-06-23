@@ -59,12 +59,14 @@ export default {
     let cache: Cache | undefined = undefined
 
     try {
-      // check cache on specific routes, GET only
-      if (url.pathname === '/time' && request.method === 'GET') {
+      // check cache on specific routes, GET only (no search params - stops caching when __rsc=true)
+      if (url.pathname === '/time' && !url.search && request.method === 'GET') {
         cache = await caches.open('default')
         const cachedResponse = await cache.match(request)
         if (cachedResponse) {
-          console.log('cache hit', url.pathname)
+          console.log(
+            `cache hit ${url.pathname + url.search} ${JSON.stringify(Object.fromEntries(request.headers), null, 2)}`
+          )
           return cachedResponse
         }
       }
@@ -80,7 +82,7 @@ export default {
       return response
     } catch (error: any) {
       console.error(error)
-      return new Response(error.stack || error.message || 'Internal Server Error', { status: 500 })
+      return new Response(`worker fetch: ${error.stack || error.message || 'internal error'}`, { status: 500 })
     }
   }
 } satisfies ExportedHandler<Env>
