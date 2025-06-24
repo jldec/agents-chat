@@ -1,4 +1,4 @@
-import { cacheRoutes } from './lib/cacheRoutes'
+import { cacheInterrupter, cacheResponse } from './lib/cacheInterrupter'
 import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { ChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
@@ -29,14 +29,21 @@ const app = defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
   render(Document, [
     index(Home),
-    route('/chat-rsc', ChatRSC), // realtime RSC
-    route('/chat-agent', ChatAgent),
-    route('/chat-tinybase', ChatTinybase),
-    route('/time', Time) // realtime RSC
+    route('/chat-rsc', [cacheInterrupter, ChatRSC]), // realtime RSC
+    route('/chat-agent', [cacheInterrupter, ChatAgent]),
+    route('/chat-tinybase', [cacheInterrupter, ChatTinybase]),
+    route('/time', [cacheInterrupter, Time]) // realtime RSC
   ]),
-  render(Document, [route('/chat-agent-sdk', ChatAgentSDK), route('/chat-agent-agent', ChatAgentAgent)], {
-    ssr: false
-  }),
+  render(
+    Document,
+    [
+      route('/chat-agent-sdk', [cacheInterrupter, ChatAgentSDK]),
+      route('/chat-agent-agent', [cacheInterrupter, ChatAgentAgent])
+    ],
+    {
+      ssr: false
+    }
+  ),
   // websockets handlers for /chat-agent, /chat-agent-sdk, /chat-agent-agent
   async ({ request }) => {
     const response = await routeAgentRequest(request, env)
@@ -55,5 +62,5 @@ const app = defineApp([
 ])
 
 export default {
-  fetch: cacheRoutes(app.fetch, { exclude: /tinybase|agent-agent|\/api\/|^\/agents\// })
-} satisfies ExportedHandler<Env>
+  fetch: cacheResponse(app.fetch)
+}
