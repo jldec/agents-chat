@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "agents-chat",
-  "main": "src/worker.ts",
+  "main": "src/worker.tsx",
   "compatibility_date": "2025-05-07",
   "compatibility_flags": ["nodejs_compat", "nodejs_compat_populate_process_env"],
   "observability": {

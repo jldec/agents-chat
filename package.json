@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "vite dev",
-    "build": "RWSDK_DEPLOY=1 vite build",
+    "build": "vite build",
     "ship": "vite build && wrangler deploy",
     "types": "wrangler types --include-runtime false --strict-vars false",
     "tail": "wrangler tail"
@@ -28,6 +28,7 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.7.4",
     "@cloudflare/workers-types": "^4.20250620.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.10",
@@ -38,7 +39,7 @@
     "tailwindcss": "^4.1.10",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
-    "wrangler": "^4.20.5"
+    "wrangler": "^4.21.0"
   },
   "prettier": {
     "printWidth": 120,
