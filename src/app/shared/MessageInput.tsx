@@ -17,9 +17,7 @@ interface MessageInputPropsAgentSDK {
   newMessage?: never
 }
 
-type MessageInputPropsUnion = MessageInputProps | MessageInputPropsAgentSDK
-
-export function MessageInput(props: MessageInputPropsUnion) {
+export function MessageInput(props: MessageInputProps | MessageInputPropsAgentSDK) {
   const [input, setInput] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
