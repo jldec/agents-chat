@@ -65,3 +65,6 @@ coverage
 
 # Wrangler
 .wrangler
+
+# Vite dev server content plugin
+/content/
