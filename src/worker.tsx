@@ -5,12 +5,13 @@ import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { ChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { ChatTinybase } from './app/chat-tinybase/ChatTinybase'
+import { ContentPages } from './app/content/contentPages'
 import { defineApp } from 'rwsdk/worker'
 import { Document } from './app/Document'
 import { echoHandler } from './lib/echo'
 import { env } from 'cloudflare:workers'
 import { Home } from './app/Home'
-import { index, render, route } from 'rwsdk/router'
+import { index, prefix, render, route } from 'rwsdk/router'
 import { realtimeRoute } from 'rwsdk/realtime/worker'
 import { redirectRoutes } from './lib/redirects'
 import { routeAgentRequest } from 'agents'
@@ -29,22 +30,16 @@ const app = defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
   render(Document, [
     index(Home),
-    route('/chat-rsc', [cacheInterrupter, ChatRSC]), // realtime RSC
+    route('/chat-rsc', [cacheInterrupter, ChatRSC]),
     route('/chat-agent', [cacheInterrupter, ChatAgent]),
     route('/chat-tinybase', [cacheInterrupter, ChatTinybase]),
-    route('/time', [cacheInterrupter, Time]) // realtime RSC
+    route('/time', [cacheInterrupter, Time]),
+    prefix('/site', [route('*', ContentPages)])
   ]),
-  render(
-    Document,
-    [
-      route('/chat-agent-sdk', [cacheInterrupter, ChatAgentSDK]),
-      route('/chat-agent-agent', [cacheInterrupter, ChatAgentAgent])
-    ],
-    {
-      ssr: false
-    }
-  ),
-  // websockets handlers for /chat-agent, /chat-agent-sdk, /chat-agent-agent
+  render(Document, [
+    route('/chat-agent-sdk', [cacheInterrupter, ChatAgentSDK]),
+    route('/chat-agent-agent', [cacheInterrupter, ChatAgentAgent])
+  ], { ssr: false }),
   async ({ request }) => {
     const response = await routeAgentRequest(request, env)
     if (response) {

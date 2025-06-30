@@ -12,13 +12,7 @@ switch (window.location.pathname) {
       key: 'rwsdk-realtime-demo'
     })
     break
-  case '/chat-agent':
-  case '/chat-agent-sdk':
-  case '/chat-tinybase':
-  case '/chat-agent-agent':
-  case '/':
+  default:
     initClient()
     break
-  default:
-    console.error(new Error(`no rwsdk client init for ${window.location.pathname}`))
 }
