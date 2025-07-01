@@ -5,7 +5,8 @@ import { cloudflare } from '@cloudflare/vite-plugin'
 import { contentPlugin } from './vite/contentPlugin'
 
 export default defineConfig({
-  plugins: [
+  // cloudflare plugin and vitest don't get along
+  plugins: process.env.VITEST ? [] : [
     cloudflare({
       viteEnvironment: { name: 'worker' }
     }),

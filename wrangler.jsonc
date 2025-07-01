@@ -9,13 +9,40 @@
   },
   "ai": { "binding": "AI" },
   "vars": {
-    "ENV": "production",
     "AGENTS_CHATSTORE": "rwsdk-agents-chat",
     "RWSDK_CHATSTORE": "rwsdk-realtime-chat",
     "REALTIME_KEY": "rwsdk-realtime-chat",
     "WEBSOCKET_AGENT_NAME": "rwsdk-chat-agent", // duplicated in ChatAgent.tsx
-    "TINYBASE_SYNC_ROUTE": "/tinybase/websocket/sync" // duplicated in ChatTinybase.tsx
+    "TINYBASE_SYNC_ROUTE": "/tinybase/websocket/sync", // duplicated in ChatTinybase.tsx
+    "GH_OWNER": "jldec",
+    "GH_REPO": "jldec-me",
+    "GH_BRANCH": "main",
+    "GH_PATH": "content"
   },
+  // .dev.vars
+  // DEV_CONTENT_DIR=/Users/jldec/presskit/jldec-me/content -- defaults to ./content
+  // pnpm wrangler secret put OPENAI_API_KEY
+  // pnpm wrangler secret put GH_PAT
+  // pnpm wrangler secret put IMAGE_KEY
+  "kv_namespaces": [
+    // pnpm wrangler kv namespace create PAGEDATA_CACHE
+    {
+      "binding": "PAGEDATA_CACHE",
+      "id": "d3258d8169fb486fa9b8d4defde14f9d"
+    },
+    // pnpm wrangler kv namespace create STATIC_CACHE
+    {
+      "binding": "STATIC_CACHE",
+      "id": "e7b3aa1f6f184c669c3128424b163009"
+    }
+  ],
+  // pnpm wrangler r2 bucket create agents-chat-images
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "agents-chat-images"
+    }
+  ],
   "durable_objects": {
     "bindings": [
       {

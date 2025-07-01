@@ -8,6 +8,7 @@ import { nanoid } from 'nanoid'
 import { env } from 'cloudflare:workers'
 import { tool } from 'ai'
 import { z } from 'zod'
+import { IS_DEV } from 'rwsdk/constants'
 
 export class ChatAgentAgentDO extends AIChatAgent<Env> {
   async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
@@ -243,7 +244,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     subagentGetMessages: this.subagentGetMessages,
     subagentNewMessage: this.subagentNewMessage,
     subagentClearMessages: this.subagentClearMessages,
-    ...(env.ENV === 'dev' ? { addMCPServerUrl: this.addMCPServerUrl } : {}), // unsafe without auth
+    ...(IS_DEV ? { addMCPServerUrl: this.addMCPServerUrl } : {}), // unsafe without auth
     removeMCPServerUrl: this.removeMCPServerUrl,
     listMCPServers: this.listMCPServers
   }
