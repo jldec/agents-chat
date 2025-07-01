@@ -1,0 +1,19 @@
+---
+title: agents-chat (now from markdown)
+---
+
+![bloemies](bloem.jpg)
+# agents-chat
+Several implementations of multi-user streaming AI chat built using RedwoodSDK and RSCs.
+
+- [RSC Chat](/chat-rsc) - syncs via RedwoodSDK realtime websockets
+
+- [Agent Chat](/chat-agent) - syncs via Cloudflare Agents websockets
+
+- [Agent SDK Chat](/chat-agent-sdk) - uses AIChatAgent with the useAgentChat hook
+
+- [TinyBase Chat](/chat-tinybase) - syncs via TinyBase websockets
+
+- [Agent Agent Chat](/chat-agent-agent) - More advanced Cloudflare agent with subagents and MCP tool calling (sse only, no auth). Syncs via agent websocket.
+
+- [Time](/time) - my first RedwoodSDK app, and my first exploration of RSCs.
