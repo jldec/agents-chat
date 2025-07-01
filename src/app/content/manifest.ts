@@ -30,7 +30,7 @@ export async function getManifest(noCache: boolean = false) {
   }
 
   // local dev uses content directory in worker site public assets manifest
-  if (IS_DEV) {
+  if (IS_DEV && !env.TEST_GH) {
     const origin = new URL(requestInfo.request.url).origin
     source = `${origin}/_content`
     const resp = await fetch(source)
@@ -41,6 +41,7 @@ export async function getManifest(noCache: boolean = false) {
   } else {
     // https://docs.github.com/en/rest/git/trees
     const url = `https://api.github.com/repos/${env.GH_OWNER}/${env.GH_REPO}/git/trees/${env.GH_BRANCH}:${env.GH_PATH}?recursive=1`
+    console.log('getManifest', url)
     const resp = await fetch(url, {
       headers: {
         Accept: 'application/vnd.github+json',

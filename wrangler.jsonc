@@ -15,9 +15,11 @@
     "WEBSOCKET_AGENT_NAME": "rwsdk-chat-agent", // duplicated in ChatAgent.tsx
     "TINYBASE_SYNC_ROUTE": "/tinybase/websocket/sync", // duplicated in ChatTinybase.tsx
     "GH_OWNER": "jldec",
-    "GH_REPO": "jldec-me",
-    "GH_BRANCH": "main",
-    "GH_PATH": "content"
+    "GH_REPO": "agents-chat",
+    "GH_BRANCH": "static-content",
+    "GH_PATH": "content",
+    "DEV_CONTENT_DIR": "./content",
+    "TEST_GH": ""
   },
   // .dev.vars
   // DEV_CONTENT_DIR=/Users/jldec/agents-chat/jldec-me/content -- defaults to ./content

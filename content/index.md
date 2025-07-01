@@ -4,7 +4,9 @@ title: agents-chat (now from markdown)
 
 ![bloemies](bloem.jpg)
 # agents-chat
-Several implementations of multi-user streaming AI chat built using RedwoodSDK and RSCs.
+https://github.com/jldec/agents-chat
+
+Multi-user streaming AI chats built using RedwoodSDK, Cloudflare Agents, and RSCs.
 
 - [RSC Chat](/chat-rsc) - syncs via RedwoodSDK realtime websockets
 

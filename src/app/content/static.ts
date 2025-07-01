@@ -18,7 +18,7 @@ export async function getStatic(
   }
   let resp: Response
   let source = 'github'
-  if (IS_DEV) {
+  if (IS_DEV && !env.TEST_GH) {
     const origin = new URL(requestInfo.request.url).origin
     source = `${origin}/_content`
     resp = await fetch(`${source}${path}`)
