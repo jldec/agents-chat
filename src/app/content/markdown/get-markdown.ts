@@ -22,7 +22,8 @@ async function getSourceText(path: string): Promise<string> {
   let resp: Response
   let source = 'github'
   if (IS_DEV) {
-    source = '/_content'
+    const origin = new URL(requestInfo.request.url).origin
+    source = `${origin}/_content`
     resp = await fetch(`${source}${filepath}`)
   } else {
     // https://docs.github.com/en/rest/repos/contents
@@ -33,7 +34,7 @@ async function getSourceText(path: string): Promise<string> {
           Accept: 'application/vnd.github.raw+json',
           Authorization: `Bearer ${env.GH_PAT}`,
           'X-GitHub-Api-Version': '2022-11-28',
-          'User-Agent': 'presskit-worker'
+          'User-Agent': 'agents-chat-worker'
         }
       }
     )

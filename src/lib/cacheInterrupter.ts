@@ -18,7 +18,10 @@ export async function cacheInterrupter({ request, cf, headers }: RequestInfo): P
   ) {
     // @ts-ignore
     const cache = caches.default
-    if (request.headers.get('pragma')?.includes('no-cache')) {
+    if (
+      request.headers.get('pragma')?.includes('no-cache') ||
+      request.headers.get('cache-control')?.includes('no-cache')
+    ) {
       try {
         // this exposes cache clearing to the client - not ideal but practical
         cf.waitUntil(cache.delete(request))

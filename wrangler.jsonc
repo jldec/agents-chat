@@ -20,7 +20,7 @@
     "GH_PATH": "content"
   },
   // .dev.vars
-  // DEV_CONTENT_DIR=/Users/jldec/presskit/jldec-me/content -- defaults to ./content
+  // DEV_CONTENT_DIR=/Users/jldec/agents-chat/jldec-me/content -- defaults to ./content
   // pnpm wrangler secret put OPENAI_API_KEY
   // pnpm wrangler secret put GH_PAT
   // pnpm wrangler secret put IMAGE_KEY

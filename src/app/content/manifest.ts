@@ -4,7 +4,7 @@ import { IS_DEV } from 'rwsdk/constants'
 import { requestInfo } from 'rwsdk/worker'
 import { env } from 'cloudflare:workers'
 
-const manifestCacheKey = 'manifest:jldec/presskit'
+const manifestCacheKey = 'manifest:jldec/agents-chat'
 
 let manifestMemo: null | string[] = null
 
@@ -31,8 +31,9 @@ export async function getManifest(noCache: boolean = false) {
 
   // local dev uses content directory in worker site public assets manifest
   if (IS_DEV) {
-    source = 'localhost:8765'
-    const resp = await fetch('http://localhost:8765/')
+    const origin = new URL(requestInfo.request.url).origin
+    source = `${origin}/_content`
+    const resp = await fetch(source)
     if (resp.ok) {
       // TODO: validate json
       manifest = (await resp.json()) as string[]
@@ -45,7 +46,7 @@ export async function getManifest(noCache: boolean = false) {
         Accept: 'application/vnd.github+json',
         Authorization: `Bearer ${env.GH_PAT}`,
         'X-GitHub-Api-Version': '2022-11-28',
-        'User-Agent': 'presskit-worker'
+        'User-Agent': 'agents-chat-worker'
       }
     })
     if (resp.ok) {

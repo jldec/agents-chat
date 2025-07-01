@@ -5,7 +5,7 @@ import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { ChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { ChatTinybase } from './app/chat-tinybase/ChatTinybase'
-import { contentRoutes } from './app/content/routes'
+import { contentMiddleware } from './app/content/middleware'
 import { defineApp } from 'rwsdk/worker'
 import { Document } from './app/Document'
 import { echoHandler } from './lib/echo'
@@ -26,7 +26,10 @@ export { ChatAgentSDKDO } from './app/chat-agent-sdk/ChatAgentSDKDO'
 export { ChatAgentAgentDO } from './app/chat-agent-agent/ChatAgentAgentDO'
 export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 
+export type AppContext = {}
+
 const app = defineApp([
+  contentMiddleware,
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
   render(Document, [
     index(Home),
@@ -34,7 +37,6 @@ const app = defineApp([
     route('/chat-agent', [cacheInterrupter, ChatAgent]),
     route('/chat-tinybase', [cacheInterrupter, ChatTinybase]),
     route('/time', [cacheInterrupter, Time]),
-    prefix('/site', contentRoutes)
   ]),
   render(Document, [
     route('/chat-agent-sdk', [cacheInterrupter, ChatAgentSDK]),
