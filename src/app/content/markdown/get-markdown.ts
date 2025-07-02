@@ -21,7 +21,7 @@ async function getSourceText(path: string): Promise<string> {
   const filepath = await filePath(path)
   let resp: Response
   let source = 'github'
-  if (IS_DEV && !env.TEST_GH) {
+  if (IS_DEV && !env.GH_TEST) {
     const origin = new URL(requestInfo.request.url).origin
     source = `${origin}/_content`
     resp = await fetch(`${source}${filepath}`)

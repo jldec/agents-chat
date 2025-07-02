@@ -5,9 +5,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite dev --force",
     "test": "vitest run",
     "build": "vite build",
+    "preview": "vite preview",
     "ship": "vite build && wrangler deploy",
     "types": "wrangler types --include-runtime false --strict-vars false",
     "tail": "wrangler tail"
