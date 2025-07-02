@@ -17,36 +17,43 @@
     "@ai-sdk/react": "^1.2.12",
     "@ai-sdk/ui-utils": "^1.2.11",
     "@std/front-matter": "jsr:^1.0.9",
-    "agents": "0.0.97",
+    "agents": "0.0.101",
     "ai": "^4.3.16",
     "clsx": "^2.1.1",
     "markdown-it": "^14.1.0",
     "nanoid": "^5.1.5",
     "reconnecting-websocket": "^4.4.0",
-    "rwsdk": "0.1.0",
+    "rwsdk": "0.1.8",
     "tailwind-merge": "^3.3.1",
     "tinybase": "^6.3.0",
     "workers-ai-provider": "^0.7.0",
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.7.4",
-    "@cloudflare/workers-types": "^4.20250620.0",
+    "@cloudflare/vite-plugin": "^1.8.0",
+    "@cloudflare/workers-types": "^4.20250702.0",
     "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.1.10",
+    "@tailwindcss/vite": "^4.1.11",
     "@types/markdown-it": "^14.1.2",
     "@types/mime-types": "^3.0.1",
-    "@types/node": "^24.0.3",
+    "@types/node": "^24.0.10",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.0.1",
     "fast-glob": "^3.3.3",
     "mime-types": "^3.0.1",
-    "tailwindcss": "^4.1.10",
+    "tailwindcss": "^4.1.11",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5",
+    "vite": "^7.0.0",
     "vitest": "^3.2.4",
-    "wrangler": "^4.21.0"
+    "wrangler": "^4.22.0"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "vite": "7"
+      }
+    }
   },
   "prettier": {
     "printWidth": 120,
