@@ -24,15 +24,15 @@
     "markdown-it": "^14.1.0",
     "nanoid": "^5.1.5",
     "reconnecting-websocket": "^4.4.0",
-    "rwsdk": "0.1.8",
+    "rwsdk": "0.1.9",
     "tailwind-merge": "^3.3.1",
     "tinybase": "^6.3.0",
-    "workers-ai-provider": "^0.7.0",
-    "zod": "^3.25.67"
+    "workers-ai-provider": "^0.7.1",
+    "zod": "^3.25.71"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.8.0",
-    "@cloudflare/workers-types": "^4.20250702.0",
+    "@cloudflare/vite-plugin": "^1.9.0",
+    "@cloudflare/workers-types": "^4.20250703.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.11",
     "@types/markdown-it": "^14.1.2",
@@ -45,9 +45,9 @@
     "mime-types": "^3.0.1",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.8.3",
-    "vite": "^7.0.0",
+    "vite": "^6.3.5",
     "vitest": "^3.2.4",
-    "wrangler": "^4.22.0"
+    "wrangler": "^4.23.0"
   },
   "pnpm": {
     "peerDependencyRules": {
