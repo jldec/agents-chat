@@ -5,9 +5,7 @@ import { getStatic } from './static'
 import { getRedirects } from './redirects'
 import { type RequestInfo } from 'rwsdk/worker'
 
-import { PageLayout } from './PageLayout'
-
-export const contentRouteHandler = async ({ request }: RequestInfo) => {
+export const contentRoutes = async ({ request, ctx }: RequestInfo): Promise<Response | void> => {
   const noCache =
     request.headers.get('cache-control')?.includes('no-cache') || request.headers.get('pragma')?.includes('no-cache')
   const url = new URL(request.url)
@@ -32,21 +30,20 @@ export const contentRouteHandler = async ({ request }: RequestInfo) => {
     }
   }
 
-  // serve markdown pages
+  // return markdown pages in ctx.pageContext or return JSON if ?json
   const pagePaths = await getPagePaths()
   if (pathname in pagePaths) {
-    const page = await getPageData(pathname, noCache)
-    if (page) {
+    const pageData = await getPageData(pathname, noCache)
+    if (pageData) {
       // site is used for meta headers, dirEntry is only used for "next" links on blog pages
       const siteData = (await getPageData('/'))?.attrs
       const dirData = pathname.startsWith('/blog/')
         ? (await getPageData('/blog'))?.dir?.find((p) => p.path === pathname)
         : undefined
 
-      if (url.searchParams.has('json')) return Response.json({ page, siteData, dirData })
-
-      // super-minimal markdown template TODO: themes
-      return <PageLayout page={page} />
+      if (url.searchParams.has('json')) return Response.json({ pageData, siteData, dirData })
+      ctx.pageContext = { pathname, pageData, siteData, dirData }
+      return
     }
   }
 
@@ -55,7 +52,4 @@ export const contentRouteHandler = async ({ request }: RequestInfo) => {
   if (pathname in redirects) {
     return Response.redirect(url.origin + redirects[pathname].redirect + search, redirects[pathname].status)
   }
-
-  // drop through if not found
-  return new Response('Not found', { status: 404 })
 }

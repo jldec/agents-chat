@@ -5,7 +5,6 @@ import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { ChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { ChatTinybase } from './app/chat-tinybase/ChatTinybase'
-import { contentRouteHandler } from './app/content/routeHandler'
 import { defineApp } from 'rwsdk/worker'
 import { Document } from './app/Document'
 import { echoHandler } from './lib/echo'
@@ -18,6 +17,10 @@ import { Time } from './app/time/Time'
 import { timeApiRoutes } from './app/time/api-routes'
 import { tinybaseApiRoutes } from './app/chat-tinybase/api-routes'
 
+import type { PageContext } from './app/contentSource/types'
+import { contentRoutes } from './app/contentSource/routes'
+import { contentTheme } from './app/contentTheme/routes'
+
 export { ChatDurableObject } from './app/shared/ChatStore'
 export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
 export { WebsocketAgent } from './app/chat-agent/WebsocketAgent'
@@ -25,7 +28,9 @@ export { ChatAgentSDKDO } from './app/chat-agent-sdk/ChatAgentSDKDO'
 export { ChatAgentAgentDO } from './app/chat-agent-agent/ChatAgentAgentDO'
 export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 
-export type AppContext = {}
+export type AppContext = {
+  pageContext: PageContext
+}
 
 const app = defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
@@ -58,7 +63,7 @@ const app = defineApp([
     { from: '/chat-client', to: '/chat-agent' }
   ]),
   route('/echo', echoHandler),
-  render(Document, [route('*', [cacheInterrupter, contentRouteHandler])])
+  render(Document, [route('*', [cacheInterrupter, contentRoutes, contentTheme])])
 ])
 
 export default {

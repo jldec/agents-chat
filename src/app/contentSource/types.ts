@@ -1,4 +1,11 @@
 // TODO: DirData should be part of PageData
+export type PageContext = {
+  pathname: string
+  pageData: PageData
+  siteData?: Frontmatter
+  dirData?: DirData
+}
+
 export type DirData = {
   path: string
   attrs?: Frontmatter
