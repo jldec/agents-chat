@@ -1,7 +1,7 @@
 import { requestInfo as r } from 'rwsdk/worker'
 
 export const Splash = () => {
-  const pageData = r.ctx.pageContext.pageData
+  const pageData = r.ctx.pageContext?.pageData
 
   const splashimage = pageData?.attrs.splash?.image ?? pageData?.attrs.splashimage
   if (!splashimage) return null

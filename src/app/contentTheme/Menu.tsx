@@ -3,7 +3,7 @@ import { requestInfo as r } from 'rwsdk/worker'
 import type { Navlink } from '../contentSource/types'
 
 export const Menu = () => {
-  const siteData = r.ctx.pageContext.siteData
+  const siteData = r.ctx.pageContext?.siteData
   if (!siteData) return null
   return (
     <nav className="flex flex-wrap mb-4">

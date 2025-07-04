@@ -27,13 +27,13 @@ export function BlogPost() {
       <title>{pageData.attrs.title}</title>
       <p className="flex">
         <span className="flex-grow">{longdate}</span>
-        <a
+        {/* <a
           className="px-[6px] text-gray-400 hover:text-orange-500"
           role="button"
-          // onClick={() => document.getElementById('chat-icon')?.click()}
+          onClick={() => document.getElementById('chat-icon')?.click()}
         >
           Ask AI
-        </a>
+        </a> */}
         {dirData?.next ? (
           <a className="px-[6px] text-gray-400 hover:text-orange-500" href={parentPath(pageData.path)}>
             <List className="h-5" />
