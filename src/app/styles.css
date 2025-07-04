@@ -68,7 +68,6 @@ html {
   text-decoration-style: double;
   text-decoration-color: #f97316; /* orange-500 */
   text-decoration-thickness: 1.5px;
-  transform: scale(1.05);
 }
 
 .prose hr {

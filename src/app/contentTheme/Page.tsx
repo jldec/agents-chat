@@ -1,12 +1,12 @@
 import { requestInfo as r } from 'rwsdk/worker'
 import { Layout } from './Layout'
+import { ContentHtml } from './ContentHtml'
 
-// assumes r.ctx.pageContext is set
 export function Page() {
   const pageData = r.ctx.pageContext?.pageData
   return (
     <Layout>
-      <div dangerouslySetInnerHTML={{ __html: pageData?.html ?? '[empty page]' }} />
+      <ContentHtml />
       {pageData?.dir ? (
         <ul>
           {pageData.dir.map((d) => (

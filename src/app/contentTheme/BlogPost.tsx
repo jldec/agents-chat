@@ -1,6 +1,7 @@
 import { requestInfo as r } from 'rwsdk/worker'
 import { Layout } from './Layout'
 import { List, SquareChevronUp, SquareChevronDown } from './icons'
+import { ContentHtml } from './ContentHtml'
 
 function parentPath(path: string) {
   return path.split('/').slice(0, -1).join('/') || '/'
@@ -23,7 +24,7 @@ export function BlogPost() {
 
   return (
     <Layout>
-      <p className="flex">
+      <p className="flex mb-4">
         <span className="flex-grow">{longdate}</span>
         {/* <a
           className="px-[6px] text-gray-400 hover:text-orange-500"
@@ -62,7 +63,7 @@ export function BlogPost() {
           ''
         )}
       </p>
-      <div dangerouslySetInnerHTML={{ __html: pageData?.html ?? '[empty page]' }} />
+      <ContentHtml />
     </Layout>
   )
 }
