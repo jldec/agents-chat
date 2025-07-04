@@ -16,15 +16,13 @@ function formatDate(date: any) {
   }).format(date)
 }
 
-// assumes r.ctx.pageContext is set
 export function BlogPost() {
-  const pageData = r.ctx.pageContext.pageData
-  const dirData = r.ctx.pageContext.dirData
-  const longdate = [formatDate(pageData.attrs?.date)].filter(Boolean).join(' - ')
+  const pageData = r.ctx.pageContext?.pageData
+  const dirData = r.ctx.pageContext?.dirData
+  const longdate = [formatDate(pageData?.attrs?.date)].filter(Boolean).join(' - ')
 
   return (
     <Layout>
-      <title>{pageData.attrs.title}</title>
       <p className="flex">
         <span className="flex-grow">{longdate}</span>
         {/* <a
@@ -35,7 +33,7 @@ export function BlogPost() {
           Ask AI
         </a> */}
         {dirData?.next ? (
-          <a className="px-[6px] text-gray-400 hover:text-orange-500" href={parentPath(pageData.path)}>
+          <a className="px-[6px] text-gray-400 hover:text-orange-500" href={parentPath(pageData?.path || '/')}>
             <List className="h-5" />
           </a>
         ) : (
@@ -64,7 +62,7 @@ export function BlogPost() {
           ''
         )}
       </p>
-      <div dangerouslySetInnerHTML={{ __html: pageData.html }} />
+      <div dangerouslySetInnerHTML={{ __html: pageData?.html ?? '[empty page]' }} />
     </Layout>
   )
 }

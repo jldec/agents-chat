@@ -48,7 +48,7 @@ const md = markdownit({
 })
 
 // In component:
-<div dangerouslySetInnerHTML={{ __html: md.render(content) }}></div>
+<div dangerouslySetInnerHTML={{ __html: pageData?.html ?? '' }} />
 ```
 
 ## Project Structure

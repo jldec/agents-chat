@@ -5,9 +5,8 @@ import { Home } from './Home'
 import { BlogList } from './BlogList'
 import { BlogPost } from './BlogPost'
 
-// Default template for markdown pages
 export function contentTheme({ ctx }: RequestInfo) {
-  if (ctx.pageContext) {
+  if (ctx.pageContext?.pageData) {
     switch (ctx.pageContext.pathname) {
       case '/':
         return <Home />

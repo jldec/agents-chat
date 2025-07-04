@@ -1,14 +1,13 @@
 import { requestInfo as r } from 'rwsdk/worker'
 import { Layout } from './Layout'
 
-// assumes r.ctx.pageContext is set
 export function BlogList() {
-  const pageData = r.ctx.pageContext.pageData
+  const pageData = r.ctx.pageContext?.pageData
   return (
     <Layout>
-      <title>{pageData.attrs.title}</title>
-      <div dangerouslySetInnerHTML={{ __html: pageData.html }} />
-      {pageData.dir ? (
+      <title>{pageData?.attrs.title}</title>
+      <div dangerouslySetInnerHTML={{ __html: pageData?.html ?? '[empty page]' }} />
+      {pageData?.dir ? (
         <ul>
           {pageData.dir.map((d) => {
             const text = d.attrs?.title ?? d.path

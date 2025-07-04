@@ -29,7 +29,7 @@ export { ChatAgentAgentDO } from './app/chat-agent-agent/ChatAgentAgentDO'
 export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 
 export type AppContext = {
-  pageContext: PageContext
+  pageContext?: PageContext
 }
 
 const app = defineApp([

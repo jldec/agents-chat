@@ -3,6 +3,7 @@ import { getManifest } from './manifest'
 import { getPageData } from './markdown/get-markdown'
 import { getStatic } from './static'
 import { getRedirects } from './redirects'
+import { type PageContext } from './types'
 import { type RequestInfo } from 'rwsdk/worker'
 
 export const contentRoutes = async ({ request, ctx }: RequestInfo): Promise<Response | void> => {
@@ -30,26 +31,21 @@ export const contentRoutes = async ({ request, ctx }: RequestInfo): Promise<Resp
     }
   }
 
-  // return markdown pages in ctx.pageContext or return JSON if ?json
-  const pagePaths = await getPagePaths()
-  if (pathname in pagePaths) {
-    const pageData = await getPageData(pathname, noCache)
-    if (pageData) {
-      // site is used for meta headers, dirEntry is only used for "next" links on blog pages
-      const siteData = (await getPageData('/'))?.attrs
-      const dirData = pathname.startsWith('/blog/')
-        ? (await getPageData('/blog'))?.dir?.find((p) => p.path === pathname)
-        : undefined
-
-      if (url.searchParams.has('json')) return Response.json({ pageData, siteData, dirData })
-      ctx.pageContext = { pathname, pageData, siteData, dirData }
-      return
-    }
-  }
-
-  // serve redirects
+  // redirects take precedence over markdown pages
   const redirects = await getRedirects()
   if (pathname in redirects) {
     return Response.redirect(url.origin + redirects[pathname].redirect + search, redirects[pathname].status)
   }
+  const pagePaths = await getPagePaths()
+  const pageContext: PageContext = {
+    pathname,
+    siteData: '/' in pagePaths ? (await getPageData('/'))?.attrs : undefined,
+    pageData: pathname in pagePaths ? (await getPageData(pathname, noCache)) || undefined : undefined,
+    dirData:
+      pathname.startsWith('/blog/') && '/blog' in pagePaths
+        ? (await getPageData('/blog'))?.dir?.find((p) => p.path === pathname)
+        : undefined
+  }
+  if (url.searchParams.has('json')) return Response.json(pageContext)
+  ctx.pageContext = pageContext
 }
