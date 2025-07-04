@@ -1,5 +1,25 @@
 ---
-title: agents-chat (now from markdown)
+title: agents-chat
+siteurl: https://agents-chat.jldec.workers.dev/
+description: Co-founder & product engineer 🌳 The Web is for everyone ❤️
+twitter: '@jldec'
+navlinks:
+  - text: Home
+    href: /
+    icon: home
+sociallinks:
+  - text: X
+    href: https://x.com/jldec
+    icon: twitter
+  - text: GitHub
+    href: https://github.com/jldec
+    icon: github
+  - text: Linkedin
+    href: https://www.linkedin.com/in/jldec/
+    icon: linkedin
+  - text: Email
+    href: mailto:jurgen@jldec.me
+    icon: email
 ---
 
 ![bloemies](bloem.jpg)
