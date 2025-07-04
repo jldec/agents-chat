@@ -17,7 +17,7 @@ async function filePath(path: string): Promise<string> {
   return `${path}.md`
 }
 
-async function getSourceText(path: string): Promise<string> {
+async function getSourceText(path: string): Promise<string | null> {
   const filepath = await filePath(path)
   let resp: Response
   let source = 'github'
@@ -39,8 +39,8 @@ async function getSourceText(path: string): Promise<string> {
       }
     )
   }
-  if (!resp.ok) throw new Error(`${resp.status} error fetching ${path}`)
   console.log('getMarkdown', source, resp.status)
+  if (!resp.ok) return null
   return await resp.text()
 }
 
@@ -56,6 +56,7 @@ export async function getPageData(path: string, noCache: boolean = false): Promi
   }
 
   const sourceText = await getSourceText(path)
+  if (!sourceText) return null
   const parsedFrontmatter = parseFrontmatter(sourceText)
   const dirData = await getDirData(path, parsedFrontmatter.attrs.sortby)
   const pageData = {
