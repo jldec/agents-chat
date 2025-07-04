@@ -51,9 +51,9 @@ export interface Navlink {
 }
 
 export interface Splash {
-  image?: string;
-  title?: string;
-  subtitle?: string;
+  image?: string
+  title?: string
+  subtitle?: string
 }
 
 export interface Redirect {

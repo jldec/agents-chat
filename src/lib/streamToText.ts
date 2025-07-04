@@ -1,4 +1,3 @@
-
 /**
  * Processes a response stream
  * @param stream - The stream from the AI.

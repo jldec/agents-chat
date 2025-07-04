@@ -4,10 +4,7 @@ import { env } from 'cloudflare:workers'
 import { requestInfo } from 'rwsdk/worker'
 import { IS_DEV } from 'rwsdk/constants'
 
-export async function getStatic(
-  path: string,
-  noCache: boolean = false
-): Promise<Response | null> {
+export async function getStatic(path: string, noCache: boolean = false): Promise<Response | null> {
   if (!noCache) {
     const { value, metadata } = await env.STATIC_CACHE.getWithMetadata(path, {
       type: 'stream',
@@ -24,7 +21,8 @@ export async function getStatic(
     resp = await fetch(`${source}${path}`)
   } else {
     // https://docs.github.com/en/rest/repos/contents
-    resp = await fetch(`https://api.github.com/repos/${env.GH_OWNER}/${env.GH_REPO}/contents/${env.GH_PATH}${path}?ref=${env.GH_BRANCH}`,
+    resp = await fetch(
+      `https://api.github.com/repos/${env.GH_OWNER}/${env.GH_REPO}/contents/${env.GH_PATH}${path}?ref=${env.GH_BRANCH}`,
       {
         headers: {
           Accept: 'application/vnd.github.raw+json',

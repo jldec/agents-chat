@@ -100,7 +100,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   ): ChatAgentAgentDO {
     if (name === this.name) return this
     const id = env.CHAT_AGENT_AGENT_DURABLE_OBJECT.idFromName(name)
-    const agent =  env.CHAT_AGENT_AGENT_DURABLE_OBJECT.get(id, options)
+    const agent = env.CHAT_AGENT_AGENT_DURABLE_OBJECT.get(id, options)
     agent.setName(name)
     return agent as unknown as ChatAgentAgentDO
   }

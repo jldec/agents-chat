@@ -11,7 +11,7 @@ export function parseFrontmatter(s: string) {
     }
 
   try {
-    return extract<Frontmatter>(s, { schema: "json" })
+    return extract<Frontmatter>(s, { schema: 'json' })
   } catch (error) {
     return {
       frontMatter: '',

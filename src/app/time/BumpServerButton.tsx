@@ -6,9 +6,9 @@ export function BumpServerButton() {
   const [val, setVal] = useState('Cross-client realtime update')
 
   async function handleClick() {
-      const res = await fetch('/api/bump')
-      const text = await res.text()
-      setVal(`fetch /api/bump: ${text}`)
+    const res = await fetch('/api/bump')
+    const text = await res.text()
+    setVal(`fetch /api/bump: ${text}`)
   }
 
   return (

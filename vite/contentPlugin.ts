@@ -18,7 +18,7 @@ export function contentPlugin(options: ContentPluginOptions = {}) {
     configureServer(server: ViteDevServer) {
       dotenv.config({ path: '.dev.vars' })
       const contentDir = process.env.DEV_CONTENT_DIR || options.contentDir || join(process.cwd(), 'content')
-      const contentRoute = '/_content';
+      const contentRoute = '/_content'
       console.log('Serving content from', contentDir, 'on', contentRoute)
 
       server.middlewares.use(contentRoute, async (req, res, next) => {

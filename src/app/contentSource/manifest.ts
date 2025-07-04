@@ -50,7 +50,7 @@ export async function getManifest(noCache: boolean = false) {
       }
     })
     if (resp.ok) {
-      const rawtree = ((await resp.json()) as { tree: { type: string, path: string }[] })?.tree
+      const rawtree = ((await resp.json()) as { tree: { type: string; path: string }[] })?.tree
       // TODO: validate json
       for (const { type, path } of rawtree) {
         if (type === 'blob') {

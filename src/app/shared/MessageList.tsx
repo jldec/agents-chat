@@ -9,7 +9,7 @@ const md = markdownit({
 
 function messageContent(message: Message | UIMessage): string {
   return 'parts' in message
-    ? message.parts?.map((p) => (p.type === 'text' ? p.text : JSON.stringify(p, null, 2))).join('\n\n') ?? ''
+    ? (message.parts?.map((p) => (p.type === 'text' ? p.text : JSON.stringify(p, null, 2))).join('\n\n') ?? '')
     : message.content
 }
 

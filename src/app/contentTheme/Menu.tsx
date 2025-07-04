@@ -7,13 +7,9 @@ export const Menu = () => {
   if (!siteData) return null
   return (
     <nav className="flex flex-wrap mb-4">
-      {siteData?.navlinks?.map((link, index) => (
-        <MenuLink key={index} link={link} />
-      ))}
+      {siteData?.navlinks?.map((link, index) => <MenuLink key={index} link={link} />)}
       <span className="flex-grow"></span>
-      {siteData?.sociallinks?.map((link, index) => (
-        <MenuLink key={index} link={link} />
-      ))}
+      {siteData?.sociallinks?.map((link, index) => <MenuLink key={index} link={link} />)}
     </nav>
   )
 }

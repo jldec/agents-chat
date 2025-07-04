@@ -46,10 +46,7 @@ async function getSourceText(path: string): Promise<string> {
 
 // Return unstyled HTML content for a page
 // Fetches and parses markdown from source, if not cached.
-export async function getPageData(
-  path: string,
-  noCache: boolean = false
-): Promise<PageData | null> {
+export async function getPageData(path: string, noCache: boolean = false): Promise<PageData | null> {
   const isHome = path === '/'
 
   if (!noCache) {

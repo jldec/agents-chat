@@ -8,7 +8,7 @@ import type { Message } from '../shared/ChatStore'
 import { nanoid } from 'nanoid'
 
 export class TinyBaseDurableObject extends WsServerDurableObject {
- createPersister() {
+  createPersister() {
     const persister = createDurableObjectStoragePersister(createMergeableStore(), this.ctx.storage)
     const store = persister.getStore()
     store.addHasRowListener('messages', null, (store, tableId, rowId, hasRow) => {
@@ -24,11 +24,15 @@ export class TinyBaseDurableObject extends WsServerDurableObject {
           askAI(messages).then(async (stream) => {
             let content = ''
 
-            let aiRowId = store.addRow(tableId, {
-              id: nanoid(8),
-              role: 'assistant',
-              content
-            }, false) // always append
+            let aiRowId = store.addRow(
+              tableId,
+              {
+                id: nanoid(8),
+                role: 'assistant',
+                content
+              },
+              false
+            ) // always append
             if (!aiRowId) {
               console.error('failed to add agent response to store')
               return

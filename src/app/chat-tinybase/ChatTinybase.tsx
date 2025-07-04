@@ -12,11 +12,15 @@ export function ChatTinybase() {
   const messages = useTable('messages', store)
 
   const newMessage = async (prompt: string) => {
-    const id = store.addRow('messages', {
-      id: nanoid(8),
-      role: 'user',
-      content: prompt
-    }, false) // always append
+    const id = store.addRow(
+      'messages',
+      {
+        id: nanoid(8),
+        role: 'user',
+        content: prompt
+      },
+      false
+    ) // always append
   }
 
   const clearMessages = async () => {

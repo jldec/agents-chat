@@ -10,10 +10,7 @@ export interface Options {
   hashPrefix?: string
 }
 
-export const imagePlugin = (
-  md: MarkdownIt,
-  { imagePrefix, hashPrefix }: Options = {}
-) => {
+export const imagePlugin = (md: MarkdownIt, { imagePrefix, hashPrefix }: Options = {}) => {
   const imageRule = md.renderer.rules.image!
   md.renderer.rules.image = (tokens, idx, options, env, self) => {
     const token = tokens[idx]

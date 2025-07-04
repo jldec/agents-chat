@@ -10,9 +10,7 @@ export function ChatLayout({ title, children }: ChatLayoutProps) {
         Home
       </a>
       <h1 className="text-lg font-bold my-2">{title}</h1>
-      <div className="w-full text-left">
-        {children}
-      </div>
+      <div className="w-full text-left">{children}</div>
     </div>
   )
 }

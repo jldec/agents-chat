@@ -12,7 +12,7 @@ export function ChatAgent() {
   const [bump, setBump] = useState(0)
 
   async function fetchMessages() {
-    setMessages(await getMessages() as Message[])
+    setMessages((await getMessages()) as Message[])
   }
 
   useEffect(() => {

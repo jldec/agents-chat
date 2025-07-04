@@ -15,7 +15,4 @@ async function handleTime() {
   return new Response(time())
 }
 
-export const timeApiRoutes = [
-  route('/api/time', handleTime),
-  route('/api/bump', handleBump)
-]
+export const timeApiRoutes = [route('/api/time', handleTime), route('/api/bump', handleBump)]

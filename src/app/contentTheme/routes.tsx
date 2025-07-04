@@ -18,6 +18,5 @@ export function contentTheme({ ctx }: RequestInfo) {
         }
         return <Page />
     }
-  }
-  else return <NotFound />
+  } else return <NotFound />
 }
