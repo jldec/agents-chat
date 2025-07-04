@@ -1,6 +1,177 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+html {
+  font-family: monospace;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .button {
-  @apply py-2 px-4 rounded-md border-1 border-gray-700;
+  @apply inline-block py-2 px-3 mb-4 font-semibold border-2 border-current no-underline;
+}
+
+/* Typography styles from presskit */
+.prose {
+  line-height: 1.4;
+}
+
+.prose h1 {
+  font-size: 1.875rem; /* 3xl */
+  text-transform: uppercase;
+}
+
+.prose h2 {
+  font-size: 1.5rem; /* 2xl */
+  text-transform: uppercase;
+}
+
+.prose ul {
+  list-style-type: square;
+  padding-inline-start: 1.75ch;
+}
+
+.prose ol {
+  padding-inline-start: 1ch;
+  padding: 0 0 0 1.5ch;
+}
+
+.prose ul > li {
+  margin: 0.2ch 0;
+  padding-inline-start: 0.25ch;
+}
+
+.prose ul > li::marker {
+  color: #f97316; /* orange-500 */
+}
+
+.prose ol > li {
+  margin: 0 0 0.2ch 2ch;
+}
+
+.prose p {
+  margin-top: 1.4rem;
+  margin-bottom: 1.4rem;
+}
+
+.prose a {
+  text-decoration-thickness: 1.5px;
+}
+
+.prose .private a {
+  text-decoration-color: #f97316; /* orange-500 */
+}
+
+.prose a:hover {
+  color: #f97316; /* orange-500 */
+  text-decoration-style: double;
+  text-decoration-color: #f97316; /* orange-500 */
+  text-decoration-thickness: 1.5px;
+  transform: scale(1.05);
+}
+
+.prose hr {
+  margin: 1.4rem 0;
+  padding-bottom: 1.5px;
+  border-top: solid 1.5px currentColor;
+  border-bottom: solid 1.5px currentColor;
+}
+
+.prose input {
+  display: block;
+  min-width: 75%;
+  margin: 1.4rem 0;
+  padding: 8px;
+  border: solid 1.5px currentColor;
+}
+
+.prose button {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  padding: 0.25rem;
+}
+
+.prose button:hover {
+  color: #f97316; /* orange-500 */
+  text-decoration-style: double;
+  text-decoration-color: #f97316; /* orange-500 */
+  transform: scale(1.05);
+}
+
+.prose img {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0.375rem; /* md */
+  cursor: pointer;
+}
+
+.prose pre {
+  background-color: #222;
+  color: #7f7;
+  min-height: 70px;
+}
+
+.prose code::before {
+  content: none;
+}
+
+.prose code::after {
+  content: none;
+}
+
+.prose blockquote {
+  font-style: normal;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  border: solid 1.5px currentColor;
+  border-radius: 0.375rem; /* md */
+}
+
+.prose blockquote p::before {
+  content: none;
+}
+
+.prose blockquote p::after {
+  content: none;
+}
+
+/* Animations from presskit */
+@keyframes pop-in {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pop-out {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+}
+
+.animate-pop-in {
+  animation: pop-in 0.1s ease-out;
+}
+
+.animate-pop-out {
+  animation: pop-out 0.1s ease-in;
+}
+
+@media print {
+  #chat,
+  #debug {
+    display: none;
+  }
+  a {
+    text-decoration-color: #f97316 !important;
+  }
 }

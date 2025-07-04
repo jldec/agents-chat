@@ -3,6 +3,7 @@ import { NotFound } from './404'
 import { Page } from './Page'
 import { Home } from './Home'
 import { BlogList } from './BlogList'
+import { BlogPost } from './BlogPost'
 
 // Default template for markdown pages
 export function contentTheme({ ctx }: RequestInfo) {
@@ -13,6 +14,9 @@ export function contentTheme({ ctx }: RequestInfo) {
       case '/blog':
         return <BlogList />
       default:
+        if (ctx.pageContext.pathname.startsWith('/blog/')) {
+          return <BlogPost />
+        }
         return <Page />
     }
   }
