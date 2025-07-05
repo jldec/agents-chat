@@ -6,7 +6,7 @@ import { getRedirects } from './redirects'
 import { type ContentPageContext } from './types'
 import { type RequestInfo } from 'rwsdk/worker'
 
-export const contentRoutes = async ({ request, ctx }: RequestInfo): Promise<Response | void> => {
+export const contentMiddleware = async ({ request, ctx }: RequestInfo): Promise<Response | void> => {
   const noCache =
     request.headers.get('cache-control')?.includes('no-cache') || request.headers.get('pragma')?.includes('no-cache')
   const url = new URL(request.url)
