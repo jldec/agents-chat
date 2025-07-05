@@ -1,7 +1,8 @@
-import { requestInfo, type RequestInfo } from 'rwsdk/worker'
+import type { RequestInfo } from 'rwsdk/worker'
+import { match } from './match'
 
 /**
- * Cloudflare Workers Cache API interrupter
+ * Returns a Cloudflare Workers Cache API interrupter
  * GET requests without query params are considered for caching
  * defaults to cache-control: public, max-age=3600 (1 hour)
  * Handlers can override cache settings by setting cache-control header
@@ -9,37 +10,40 @@ import { requestInfo, type RequestInfo } from 'rwsdk/worker'
  *
  * @todo Remove console.logs.
  */
-export async function cacheInterrupter({ request, cf, headers }: RequestInfo): Promise<Response | void> {
-  const url = new URL(request.url)
+export function cacheInterrupter({ ignore }: { ignore?: string | string[] }) {
+  return async ({ request, cf, headers }: RequestInfo): Promise<Response | void> => {
+    const url = new URL(request.url)
 
-  if (
-    request.method === 'GET' &&
-    !url.search // avoid caching for urls with params e.g. ?__rsc=true
-  ) {
-    // @ts-ignore
-    const cache = caches.default
     if (
-      request.headers.get('pragma')?.includes('no-cache') ||
-      request.headers.get('cache-control')?.includes('no-cache')
+      request.method === 'GET' &&
+      !url.search && // avoid caching for urls with params e.g. ?__rsc=true
+      !match(url.pathname, ignore)
     ) {
-      try {
-        // this exposes cache clearing to the client - not ideal but practical
-        cf.waitUntil(cache.delete(request))
-        console.log(`cache delete ${url.pathname}`)
-      } catch (error: any) {
-        console.error(`cache delete error ${url.pathname}`, error)
-      }
-    } else {
-      const cachedResponse = await cache.match(request)
-      if (cachedResponse) {
-        console.log(`cache hit ${url.pathname}`)
-        return cachedResponse
+      // @ts-ignore
+      const cache = caches.default
+      if (
+        request.headers.get('pragma')?.includes('no-cache') ||
+        request.headers.get('cache-control')?.includes('no-cache')
+      ) {
+        try {
+          // this exposes cache clearing to the client - not ideal but practical
+          cf.waitUntil(cache.delete(request))
+          console.log(`cache delete ${url.pathname}`)
+        } catch (error: any) {
+          console.error(`cache delete error ${url.pathname}`, error)
+        }
       } else {
-        console.log(`cache miss ${url.pathname}${url.search}`)
+        const cachedResponse = await cache.match(request)
+        if (cachedResponse) {
+          console.log(`cache hit ${url.pathname}`)
+          return cachedResponse
+        } else {
+          console.log(`cache miss ${url.pathname}${url.search}`)
+        }
       }
+      // signal cacheResponse to do its thing (tried but can't use requestInfo.ctx for this)
+      headers.set('x-cache-interrupter', 'true')
     }
-    // signal cacheResponse to do its thing (tried but can't use requestInfo.ctx for this)
-    headers.set('x-cache-interrupter', 'true')
   }
 }
 

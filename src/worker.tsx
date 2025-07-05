@@ -1,5 +1,6 @@
-import { agentsRoute } from './app/shared/agentsRoute'
-import { cacheInterrupter as cache, cacheResponse } from './lib/cacheInterrupter'
+// prettier-ignore
+import { routeAgents } from './app/shared/routeAgents'
+import { cacheInterrupter, cacheResponse } from './lib/cacheInterrupter'
 import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { ChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
@@ -24,8 +25,8 @@ export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 
 import type { ContentPageContext } from './app/contentSource/types'
 import { ContentLayout } from './app/contentTheme/ContentLayout'
-import { contentMiddleware as content } from './app/contentSource/contentMiddleware'
-import { contentTheme as theme } from './app/contentTheme/contentTheme'
+import { contentMiddleware } from './app/contentSource/contentMiddleware'
+import { contentTheme } from './app/contentTheme/contentTheme'
 
 export type AppContext = {
   pageContext?: ContentPageContext
@@ -35,28 +36,31 @@ export const AppLayout = ({ children }: LayoutProps) => <ContentLayout>{children
 
 const app = defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
-  agentsRoute,
+  routeAgents,
+  cacheInterrupter({ ignore: '/api/' }),
+  contentMiddleware({ ignore: '/api/' }),
   render(
     Document,
     layout(AppLayout, [
-      route('/chat-rsc', [cache, content, ChatRSC]),
-      route('/chat-agent', [cache, content, ChatAgent]),
-      route('/chat-tinybase', [cache, content, ChatTinybase]),
-      route('/time', [cache, content, Time])
+      route('/chat-rsc', ChatRSC),
+      route('/chat-agent', ChatAgent),
+      route('/chat-tinybase', ChatTinybase),
+      route('/time', Time)
     ])
   ),
   render(
     Document,
     layout(AppLayout, [
-      route('/chat-agent-sdk', [cache, content, ChatAgentSDK]),
-      route('/chat-agent-agent', [cache, content, ChatAgentAgent])
+      // useAgentChat doesn't play well with SSR
+      route('/chat-agent-sdk', ChatAgentSDK),
+      route('/chat-agent-agent', ChatAgentAgent)
     ]),
-    { ssr: false } // useAgentChat doesn't play well with SSR
+    { ssr: false }
   ),
   ...chatAgentApiRoutes,
   ...tinybaseApiRoutes,
   ...timeApiRoutes,
-  render(Document, [route('*', [cache, content, theme])])
+  render(Document, [route('*', contentTheme)])
 ])
 
 export default {
