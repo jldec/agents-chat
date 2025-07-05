@@ -45,7 +45,10 @@ export function MessageInput(props: MessageInputProps | MessageInputPropsAgentSD
     await props.onClear()
   }
   return (
-    <form onSubmit={'onSubmit' in props ? props.onSubmit : submit} className="mt-10 px-2 md:px-0 mb-[10vh] flex flex-row gap-2">
+    <form
+      onSubmit={'onSubmit' in props ? props.onSubmit : submit}
+      className="mt-10 px-2 md:px-0 mb-[10vh] flex flex-row gap-2"
+    >
       <input
         ref={inputRef}
         onChange={'onChange' in props ? props.onChange : (e) => setInput(e.target.value)}
