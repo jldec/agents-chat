@@ -16,10 +16,10 @@ function messageContent(message: Message | UIMessage): string {
 // No hooks - component can run in both RSC and client
 export function MessageList({ messages }: { messages: Message[] | UIMessage[] }) {
   return (
-    <div id="message-list" className="flex flex-col gap-2">
+    <div id="message-list" className="flex flex-col gap-2 prose max-w-none prose-p:!my-0 my-4">
       {messages.map((m) => (
         <div
-          className={cn('border-gray-200 p-2 prose prose-p:my-2', m.role === 'assistant' ? 'bg-gray-100' : 'bg-white')}
+          className={cn('border-gray-200 p-2 rounded-lg', m.role === 'assistant' ? 'bg-gray-100' : 'bg-white')}
           key={m.id}
           dangerouslySetInnerHTML={{ __html: md.render(messageContent(m)) }}
         />

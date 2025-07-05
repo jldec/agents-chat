@@ -1,5 +1,5 @@
 import { requestInfo as r } from 'rwsdk/worker'
-import { Layout } from './Layout'
+import { ContentLayout } from './ContentLayout'
 import { List, SquareChevronUp, SquareChevronDown } from './icons'
 import { ContentHtml } from './ContentHtml'
 
@@ -23,7 +23,7 @@ export function BlogPost() {
   const longdate = [formatDate(pageData?.attrs?.date)].filter(Boolean).join(' - ')
 
   return (
-    <Layout>
+    <ContentLayout>
       <p className="flex mb-4">
         <span className="flex-grow">{longdate}</span>
         {/* <a
@@ -64,6 +64,6 @@ export function BlogPost() {
         )}
       </p>
       <ContentHtml />
-    </Layout>
+    </ContentLayout>
   )
 }

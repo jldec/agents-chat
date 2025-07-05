@@ -1,11 +1,11 @@
 import { requestInfo as r } from 'rwsdk/worker'
-import { Layout } from './Layout'
+import { ContentLayout } from './ContentLayout'
 import { ContentHtml } from './ContentHtml'
 
 export function Page() {
   const pageData = r.ctx.pageContext?.pageData
   return (
-    <Layout>
+    <ContentLayout>
       <ContentHtml />
       {pageData?.dir ? (
         <ul>
@@ -16,6 +16,6 @@ export function Page() {
           ))}
         </ul>
       ) : null}
-    </Layout>
+    </ContentLayout>
   )
 }

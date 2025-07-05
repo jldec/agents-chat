@@ -1,6 +1,13 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+/*
+Monospace typography from presskit
+----------------------------------
+locks everything to 15px
+prose-sm and other overides will not work
+*/
+
 html {
   font-family: monospace;
   font-size: 15px;
@@ -9,10 +16,9 @@ html {
 }
 
 .button {
-  @apply inline-block py-2 px-3 mb-4 font-semibold border-2 border-current no-underline;
+  @apply inline-block py-2 px-3 mb-4 font-semibold rounded-md  border-2 border-current no-underline;
 }
 
-/* Typography styles from presskit */
 .prose {
   line-height: 1.4;
 }

@@ -1,10 +1,10 @@
-import { Layout } from './Layout'
+import { ContentLayout } from './ContentLayout'
 import { ContentHtml } from './ContentHtml'
 
 export function Home() {
   return (
-    <Layout>
+    <ContentLayout>
       <ContentHtml />
-    </Layout>
+    </ContentLayout>
   )
 }

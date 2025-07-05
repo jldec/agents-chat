@@ -1,5 +1,5 @@
 // TODO: DirData should be part of PageData
-export type PageContext = {
+export type ContentPageContext = {
   pathname: string
   pageData?: PageData
   siteData?: Frontmatter

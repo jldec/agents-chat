@@ -1,16 +1,8 @@
-interface ChatLayoutProps {
-  title: string
-  children: React.ReactNode
-}
-
-export function ChatLayout({ title, children }: ChatLayoutProps) {
+export function ChatLayout({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="text-sm p-2 relative max-w-2xl mx-auto">
-      <a href="/" className="text-blue-600 underline text-base absolute top-0 right-0 pt-4 pr-3">
-        Home
-      </a>
-      <h1 className="text-lg font-bold my-2">{title}</h1>
-      <div className="w-full text-left">{children}</div>
-    </div>
+    <>
+      <h1 className="text-2xl font-bold my-2 px-2">{title}</h1>
+      {children}
+    </>
   )
 }
