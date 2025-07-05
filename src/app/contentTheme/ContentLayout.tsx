@@ -4,7 +4,7 @@ import { Splash } from './Splash'
 
 export function ContentLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-3xl m-auto py-2 md:px-2">
+    <div className="max-w-3xl m-auto p-3">
       <Metadata />
       <Menu />
       <Splash />
