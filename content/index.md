@@ -13,7 +13,7 @@ sociallinks:
     href: https://x.com/jldec
     icon: twitter
   - text: GitHub
-    href: https://github.com/jldec
+    href: https://github.com/jldec/agents-chat
     icon: github
   - text: Linkedin
     href: https://www.linkedin.com/in/jldec/
