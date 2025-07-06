@@ -1,8 +1,8 @@
 ---
 title: agents-chat
-splashimage: bloem.jpg
-siteurl: https://agents-chat.jldec.me/
-description: Co-founder & product engineer 🌳 The Web is for everyone ❤️
+splashimage: bloem.webp
+siteurl: https://agents-chat.jldec.me
+description: Multi-user streaming AI chats built using RedwoodSDK, Cloudflare Agents, and RSCs.
 twitter: '@jldec'
 navlinks:
   - text: Home

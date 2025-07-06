@@ -76,7 +76,7 @@ async function newMessage(prompt: string) {
   await chatStore.setMessage(aiResponse)
   await agent.bumpClients()
 
-  const stream = await askAI(await chatStore.getMessages())
+  const stream = await askAI(await chatStore.getMessages(), 'Agent Chat')
   aiResponse.content = '' // remove ... when stream starts
   for await (const chunk of streamToText(stream)) {
     aiResponse.content += chunk

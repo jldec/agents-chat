@@ -2,6 +2,7 @@ import { AIChatAgent } from 'agents/ai-chat-agent'
 import { createWorkersAI } from 'workers-ai-provider'
 import { env } from 'cloudflare:workers'
 import { streamText, type StreamTextOnFinishCallback, type ToolSet } from 'ai'
+import { systemMessageText } from '@/lib/systemMessageText'
 
 export class ChatAgentSDKDO extends AIChatAgent<Env> {
   async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
@@ -13,7 +14,7 @@ export class ChatAgentSDKDO extends AIChatAgent<Env> {
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful and delightful assistant'
+          content: systemMessageText('Agent SDK Chat')
         },
         ...this.messages
       ],

@@ -27,7 +27,7 @@ export async function newMessage(prompt: string) {
   messagesMemo[aiIndex] = aiResponse
   await syncRealtimeClients()
 
-  const stream = await askAI(await chatStore.getMessages())
+  const stream = await askAI(await chatStore.getMessages(), 'RSC Chat')
   aiResponse.content = '' // remove ... when stream starts
   // operate on memoized messages during streaming
   for await (const chunk of streamToText(stream)) {

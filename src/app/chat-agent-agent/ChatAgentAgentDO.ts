@@ -9,6 +9,7 @@ import { env } from 'cloudflare:workers'
 import { tool } from 'ai'
 import { z } from 'zod'
 import { IS_DEV } from 'rwsdk/constants'
+import { systemMessageText } from '@/lib/systemMessageText'
 
 export class ChatAgentAgentDO extends AIChatAgent<Env> {
   async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
@@ -39,7 +40,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
           // ts-expect-error (this 🦙 is not typed in ts)
           // model: workersai('@cf/meta/llama-3.1-8b-instruct-fp8-fast'),
           model,
-          system: 'You are a helpful and delightful assistant that can use tools to help users.',
+          system: systemMessageText('Agent Agent Chat'),
           messages: processedMessages,
           tools: allTools,
           onFinish: async (args) => {

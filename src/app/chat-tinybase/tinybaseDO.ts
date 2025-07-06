@@ -21,7 +21,7 @@ export class TinyBaseDurableObject extends WsServerDurableObject {
           store.setPartialRow(tableId, rowId, { aiRowId: '_' })
           console.log('asking agent', message.content)
           const messages = Object.values(store.getTable(tableId)) as Message[]
-          askAI(messages).then(async (stream) => {
+          askAI(messages, 'TinyBase Chat').then(async (stream) => {
             let content = ''
 
             let aiRowId = store.addRow(
