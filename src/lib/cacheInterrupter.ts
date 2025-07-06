@@ -10,7 +10,7 @@ import { match } from './match'
  *
  * @todo Remove console.logs.
  */
-export function cacheInterrupter({ ignore }: { ignore?: string | string[] }) {
+export function cacheInterrupter({ ignore }: { ignore?: string | string[] } = {}) {
   return async ({ request, cf, headers }: RequestInfo): Promise<Response | void> => {
     const url = new URL(request.url)
 

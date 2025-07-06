@@ -36,8 +36,7 @@ export const AppLayout = ({ children }: LayoutProps) => <ContentLayout>{children
 
 const app = defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
-  routeAgents,
-  cacheInterrupter({ ignore: '/api/' }),
+  routeAgents({ prefix: '/agents/' }),
   contentMiddleware({ ignore: '/api/' }),
   render(
     Document,
@@ -60,7 +59,7 @@ const app = defineApp([
   ...chatAgentApiRoutes,
   ...tinybaseApiRoutes,
   ...timeApiRoutes,
-  render(Document, [route('*', contentTheme)])
+  render(Document, [route('*', [cacheInterrupter(), contentTheme])])
 ])
 
 export default {
