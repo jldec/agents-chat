@@ -1,6 +1,10 @@
 import type { RequestInfo } from 'rwsdk/worker'
 import { match } from './match'
 
+export type cacheInterrupterOptions = {
+  ignore?: string | string[]
+}
+
 /**
  * Returns a Cloudflare Workers Cache API interrupter
  * GET requests without query params are considered for caching
@@ -10,7 +14,7 @@ import { match } from './match'
  *
  * @todo Remove console.logs.
  */
-export function cacheInterrupter({ ignore }: { ignore?: string | string[] } = {}) {
+export function cacheInterrupter({ ignore }: cacheInterrupterOptions = {}) {
   return async ({ request, cf, headers }: RequestInfo): Promise<Response | void> => {
     const url = new URL(request.url)
 

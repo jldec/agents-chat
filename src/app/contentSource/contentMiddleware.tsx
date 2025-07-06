@@ -7,7 +7,11 @@ import { type ContentPageContext } from './types'
 import { type RequestInfo } from 'rwsdk/worker'
 import { match } from '@/lib/match'
 
-export const contentMiddleware = ({ ignore }: { ignore?: string | string[] }) => {
+export type contentMiddlewareOptions = {
+  ignore?: string | string[]
+}
+
+export const contentMiddleware = ({ ignore }: contentMiddlewareOptions = {}) => {
   return async ({ request, ctx }: RequestInfo): Promise<Response | void> => {
     const noCache =
       request.headers.get('cache-control')?.includes('no-cache') || request.headers.get('pragma')?.includes('no-cache')
