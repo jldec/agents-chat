@@ -1,3 +1,4 @@
+import { getAgentByName } from 'agents'
 import { AIChatAgent } from 'agents/ai-chat-agent'
 // import { createWorkersAI } from 'workers-ai-provider'
 // import { env } from 'cloudflare:workers'
@@ -92,18 +93,14 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   // by passing the name of the agent to the tool
   // Unfortunatelythis.name is not available in subagents
   // see  https://github.com/cloudflare/workerd/issues/2240
-  private agentByName(
+  private async agentByName(
     name: string,
     options?: {
       jurisdiction?: DurableObjectJurisdiction
       locationHint?: DurableObjectLocationHint
     }
-  ): ChatAgentAgentDO {
-    if (name === this.name) return this
-    const id = env.CHAT_AGENT_AGENT_DURABLE_OBJECT.idFromName(name)
-    const agent = env.CHAT_AGENT_AGENT_DURABLE_OBJECT.get(id, options)
-    agent.setName(name)
-    return agent as unknown as ChatAgentAgentDO
+  ): Promise<DurableObjectStub<ChatAgentAgentDO>> {
+    return (await getAgentByName<Env, ChatAgentAgentDO>(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name, options))
   }
 
   private getAgentTime = tool({
@@ -129,7 +126,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name, location }) => {
       try {
-        const agent = this.agentByName(name, { locationHint: location ?? undefined })
+        const agent = await this.agentByName(name, { locationHint: location ?? undefined })
         return await agent.getTime()
       } catch (error) {
         console.error(`Error calling agent ${name}`, error)
@@ -145,7 +142,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name }) => {
       try {
-        const agent = this.agentByName(name)
+        const agent = await this.agentByName(name)
         return await agent.getMessages()
       } catch (error) {
         console.error(`Error calling subagent ${name}`, error)
@@ -162,7 +159,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name, message }) => {
       try {
-        const agent = this.agentByName(name)
+        const agent = await this.agentByName(name)
         return await agent.newMessage(message)
       } catch (error) {
         console.error(`Error calling subagent ${name}`, error)
@@ -178,7 +175,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name }) => {
       try {
-        const agent = this.agentByName(name)
+        const agent = await this.agentByName(name)
         await agent.clearMessages()
         return `Cleared messages of subagent ${name}`
       } catch (error) {
@@ -196,7 +193,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name, url }) => {
       try {
-        const agent = this.agentByName(name)
+        const agent = await this.agentByName(name)
         const { id } = await agent.addMcpServer(url, url, 'mcp-demo-host')
         return `Added MCP url: ${url} with id: ${id}`
       } catch (error) {
@@ -214,7 +211,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name, id }) => {
       try {
-        const agent = this.agentByName(name)
+        const agent = await this.agentByName(name)
         await agent.removeMcpServer(id)
         return `Removed MCP server with id: ${id}`
       } catch (error) {
@@ -231,7 +228,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name }) => {
       try {
-        const agent = this.agentByName(name)
+        const agent = await this.agentByName(name)
         return agent.getMcpServers()
       } catch (error) {
         console.error('Error getting MCP servers', error)
