@@ -13,6 +13,7 @@ import { IS_DEV } from 'rwsdk/constants'
 import { systemMessageText } from '@/lib/systemMessageText'
 
 export class ChatAgentAgentDO extends AIChatAgent<Env> {
+  isSubAgent: boolean = false // see newMessage()
   async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
     // const workersai = createWorkersAI({ binding: env.AI })
     const model = openai('gpt-4o-2024-11-20')
@@ -22,6 +23,14 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
       ...this.tools,
       ...this.mcp.unstable_getAITools()
     }
+
+    // subagents cannot use subagent tools
+    Object.keys(allTools).forEach((key) => {
+      if (this.isSubAgent && key.startsWith('subagent')) {
+        // @ts-ignore
+        delete allTools[key]
+      }
+    })
 
     // Create a streaming response that handles both text and tool outputs
     // credit https://github.com/cloudflare/agents-starter
@@ -66,8 +75,9 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     return this.messages
   }
 
-  async newMessage(message: string) {
-    console.log('newMessage', message)
+  async newMessage(isSubAgent: boolean, message: string) {
+    console.log('newMessage', isSubAgent, message)
+    this.isSubAgent = isSubAgent // racey
     // https://github.com/cloudflare/agents/blob/398c7f5411f3a63f450007f83db7e3f29b6ed4c2/packages/agents/src/ai-chat-agent.ts#L185
     await this.saveMessages([
       ...this.messages,
@@ -78,7 +88,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
         // TODO check timestamps etc.
       }
     ])
-    return this.messages[this.messages.length - 1] // TODO: stream baby stream
+    return this.messages
   }
 
   async clearMessages() {
@@ -100,7 +110,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
       locationHint?: DurableObjectLocationHint
     }
   ): Promise<DurableObjectStub<ChatAgentAgentDO>> {
-    return (await getAgentByName<Env, ChatAgentAgentDO>(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name, options))
+    return await getAgentByName<Env, ChatAgentAgentDO>(env.CHAT_AGENT_AGENT_DURABLE_OBJECT, name, options)
   }
 
   private getAgentTime = tool({
@@ -143,6 +153,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     execute: async ({ name }) => {
       try {
         const agent = await this.agentByName(name)
+        // @ts-ignore
         return await agent.getMessages()
       } catch (error) {
         console.error(`Error calling subagent ${name}`, error)
@@ -151,6 +162,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     }
   })
 
+
   private subagentNewMessage = tool({
     description: 'send a message to a subagent',
     parameters: z.object({
@@ -158,12 +170,16 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
       message: z.string().describe('The message to send to the subagent')
     }),
     execute: async ({ name, message }) => {
+      const agent = await this.agentByName(name)
       try {
-        const agent = await this.agentByName(name)
-        return await agent.newMessage(message)
+        if (name === 'main') throw new Error('Cannot recursively message the main agent')
+          // @ts-ignore
+        return await agent.newMessage(true, message)
       } catch (error) {
         console.error(`Error calling subagent ${name}`, error)
         return `Error calling subagent ${name}: ${error}`
+      } finally {
+        await agent.clearMessages()
       }
     }
   })

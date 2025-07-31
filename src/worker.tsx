@@ -27,6 +27,7 @@ import type { ContentPageContext } from './app/contentSource/types'
 import { ContentLayout } from './app/contentTheme/ContentLayout'
 import { contentMiddleware } from './app/contentSource/contentMiddleware'
 import { contentTheme } from './app/contentTheme/contentTheme'
+import { contentApiRoutes } from './app/contentSource/api-routes'
 
 export type AppContext = {
   pageContext?: ContentPageContext
@@ -59,6 +60,7 @@ const app = defineApp([
   ...chatAgentApiRoutes,
   ...tinybaseApiRoutes,
   ...timeApiRoutes,
+  ...contentApiRoutes,
   render(Document, [route('*', [cacheInterrupter(), contentTheme])])
 ])
 
