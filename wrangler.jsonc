@@ -68,6 +68,10 @@
         "class_name": "ChatAgentAgentDO"
       },
       {
+        "name": "CHAT_PUBSUB_AGENT_DURABLE_OBJECT",
+        "class_name": "ChatPubsubAgentDO"
+      },
+      {
         "name": "TINYBASE_DURABLE_OBJECT",
         "class_name": "TinyBaseDurableObject"
       }
@@ -93,6 +97,10 @@
     {
       "tag": "v5",
       "new_sqlite_classes": ["ChatAgentAgentDO"]
+    },
+    {
+      "tag": "v6",
+      "new_sqlite_classes": ["ChatPubsubAgentDO"]
     }
   ]
 }
