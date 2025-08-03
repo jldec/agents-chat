@@ -2,7 +2,7 @@ import { getAgentByName } from 'agents'
 import { AIChatAgent } from 'agents/ai-chat-agent'
 // import { createWorkersAI } from 'workers-ai-provider'
 // import { env } from 'cloudflare:workers'
-import { createDataStreamResponse, streamText, type StreamTextOnFinishCallback, type ToolSet } from 'ai'
+import { createDataStreamResponse, streamText, type StreamTextOnFinishCallback, type ToolSet, appendResponseMessages, type Message as ChatMessage } from 'ai'
 import { processToolCalls } from './utils'
 import { openai } from '@ai-sdk/openai'
 import { nanoid } from 'nanoid'
@@ -11,6 +11,8 @@ import { tool } from 'ai'
 import { z } from 'zod'
 import { IS_DEV } from 'rwsdk/constants'
 import { systemMessageText } from '@/lib/systemMessageText'
+
+const decoder = new TextDecoder();
 
 export class ChatPubsubAgentDO extends AIChatAgent<Env> {
   isSubAgent: boolean = false // see newMessage()
@@ -79,7 +81,7 @@ export class ChatPubsubAgentDO extends AIChatAgent<Env> {
     console.log('newMessage', isSubAgent, message)
     this.isSubAgent = isSubAgent // racey
     // https://github.com/cloudflare/agents/blob/398c7f5411f3a63f450007f83db7e3f29b6ed4c2/packages/agents/src/ai-chat-agent.ts#L185
-    await this.saveMessages([
+    await this.saveMessagesWithLogging([
       ...this.messages,
       {
         id: nanoid(8),
@@ -95,48 +97,52 @@ export class ChatPubsubAgentDO extends AIChatAgent<Env> {
     await this.saveMessages([])
   }
 
+  /**
+   * Save messages on the server side and trigger AI response with custom handling
+   * @param messages Chat messages to save
+   */
+  async saveMessagesWithLogging(messages: ChatMessage[]) {
+    await this.persistMessages(messages);
+    const response = await this.onChatMessage(async ({ response }) => {
+      const finalMessages = appendResponseMessages({
+        messages,
+        responseMessages: response.messages
+      });
+
+      await this.persistMessages(finalMessages, []);
+    });
+    if (response) {
+      // we're just going to drain the body
+      // @ts-ignore TODO: fix this type error
+      for await (const chunk of response.body!) {
+        let decodedChunk = decoder.decode(chunk);
+        console.log('chunk', decodedChunk);
+      }
+      response.body?.cancel();
+    }
+  }
+
   async getTime() {
     return `The current time for the agent is ${new Date().toLocaleTimeString()}`
   }
 
-  // Built-in tools below can operate on this or other agent instances
-  // by passing the name of the agent to the tool
-  // Unfortunatelythis.name is not available in subagents
+  // Tools below operate on this or other agent instances by passing the name of the agent to the tool
+  // Unfortunately this.name is not available in subagents
   // see  https://github.com/cloudflare/workerd/issues/2240
-  private async agentByName(
-    name: string,
-    options?: {
-      jurisdiction?: DurableObjectJurisdiction
-      locationHint?: DurableObjectLocationHint
-    }
-  ): Promise<DurableObjectStub<ChatPubsubAgentDO>> {
-    return await getAgentByName<Env, ChatPubsubAgentDO>(env.CHAT_PUBSUB_AGENT_DURABLE_OBJECT, name, options)
+  private agentByName(name: string) {
+    const id = env.CHAT_PUBSUB_AGENT_DURABLE_OBJECT.idFromName(name)
+    const agent = env.CHAT_PUBSUB_AGENT_DURABLE_OBJECT.get(id)
+    return agent
   }
 
   private getAgentTime = tool({
     description: 'get the time',
     parameters: z.object({
       name: z.string().describe('The name of the agent').default('main'),
-      location: z
-        .union([
-          z.literal('wnam'),
-          z.literal('enam'),
-          z.literal('sam'),
-          z.literal('weur'),
-          z.literal('eeur'),
-          z.literal('apac'),
-          z.literal('oc'),
-          z.literal('afr'),
-          z.literal('me')
-        ])
-        .describe(
-          'The optional DurableObjectLocationHint for this agent: "wnam" | "enam" | "sam" | "weur" | "eeur" | "apac" | "oc" | "afr" | "me"'
-        )
-        .optional()
     }),
-    execute: async ({ name, location }) => {
+    execute: async ({ name }) => {
       try {
-        const agent = await this.agentByName(name, { locationHint: location ?? undefined })
+        const agent = this.agentByName(name)
         return await agent.getTime()
       } catch (error) {
         console.error(`Error calling agent ${name}`, error)
@@ -152,7 +158,7 @@ export class ChatPubsubAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name }) => {
       try {
-        const agent = await this.agentByName(name)
+        const agent = this.agentByName(name)
         // @ts-ignore
         return await agent.getMessages()
       } catch (error) {
@@ -170,7 +176,7 @@ export class ChatPubsubAgentDO extends AIChatAgent<Env> {
       message: z.string().describe('The message to send to the subagent')
     }),
     execute: async ({ name, message }) => {
-      const agent = await this.agentByName(name)
+      const agent = this.agentByName(name)
       try {
         if (name === 'main') throw new Error('Cannot recursively message the main agent')
           // @ts-ignore
@@ -191,7 +197,7 @@ export class ChatPubsubAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name }) => {
       try {
-        const agent = await this.agentByName(name)
+        const agent = this.agentByName(name)
         await agent.clearMessages()
         return `Cleared messages of subagent ${name}`
       } catch (error) {
@@ -209,7 +215,7 @@ export class ChatPubsubAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name, url }) => {
       try {
-        const agent = await this.agentByName(name)
+        const agent = this.agentByName(name)
         const { id } = await agent.addMcpServer(url, url, 'mcp-demo-host')
         return `Added MCP url: ${url} with id: ${id}`
       } catch (error) {
@@ -227,7 +233,7 @@ export class ChatPubsubAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name, id }) => {
       try {
-        const agent = await this.agentByName(name)
+        const agent = this.agentByName(name)
         await agent.removeMcpServer(id)
         return `Removed MCP server with id: ${id}`
       } catch (error) {
@@ -244,7 +250,7 @@ export class ChatPubsubAgentDO extends AIChatAgent<Env> {
     }),
     execute: async ({ name }) => {
       try {
-        const agent = await this.agentByName(name)
+        const agent = this.agentByName(name)
         return agent.getMcpServers()
       } catch (error) {
         console.error('Error getting MCP servers', error)

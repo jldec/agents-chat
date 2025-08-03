@@ -16,7 +16,7 @@ export function ChatPubsubAgentClient() {
 
   return (
     <>
-      <MessageList messages={messages} />
+      <MessageList key="messages" messages={messages} />
       <MessageInput value={input} onChange={handleInputChange} onSubmit={handleSubmit} onClear={clearHistory} />
     </>
   )
