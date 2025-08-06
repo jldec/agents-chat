@@ -93,6 +93,14 @@
     {
       "tag": "v5",
       "new_sqlite_classes": ["ChatAgentAgentDO"]
+    },
+    {
+      "tag": "v6",
+      "new_sqlite_classes": ["ChatPubsubAgentDO"]
+    },
+    {
+      "tag": "v7",
+      "deleted_classes": ["ChatPubsubAgentDO"]
     }
   ]
 }

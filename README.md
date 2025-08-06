@@ -15,7 +15,8 @@ This is a companion repository for a [blog post](https://jldec.me/blog/multi-use
 
 **RedwoodSDK RSC:**
 - Server components provide succinct way to populate JSX and keep clients updated.
-- This makes using react with Cloudflar workers super easy, and simplifies async data loading.
+- This makes using react with Cloudflare workers super easy, and simplifies async data loading.
+- The realtime sync feature of RedwoodSDK pushes updates to connected clients over websockets.
 
 **Cloudflare Agents:**
 - AIChatAgent provides its own websocket protocol for multi-user real-time sync

@@ -34,7 +34,7 @@ Multi-user streaming AI chats built using RedwoodSDK, Cloudflare Agents, and RSC
 >
 > - [TinyBase Chat](/chat-tinybase) - syncs via TinyBase websockets
 >
-> - [Agent Agent Chat](/chat-agent-agent) - More advanced Cloudflare agent with subagents and MCP tool calling (sse only, no auth). Syncs via agent websocket.
+> - [Agent Agent Chat](/chat-agent-agent) - More advanced Cloudflare agent with subagents and MCP tool calling (sse only, no auth). Syncs via agents websockets. Does not stream subagent responses.
 >
 > - [Time](/time) - my first RedwoodSDK app, and my first exploration of RSCs.
 

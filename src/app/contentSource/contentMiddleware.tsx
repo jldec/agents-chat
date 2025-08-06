@@ -7,6 +7,9 @@ import { type ContentPageContext } from './types'
 import { type RequestInfo } from 'rwsdk/worker'
 import { match } from '@/lib/match'
 
+import { getAgentByName } from 'agents'
+import { env } from 'cloudflare:workers'
+
 export type contentMiddlewareOptions = {
   ignore?: string | string[]
 }

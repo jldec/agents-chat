@@ -4,6 +4,7 @@ export type ContentPageContext = {
   pageData?: PageData
   siteData?: Frontmatter
   dirData?: DirData
+  [key: string]: unknown
 }
 
 export type DirData = {
