@@ -3,9 +3,8 @@ import { IS_DEV } from 'rwsdk/constants'
 import { z } from 'zod'
 import { tool } from 'ai'
 import type { ChatAgentAgentDO } from '../chat-agent-agent/ChatAgentAgentDO'
-import type { ChatPubsubAgentDO } from '../chat-agent-pubsub/ChatPubsubAgentDO'
 
-export function agentTools(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatPubsubAgentDO>) {
+export function agentTools(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return {
     getAgentTime: getAgentTime(namespace),
     subagentGetMessages: subagentGetMessages(namespace),
@@ -17,11 +16,11 @@ export function agentTools(namespace: DurableObjectNamespace<ChatAgentAgentDO | 
   }
 }
 
-function agentByName(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatPubsubAgentDO>, name: string) {
+function agentByName(namespace: DurableObjectNamespace<ChatAgentAgentDO>, name: string) {
   return namespace.get(namespace.idFromName(name))
 }
 
-function getAgentTime(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatPubsubAgentDO>) {
+function getAgentTime(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'get the time',
     parameters: z.object({
@@ -39,7 +38,7 @@ function getAgentTime(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatP
   })
 }
 
-function subagentGetMessages(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatPubsubAgentDO>) {
+function subagentGetMessages(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'get the messages of a subagent',
     parameters: z.object({
@@ -58,7 +57,7 @@ function subagentGetMessages(namespace: DurableObjectNamespace<ChatAgentAgentDO 
   })
 }
 
-function subagentNewMessage(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatPubsubAgentDO>) {
+function subagentNewMessage(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'send a message to a subagent',
     parameters: z.object({
@@ -81,7 +80,7 @@ function subagentNewMessage(namespace: DurableObjectNamespace<ChatAgentAgentDO |
   })
 }
 
-function subagentClearMessages(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatPubsubAgentDO>) {
+function subagentClearMessages(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'clear the messages of a subagent',
     parameters: z.object({
@@ -100,7 +99,7 @@ function subagentClearMessages(namespace: DurableObjectNamespace<ChatAgentAgentD
   })
 }
 
-function addMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatPubsubAgentDO>) {
+function addMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'add a MCP server URL to the MCP client in the named (or default) agent',
     parameters: z.object({
@@ -120,7 +119,7 @@ function addMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO | Ch
   })
 }
 
-function removeMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatPubsubAgentDO>) {
+function removeMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'remove a MCP server by id from the MCP client in the named (or default) agent',
     parameters: z.object({
@@ -140,7 +139,7 @@ function removeMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO |
   })
 }
 
-function listMCPServers(namespace: DurableObjectNamespace<ChatAgentAgentDO | ChatPubsubAgentDO>) {
+function listMCPServers(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'List all MCP server URLs known to the MCP client in the named (or default) agent',
     parameters: z.object({

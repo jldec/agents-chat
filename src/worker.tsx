@@ -5,7 +5,6 @@ import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { ChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { ChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
-import { ChatPubsubAgent } from './app/chat-agent-pubsub/ChatPubsubAgent'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { ChatTinybase } from './app/chat-tinybase/ChatTinybase'
 import { defineApp } from 'rwsdk/worker'
@@ -22,7 +21,6 @@ export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
 export { WebsocketAgent } from './app/chat-agent/WebsocketAgent'
 export { ChatAgentSDKDO } from './app/chat-agent-sdk/ChatAgentSDKDO'
 export { ChatAgentAgentDO } from './app/chat-agent-agent/ChatAgentAgentDO'
-export { ChatPubsubAgentDO } from './app/chat-agent-pubsub/ChatPubsubAgentDO'
 export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 
 import type { ContentPageContext } from './app/contentSource/types'
@@ -55,8 +53,7 @@ const app = defineApp([
     layout(AppLayout, [
       // useAgentChat doesn't play well with SSR
       route('/chat-agent-sdk', ChatAgentSDK),
-      route('/chat-agent-agent', ChatAgentAgent),
-      route('/chat-agent-pubsub', ChatPubsubAgent),
+      route('/chat-agent-agent', ChatAgentAgent)
     ]),
     { ssr: false }
   ),

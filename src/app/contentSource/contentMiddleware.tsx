@@ -50,7 +50,6 @@ export const contentMiddleware = ({ ignore }: contentMiddlewareOptions = {}) => 
     const pagePaths = await getPagePaths()
     const pageContext: ContentPageContext = {
       pathname,
-      messages: pathname === '/chat-agent-pubsub' ? await getMessages() : undefined,
       siteData: '/' in pagePaths ? (await getPageData('/'))?.attrs : undefined,
       pageData: pathname in pagePaths ? (await getPageData(pathname, noCache)) || undefined : undefined,
       dirData:
@@ -61,10 +60,4 @@ export const contentMiddleware = ({ ignore }: contentMiddlewareOptions = {}) => 
     if (url.searchParams.has('json')) return Response.json(pageContext)
     ctx.pageContext = pageContext
   }
-}
-
-async function getMessages() {
-  const agent = await getAgentByName(env.CHAT_PUBSUB_AGENT_DURABLE_OBJECT, 'main')
-  // @ts-ignore
-  return await agent.getMessages()
 }
