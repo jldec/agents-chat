@@ -19,9 +19,10 @@ This is a companion repository for a [blog post](https://jldec.me/blog/multi-use
 - The realtime sync feature of RedwoodSDK pushes updates to connected clients over websockets.
 
 **Cloudflare Agents:**
-- AIChatAgent provides its own websocket protocol for multi-user real-time sync
-- Agents also offer raw websockets give full control over payloads for optimizations
-- Vercel's AI SDK abstracts tool calling and supports different LLMs
+- AIChatAgent provides its own persistence and websocket protocol for multi-user real-time sync
+- It uses Vercel's AI SDK to abstract tool calling and support different LLMs
+- It does not support streaming AI responses to multiple users, or streaming for subagents.
+- Agents can also provide raw websockets for full control over websocket payloads
 
 **TinyBase:**
 - DB sync engines can improve UX with local-first client-side persistence
@@ -33,3 +34,4 @@ This is a companion repository for a [blog post](https://jldec.me/blog/multi-use
 - **RedwoodSDK Docs:** https://docs.rwsdk.com/
 - **Cloudflare Workers Docs:** https://developers.cloudflare.com/workers/
 - **Cloudflare Agents Docs:** https://developers.cloudflare.com/agents/
+- **AI SDK Docs:** https://ai-sdk.dev/docs/

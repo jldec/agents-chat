@@ -1,6 +1,7 @@
 // prettier-ignore
 import { routeAgents } from './app/shared/routeAgents'
-import { cacheInterrupter, cacheResponse } from './lib/cacheInterrupter'
+// disable cacheInterrupter because of https://github.com/jldec/agents-chat/issues/56
+// import { cacheInterrupter, cacheResponse } from './lib/cacheInterrupter'
 import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { ChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
@@ -26,7 +27,7 @@ export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 import type { ContentPageContext } from './app/contentSource/types'
 import { ContentLayout } from './app/contentTheme/ContentLayout'
 import { contentMiddleware } from './app/contentSource/contentMiddleware'
-import { contentTheme } from './app/contentTheme/contentTheme'
+import { ContentTheme } from './app/contentTheme/ContentTheme'
 import { contentApiRoutes } from './app/contentSource/api-routes'
 
 export type AppContext = {
@@ -61,9 +62,9 @@ const app = defineApp([
   ...tinybaseApiRoutes,
   ...timeApiRoutes,
   ...contentApiRoutes,
-  render(Document, [route('*', [cacheInterrupter(), contentTheme])])
+  render(Document, [route('*', ContentTheme)])
 ])
 
 export default {
-  fetch: cacheResponse(app.fetch)
+  fetch: app.fetch
 }
