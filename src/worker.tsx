@@ -42,8 +42,6 @@ const app = defineApp([
     Document,
     layout(AppLayout, [
       route('/chat-rsc', ChatRSC),
-      route('/chat-agent', ChatAgent),
-      route('/chat-tinybase', ChatTinybase),
       route('/time', Time)
     ])
   ),
@@ -52,7 +50,9 @@ const app = defineApp([
     layout(AppLayout, [
       // useAgentChat doesn't play well with SSR
       route('/chat-agent-sdk', ChatAgentSDK),
-      route('/chat-agent-agent', ChatAgentAgent)
+      route('/chat-agent-agent', ChatAgentAgent),
+      route('/chat-agent', ChatAgent),
+      route('/chat-tinybase', ChatTinybase)
     ]),
     { ssr: false }
   ),
