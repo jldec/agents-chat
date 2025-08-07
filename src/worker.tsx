@@ -1,6 +1,5 @@
 // prettier-ignore
 import { routeAgents } from './app/shared/routeAgents'
-import { cacheInterrupter, cacheResponse } from './lib/cacheInterrupter'
 import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { ChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
@@ -61,9 +60,9 @@ const app = defineApp([
   ...tinybaseApiRoutes,
   ...timeApiRoutes,
   ...contentApiRoutes,
-  render(Document, [route('*', [cacheInterrupter(), contentTheme])])
+  render(Document, [route('*', contentTheme)])
 ])
 
 export default {
-  fetch: cacheResponse(app.fetch)
+  fetch: app.fetch
 }
