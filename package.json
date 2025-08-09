@@ -17,6 +17,8 @@
     "@ai-sdk/openai": "^1.3.23",
     "@ai-sdk/react": "^1.2.12",
     "@ai-sdk/ui-utils": "^1.2.11",
+    "@openai/agents": "^0.0.15",
+    "@openai/agents-core": "^0.0.15",
     "@std/front-matter": "jsr:^1.0.9",
     "agents": "0.0.109",
     "ai": "^4.3.19",
@@ -52,8 +54,12 @@
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
-        "vite": "7"
+        "vite": "7",
+        "zod": "^3.25"
       }
+    },
+    "patchedDependencies": {
+      "@openai/agents-core": "patches/@openai__agents-core.patch"
     }
   },
   "prettier": {
