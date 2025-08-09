@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 interface MessageInputProps {
   newMessage: (prompt: string) => Promise<void>
   onClear: () => Promise<void>
+  isReady?: boolean
   value?: never
   onChange?: never
   onSubmit?: never
@@ -14,6 +15,7 @@ interface MessageInputPropsAgentSDK {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   onSubmit: (event?: { preventDefault?: () => void }) => void
   onClear: () => void
+  isReady?: never
   newMessage?: never
 }
 
@@ -55,7 +57,11 @@ export function MessageInput(props: MessageInputProps | MessageInputPropsAgentSD
         className="flex-grow border-2 border-gray-400 p-2 w-full rounded-md"
         value={'value' in props ? props.value : input}
       />
-      <button type="submit" className="p-2 bg-blue-500 text-white rounded-md cursor-pointer">
+      <button
+        type="submit"
+        disabled={'isReady' in props ? !props.isReady : false}
+        className="p-2 bg-blue-500 text-white rounded-md cursor-pointer"
+      >
         Submit
       </button>
       <button onClick={clear} className="p-2 rounded-md border border-gray-400 cursor-pointer">

@@ -63,3 +63,8 @@ async function syncRealtimeClients() {
     key: env.REALTIME_KEY
   })
 }
+
+export async function ping() {
+  await new Promise((resolve) => setTimeout(resolve, 250))
+  return 'pong'
+}
