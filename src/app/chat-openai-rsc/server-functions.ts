@@ -27,7 +27,7 @@ export async function newMessage(prompt: string) {
   messagesMemo[aiIndex] = aiResponse
   await syncRealtimeClients()
 
-  const stream = await askAI(await chatStore.getMessages(), 'RSC Chat')
+  const stream = await askAI(await chatStore.getMessages(), 'OpenaAI Chat')
   aiResponse.content = '' // remove ... when stream starts
   // operate on memoized messages during streaming
   for await (const chunk of streamToText(stream)) {
@@ -62,4 +62,9 @@ async function syncRealtimeClients() {
     durableObjectNamespace: env.REALTIME_DURABLE_OBJECT,
     key: env.REALTIME_KEY
   })
+}
+
+export async function ping() {
+  await new Promise((resolve) => setTimeout(resolve, 0))
+  return 'pong'
 }
