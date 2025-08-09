@@ -6,7 +6,7 @@ This is a companion repository for a [blog post](https://jldec.me/blog/multi-use
 
 ### Implementations
 1. **[RSC Chat](https://agents-chat.jldec.me/chat-rsc)** - Uses RedwoodSDK realtime websockets
-2. **[OpenAI Chat](https://agents-chat.jldec.me/chat-openai-rsc)** - New! Uses OpenAI Agent SDK and syncs via RedwoodSDK realtime RSC
+2. **[OpenAI Chat](https://agents-chat.jldec.me/chat-openai-sdk)** - New! Uses OpenAI Agent SDK and syncs via RedwoodSDK realtime RSC
 3. **[Agent Chat](https://agents-chat.jldec.me/chat-agent)** - Uses Cloudflare Agents websockets with separate durable object storage
 4. **[Agent SDK Chat](https://agents-chat.jldec.me/chat-agent-sdk)** - Uses Cloudflare Agents AIChatAgent with the useAgentChat hook
 5. **[TinyBase Chat](https://agents-chat.jldec.me/chat-tinybase)** - Uses TinyBase websockets

@@ -28,7 +28,7 @@ Multi-user streaming AI chats built using RedwoodSDK, Cloudflare Agents, and RSC
 
 > - [RSC Chat](/chat-rsc) - syncs via RedwoodSDK realtime websockets
 >
-> - [OpenaAI SDK Chat](/chat-openai-rsc) - new! Also syncs via RedwoodSDK realtime RSC
+> - [OpenaAI SDK Chat](/chat-openai-sdk) - new! Also syncs via RedwoodSDK realtime RSC
 >
 > - [Agent Chat](/chat-agent) - syncs via Cloudflare Agents websockets
 >

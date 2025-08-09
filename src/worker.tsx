@@ -28,7 +28,7 @@ import { ContentLayout } from './app/contentTheme/ContentLayout'
 import { contentMiddleware } from './app/contentSource/contentMiddleware'
 import { contentTheme } from './app/contentTheme/contentTheme'
 import { contentApiRoutes } from './app/contentSource/api-routes'
-import { ChatOpenaiRSC } from './app/chat-openai-rsc/ChatOpenaiRSC'
+import { ChatOpenaiSDK } from './app/chat-openai-sdk/ChatOpenaiSDK'
 
 export type AppContext = {
   pageContext?: ContentPageContext
@@ -44,7 +44,7 @@ const app = defineApp([
     Document,
     layout(AppLayout, [
       route('/chat-rsc', ChatRSC),
-      route('/chat-openai-rsc', ChatOpenaiRSC),
+      route('/chat-openai-sdk', ChatOpenaiSDK),
       route('/chat-agent', ChatAgent),
       route('/chat-tinybase', ChatTinybase),
       route('/time', Time)

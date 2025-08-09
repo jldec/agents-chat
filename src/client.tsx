@@ -7,7 +7,7 @@ switch (window.location.pathname) {
       key: 'rwsdk-realtime-chat'
     })
     break
-  case '/chat-openai-rsc':
+  case '/chat-openai-sdk':
     initRealtimeClient({
       key: 'openai-realtime-chat'
     })

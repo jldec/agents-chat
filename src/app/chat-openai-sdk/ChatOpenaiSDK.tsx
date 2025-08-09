@@ -4,10 +4,10 @@ import { ChatLayout } from '../shared/ChatLayout'
 import { getMessages, newMessage, clearMessages } from './server-functions'
 import { Connect } from '../chat-rsc/Connect'
 
-export async function ChatOpenaiRSC() {
+export async function ChatOpenaiSDK() {
   return (
     <ChatLayout title="OpenaAI Agents SDK Chat">
-            <Connect />
+      <Connect />
       <MessageList messages={await getMessages()} />
       <MessageInput newMessage={newMessage} onClear={clearMessages} />
     </ChatLayout>
