@@ -24,7 +24,7 @@ export function useStore() {
   useCreateSynchronizer(store, async (store: MergeableStore) => {
     const synchronizer = await createWsSynchronizer(
       store,
-      new ReconnectingWebSocket(window.location.origin.replace('http', 'ws') + TINYBASE_SYNC_ROUTE),
+      new ReconnectingWebSocket(window.location.origin.replace('http', 'ws') + TINYBASE_SYNC_ROUTE) as any,
       1
     )
     await synchronizer.startSync()
