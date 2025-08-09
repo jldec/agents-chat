@@ -3,10 +3,10 @@ import { env } from 'cloudflare:workers'
 import { renderRealtimeClients } from 'rwsdk/realtime/worker'
 import { nanoid } from 'nanoid'
 import type { Message } from '../shared/ChatStore'
-import { askAI } from '@/lib/askAI'
-import { streamToText } from '@/lib/streamToText'
+import { Agent, run } from '@openai/agents'
+import { systemMessageText } from '@/lib/systemMessageText'
 
-let messagesMemo: Message[] | null = null
+const name = 'OpenaAI Agents SDK Chat'
 
 export async function newMessage(prompt: string) {
   const promptMessage: Message = {
@@ -19,33 +19,29 @@ export async function newMessage(prompt: string) {
     role: 'assistant',
     content: '...'
   }
+
   const chatStore = resolveChatStore(env.OPENAI_CHATSTORE)
-  const promptIndex = await chatStore.setMessage(promptMessage)
-  const aiIndex = await chatStore.setMessage(aiResponse)
-  messagesMemo = await chatStore.getMessages()
-  messagesMemo[promptIndex] = promptMessage
-  messagesMemo[aiIndex] = aiResponse
+  await chatStore.setMessage(promptMessage)
+  await chatStore.setMessage(aiResponse)
   await syncRealtimeClients()
 
-  const stream = await askAI(await chatStore.getMessages(), 'OpenaAI Chat')
-  aiResponse.content = '' // remove ... when stream starts
-  // operate on memoized messages during streaming
-  for await (const chunk of streamToText(stream)) {
-    aiResponse.content += chunk
-    syncRealtimeClients()
-  }
-  // update the chat store with the final response
+  const agent = new Agent({
+    name,
+    instructions: systemMessageText(name)
+  })
+  const result = await run(agent, prompt)
+
+  aiResponse.content = result.finalOutput || 'no response'
   await chatStore.setMessage(aiResponse)
+  await syncRealtimeClients()
 }
 
 export async function getMessages(): Promise<Message[]> {
-  if (messagesMemo) return messagesMemo
   const chatStore = resolveChatStore(env.OPENAI_CHATSTORE)
   return chatStore.getMessages()
 }
 
 export async function clearMessages(): Promise<void> {
-  messagesMemo = []
   const chatStore = resolveChatStore(env.OPENAI_CHATSTORE)
   await chatStore.clearMessages()
   await syncRealtimeClients()
