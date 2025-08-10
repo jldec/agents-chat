@@ -21,7 +21,8 @@
     "GH_BRANCH": "main",
     "GH_PATH": "content",
     "DEV_CONTENT_DIR": "",
-    "GH_TEST": ""
+    "GH_TEST": "",
+    "THROTTLE_UPDATES_MS": 100
   },
   // .dev.vars
   // DEV_CONTENT_DIR=/Users/jldec/agents-chat/jldec-me/content -- defaults to ./content
