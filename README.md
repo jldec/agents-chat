@@ -15,13 +15,13 @@ This is a companion repository for a [blog post](https://jldec.me/blog/multi-use
 ### Takeaways
 **TL;DR**
 - Cloudflare is a great platform for building multi-agent multi-user streaming UX.
-- Current UI tooling is not mature, and makes limiting architectural assumptions.
+- Current UI tooling is immature e.g. with limiting assumptions which block many-to-many connections.
 
 **RedwoodSDK RSC:**
-- Server components provide succinct way to populate JSX and keep clients updated.
-- This makes using react with Cloudflare workers super easy, and simplifies async data loading.
-- The realtime sync feature of RedwoodSDK pushes updates to connected clients over websockets.
-- Disabled RSC pre-rendering for components with hooks which can't run server-side.
+- React Server Components provide succinct way to render JSX on the server.
+- RedwoodSDK makes using react with Cloudflare workers easy.
+- The realtime feature of RedwoodSDK pushes updates to connected clients over websockets.
+- Had to disable ssr for hooks (e.g. useChat) not designed to run server-side.
 
 **Cloudflare Agents**
 - Cloudflare durable objects are ideal for agents and subagents.
@@ -29,13 +29,13 @@ This is a companion repository for a [blog post](https://jldec.me/blog/multi-use
 - It depends on Vercel's AI SDK for model portabilty, message types, streaming, and tool calling.
 - useChat and useAgentChat result in tight coupling between Agents and UI.
 - The design for AI chat assumes single-agent, single-user.
-- Support for RSC server-rendering is lacking.
+- RSC support in Vercel's AI SDK is [limited](https://ai-sdk.dev/docs/ai-sdk-rsc/migrating-to-ui).
 
 **OpenAI Agents SDK**
 - OpenAI Agents SDK is less mature and focuses on model APIs, not UI integration.
-- It supports realtime, handoffs, and subagents - not used in this project yet.
-- It still requires patches to run in workerd.
-- The stateful Agent abstraction assumes long-running server processes.
+- It offers APIs for realtime, handoffs, and subagents - not used in this project yet.
+- It currently requires [patches](https://github.com/jldec/agents-chat/tree/main/patches) to run in workerd. (from [here](https://github.com/cloudflare/agents/tree/main/patches) 🙏 @threepointone)
+- The stateful Agent abstraction assumes long-running server processes with a single conversation per agent.
 
 **TinyBase:**
 - DB sync engines can improve UX with local-first client-side persistence.
