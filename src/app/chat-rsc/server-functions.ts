@@ -39,9 +39,11 @@ export async function newMessage(prompt: string) {
     aiResponse.content += chunk
     throttledUpdate()
   }
+  // the last update may have bee throttled
+  await chatStore.setMessage(aiResponse)
+  await syncRealtimeClients()
   // console.log('newMessage updateCount', updateCount)
   // console.log('newMessage aiResponse.content', aiResponse.content)
-  await syncRealtimeClients()
 }
 
 export async function getMessages(): Promise<Message[]> {
