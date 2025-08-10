@@ -27,15 +27,17 @@ sociallinks:
 
 This is an experimental project, looking at how to live-stream AI responses back to multiple connected clients. All implementations use Cloudflare durable objects and React Server Components (RSC) with [RedwoodSDK](https://rwsdk.com/).
 
-This is a companion repository for a [blog post](https://jldec.me/blog/multi-user-ai-chat-with-redwoodsdk-rsc-and-cloudflare-agents), deployed at https://agents-chat.jldec.me/.
+Deployed at https://agents-chat.jldec.me/
 
 ### Implementations
-1. **[RSC Chat](https://agents-chat.jldec.me/chat-rsc)** - Uses RedwoodSDK realtime websockets
-2. **[OpenAI Chat](https://agents-chat.jldec.me/chat-openai-sdk)** - New! Uses OpenAI Agents SDK and syncs via RedwoodSDK realtime RSC
-3. **[Agent Chat](https://agents-chat.jldec.me/chat-agent)** - Uses Cloudflare Agents websockets with separate durable object storage
-4. **[Agent SDK Chat](https://agents-chat.jldec.me/chat-agent-sdk)** - Uses Cloudflare Agents AIChatAgent with the useAgentChat hook (based on AI SDK useChat)
-5. **[TinyBase Chat](https://agents-chat.jldec.me/chat-tinybase)** - Uses TinyBase websockets
-6. **[Agent Agent Chat](https://agents-chat.jldec.me/chat-agent-agent)** - More advanced Cloudflare Agents with subagents and MCP tool calling
+> 1. **[RSC Chat](https://agents-chat.jldec.me/chat-rsc)** - Uses RedwoodSDK realtime websockets
+> 2. **[OpenAI Chat](https://agents-chat.jldec.me/chat-openai-sdk)** - New! Uses OpenAI Agents SDK
+> 3. **[Agent Chat](https://agents-chat.jldec.me/chat-agent)** - Uses Cloudflare Agents websockets
+> 4. **[Agent SDK Chat](https://agents-chat.jldec.me/chat-agent-sdk)** - Uses Cloudflare Agents AIChatAgent
+> 5. **[TinyBase Chat](https://agents-chat.jldec.me/chat-tinybase)** - Uses TinyBase websockets
+> 6. **[Agent Agent Chat](https://agents-chat.jldec.me/chat-agent-agent)** - Cloudflare Agents with subagents and MCP tools
+
+This is a companion repository for the blog post [Multi-user AI chat with RedwoodSDK RSC and Cloudflare agents](https://jldec.me/blog/multi-user-ai-chat-with-redwoodsdk-rsc-and-cloudflare-agents).
 
 ### Takeaways
 **TL;DR**
