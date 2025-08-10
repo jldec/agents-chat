@@ -1,3 +1,28 @@
+---
+title: agents-chat
+splashimage: bloem.webp
+siteurl: https://agents-chat.jldec.me
+description: Multi-user streaming AI chats built using RedwoodSDK RSCs, Cloudflare Agents, Vercel AI SDK, and OpenAI Agents SDK.
+twitter: '@jldec'
+navlinks:
+  - text: Home
+    href: /
+    icon: home
+sociallinks:
+  - text: X
+    href: https://x.com/jldec
+    icon: twitter
+  - text: GitHub
+    href: https://github.com/jldec/agents-chat
+    icon: github
+  - text: Linkedin
+    href: https://www.linkedin.com/in/jldec/
+    icon: linkedin
+  - text: Email
+    href: mailto:jurgen@jldec.me
+    icon: email
+---
+
 # Multi-user AI Chat with RedwoodSDK RSC and Cloudflare Agents
 
 This is an experimental project, looking at how to live-stream AI responses back to multiple connected clients. All implementations use Cloudflare durable objects and React Server Components (RSC) with [RedwoodSDK](https://rwsdk.com/).
