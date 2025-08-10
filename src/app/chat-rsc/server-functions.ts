@@ -5,10 +5,13 @@ import { nanoid } from 'nanoid'
 import type { Message } from '../shared/ChatStore'
 import { askAI } from '@/lib/askAI'
 import { streamToText } from '@/lib/streamToText'
+import throttle from 'lodash/throttle'
 
-let messagesMemo: Message[] | null = null
+// limit streaming updates to once every 100ms
+const throttleUpdatesMs = Number(env.THROTTLE_UPDATES_MS || 100)
 
 export async function newMessage(prompt: string) {
+  let updateCount = 0
   const promptMessage: Message = {
     id: nanoid(8),
     role: 'user',
@@ -20,32 +23,33 @@ export async function newMessage(prompt: string) {
     content: '...'
   }
   const chatStore = resolveChatStore(env.RWSDK_CHATSTORE)
-  const promptIndex = await chatStore.setMessage(promptMessage)
-  const aiIndex = await chatStore.setMessage(aiResponse)
-  messagesMemo = await chatStore.getMessages()
-  messagesMemo[promptIndex] = promptMessage
-  messagesMemo[aiIndex] = aiResponse
+  await chatStore.setMessage(promptMessage)
+  await chatStore.setMessage(aiResponse)
   await syncRealtimeClients()
 
+  const throttledUpdate = throttle(async () => {
+    updateCount++
+    await chatStore.setMessage(aiResponse)
+    await syncRealtimeClients()
+  }, throttleUpdatesMs)
+
   const stream = await askAI(await chatStore.getMessages(), 'RSC Chat')
-  aiResponse.content = '' // remove ... when stream starts
-  // operate on memoized messages during streaming
+  aiResponse.content = ''
   for await (const chunk of streamToText(stream)) {
     aiResponse.content += chunk
-    syncRealtimeClients()
+    throttledUpdate()
   }
-  // update the chat store with the final response
-  await chatStore.setMessage(aiResponse)
+  // console.log('newMessage updateCount', updateCount)
+  // console.log('newMessage aiResponse.content', aiResponse.content)
+  await syncRealtimeClients()
 }
 
 export async function getMessages(): Promise<Message[]> {
-  if (messagesMemo) return messagesMemo
   const chatStore = resolveChatStore(env.RWSDK_CHATSTORE)
   return chatStore.getMessages()
 }
 
 export async function clearMessages(): Promise<void> {
-  messagesMemo = []
   const chatStore = resolveChatStore(env.RWSDK_CHATSTORE)
   await chatStore.clearMessages()
   await syncRealtimeClients()
@@ -57,7 +61,7 @@ function resolveChatStore(chatID: string) {
 }
 
 async function syncRealtimeClients() {
-  // TODO: throttle?
+  // console.log('syncRealtimeClients')
   await renderRealtimeClients({
     durableObjectNamespace: env.REALTIME_DURABLE_OBJECT,
     key: env.REALTIME_KEY
