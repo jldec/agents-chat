@@ -55,7 +55,7 @@ Companion repo for blog post: [Multi-user AI chat with RedwoodSDK RSC and Cloudf
 - Had to disable ssr for hooks (e.g. useChat) not designed to run server-side.
 
 **Cloudflare Agents**
-- Cloudflare durable objects are ideal for agents and subagents.
+- Cloudflare durable objects (DOs) are ideal for agents and subagents.
 - The agents library wraps DOs with additional classes and react hookk.
 - It depends on Vercel's AI SDK for model portabilty, message types, streaming, and tool calling.
 - useChat and useAgentChat result in tight coupling between Agents and UI.
