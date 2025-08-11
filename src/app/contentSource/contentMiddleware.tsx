@@ -7,9 +7,6 @@ import { type ContentPageContext } from './types'
 import { type RequestInfo } from 'rwsdk/worker'
 import { match } from '@/lib/match'
 
-import { getAgentByName } from 'agents'
-import { env } from 'cloudflare:workers'
-
 export type contentMiddlewareOptions = {
   ignore?: string | string[]
 }
@@ -51,11 +48,7 @@ export const contentMiddleware = ({ ignore }: contentMiddlewareOptions = {}) => 
     const pageContext: ContentPageContext = {
       pathname,
       siteData: '/' in pagePaths ? (await getPageData('/'))?.attrs : undefined,
-      pageData: pathname in pagePaths ? (await getPageData(pathname, noCache)) || undefined : undefined,
-      dirData:
-        pathname.startsWith('/blog/') && '/blog' in pagePaths
-          ? (await getPageData('/blog'))?.dir?.find((p) => p.path === pathname)
-          : undefined
+      pageData: pathname in pagePaths ? (await getPageData(pathname, noCache)) || undefined : undefined
     }
     if (url.searchParams.has('json')) return Response.json(pageContext)
     ctx.pageContext = pageContext

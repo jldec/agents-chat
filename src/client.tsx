@@ -18,8 +18,5 @@ switch (window.location.pathname) {
     })
     break
   default:
-    if (!document.getElementById('404')) {
-      initClient()
-    }
-    break
+    initClient()
 }
