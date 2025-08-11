@@ -34,29 +34,31 @@ export type AppContext = {
   pageContext?: ContentPageContext
 }
 
-export const AppLayout = ({ children }: LayoutProps) => <ContentLayout>{children}</ContentLayout>
+const withContentLayout = (Component: React.ComponentType) => () =>
+  (
+    <ContentLayout>
+      <Component />
+    </ContentLayout>
+  )
 
 const app = defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
   routeAgents({ prefix: '/agents/' }),
   contentMiddleware({ ignore: '/api/' }),
+  render(Document, [
+    route('/chat-rsc', withContentLayout(ChatRSC)),
+    route('/chat-openai-sdk', withContentLayout(ChatOpenaiSDK)),
+    route('/chat-agent', withContentLayout(ChatAgent)),
+    route('/chat-tinybase', withContentLayout(ChatTinybase)),
+    route('/time', withContentLayout(Time))
+  ]),
   render(
     Document,
-    layout(AppLayout, [
-      route('/chat-rsc', ChatRSC),
-      route('/chat-openai-sdk', ChatOpenaiSDK),
-      route('/chat-agent', ChatAgent),
-      route('/chat-tinybase', ChatTinybase),
-      route('/time', Time)
-    ])
-  ),
-  render(
-    Document,
-    layout(AppLayout, [
+    [
       // useAgentChat doesn't play well with SSR
-      route('/chat-agent-sdk', ChatAgentSDK),
-      route('/chat-agent-agent', ChatAgentAgent)
-    ]),
+      route('/chat-agent-sdk', withContentLayout(ChatAgentSDK)),
+      route('/chat-agent-agent', withContentLayout(ChatAgentAgent))
+    ],
     { ssr: false }
   ),
   ...chatAgentApiRoutes,
