@@ -9,7 +9,7 @@ ${readme}
 
 ## NOTES:
 - RedwoodSDK is also known as "rwsdk" and should not be confused with RedwoodJS or Redwood.
-RSC stands for "React Server Components".
+- RSC stands for "React Server Components".
 - MCP is a standard for AI models to integrate with external systems.
 MCP stands for "Model Context Protocol". Read more about it at https://jldec.me/blog/mcp
 `
