@@ -1,5 +1,6 @@
 // prettier-ignore
 import { ChatAgent } from './app/chat-agent/ChatAgent'
+import { ChatAgentWithContentLayout } from './app/chat-agent/ChatAgentWithContentLayout'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { defineApp } from 'rwsdk/worker'
 import { Document } from './app/Document'
@@ -18,15 +19,19 @@ export type AppContext = {
   pageContext?: ContentPageContext
 }
 
-export const AppLayout = ({ children }: LayoutProps) => <ContentLayout>{children}</ContentLayout>
+export const AppLayoutWithContentLayout = ({ children }: LayoutProps) => <ContentLayout>{children}</ContentLayout>
 
 const app = defineApp([
   contentMiddleware({ ignore: '/api/' }),
   render(
     Document,
-    layout(AppLayout, [
+    layout(AppLayoutWithContentLayout, [
       route('/chat-agent', ChatAgent),
     ])
+  ),
+  render(
+    Document,
+    [route('/chat-agent-with-content-layout', ChatAgentWithContentLayout)]
   ),
   ...chatAgentApiRoutes,
   ...contentApiRoutes,

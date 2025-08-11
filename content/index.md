@@ -25,5 +25,7 @@ sociallinks:
 
 # agent-chat
 
-> - [Agent Chat](/chat-agent) - syncs via Cloudflare Agents websockets
+> - [/chat-agent](/chat-agent) - layout() in worker.tsx
 >
+> - [/chat-agent-with-content-layout](/chat-agent-with-content-layout) - ChatAgentWithContentLayout.tsx
+
