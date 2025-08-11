@@ -28,7 +28,6 @@
   // DEV_CONTENT_DIR=/Users/jldec/agents-chat/jldec-me/content -- defaults to ./content
   // pnpm wrangler secret put OPENAI_API_KEY
   // pnpm wrangler secret put GH_PAT
-  // pnpm wrangler secret put IMAGE_KEY
   "kv_namespaces": [
     // pnpm wrangler kv namespace create PAGEDATA_CACHE
     {
@@ -39,13 +38,6 @@
     {
       "binding": "STATIC_CACHE",
       "id": "e7b3aa1f6f184c669c3128424b163009"
-    }
-  ],
-  // pnpm wrangler r2 bucket create agents-chat-images
-  "r2_buckets": [
-    {
-      "binding": "IMAGES",
-      "bucket_name": "agents-chat-images"
     }
   ],
   "durable_objects": {
