@@ -14,7 +14,7 @@
     "WEBSOCKET_AGENT_NAME": "rwsdk-chat-agent", // duplicated in ChatAgent.tsx
     "GH_OWNER": "jldec",
     "GH_REPO": "agents-chat",
-    "GH_BRANCH": "main",
+    "GH_BRANCH": "rwsdk-0-2-0-alpha-x",
     "GH_PATH": "content",
     "DEV_CONTENT_DIR": "",
     "GH_TEST": ""
