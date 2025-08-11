@@ -6,8 +6,6 @@ import { streamToText } from '@/lib/streamToText'
 
 import { route } from 'rwsdk/router'
 import type { RequestInfo } from 'rwsdk/worker'
-import { routeAgentRequest } from 'agents'
-import type { WebsocketAgent } from './WebsocketAgent'
 
 async function GET() {
   try {
