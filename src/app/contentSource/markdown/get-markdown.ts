@@ -65,9 +65,7 @@ export async function getPageData(path: string, noCache: boolean = false): Promi
     md: parsedFrontmatter.body,
     html: parsedFrontmatter.attrs.error
       ? errorHtml(parsedFrontmatter.attrs.error, await filePath(path))
-      : parseMarkdown(parsedFrontmatter.body, {
-          hashPrefix: env.IMAGE_KEY
-        }),
+      : parseMarkdown(parsedFrontmatter.body),
     dir: dirData
   }
   requestInfo.cf.waitUntil(env.PAGEDATA_CACHE.put(path, JSON.stringify(pageData)))
