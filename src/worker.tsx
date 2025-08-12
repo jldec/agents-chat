@@ -10,7 +10,7 @@ import { defineApp } from 'rwsdk/worker'
 import { Document } from './app/Document'
 import { env } from 'cloudflare:workers'
 import { realtimeRoute } from 'rwsdk/realtime/worker'
-import { render, route } from 'rwsdk/router'
+import { LayoutProps, render, route, layout } from 'rwsdk/router'
 import { routeAgents } from './app/shared/routeAgents'
 import { Time } from './app/time/Time'
 import { timeApiRoutes } from './app/time/api-routes'
@@ -34,31 +34,29 @@ export type AppContext = {
   pageContext?: ContentPageContext
 }
 
-const withContentLayout = (Component: React.ComponentType) => () =>
-  (
-    <ContentLayout>
-      <Component />
-    </ContentLayout>
-  )
+const AppLayout = ({ children }: LayoutProps) => <ContentLayout>{children}</ContentLayout>
 
 const app = defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
   routeAgents({ prefix: '/agents/' }),
   contentMiddleware({ ignore: '/api/' }),
-  render(Document, [
-    route('/chat-rsc', withContentLayout(ChatRSC)),
-    route('/chat-openai-sdk', withContentLayout(ChatOpenaiSDK)),
-    route('/chat-agent', withContentLayout(ChatAgent)),
-    route('/chat-tinybase', withContentLayout(ChatTinybase)),
-    route('/time', withContentLayout(Time))
-  ]),
   render(
     Document,
-    [
+    layout(AppLayout, [
+      route('/chat-rsc', ChatRSC),
+      route('/chat-openai-sdk', ChatOpenaiSDK),
+      route('/chat-agent', ChatAgent),
+      route('/chat-tinybase', ChatTinybase),
+      route('/time', Time)
+    ])
+  ),
+  render(
+    Document,
+    layout(AppLayout, [
       // useAgentChat doesn't play well with SSR
-      route('/chat-agent-sdk', withContentLayout(ChatAgentSDK)),
-      route('/chat-agent-agent', withContentLayout(ChatAgentAgent))
-    ],
+      route('/chat-agent-sdk', ChatAgentSDK),
+      route('/chat-agent-agent', ChatAgentAgent)
+    ]),
     { ssr: false }
   ),
   ...chatAgentApiRoutes,
