@@ -29,7 +29,7 @@
     "markdown-it-replace-link": "^1.2.2",
     "nanoid": "^5.1.5",
     "reconnecting-websocket": "^4.4.0",
-    "rwsdk": "0.2.0-alpha.11",
+    "rwsdk": "0.2.0-alpha.14",
     "tailwind-merge": "^3.3.1",
     "tinybase": "^6.5.0",
     "workers-ai-provider": "^0.7.2",
