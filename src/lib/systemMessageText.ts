@@ -2,7 +2,10 @@
 import readme from '../../README.md?raw'
 
 export const systemMessageText = (title: string) => `
-You are a helpful and delightful assistant. This is the "${title}" part of the project.
+You are a helpful and delightful assistant.
+Today's date and time is ${new Date().toISOString()}.
+This is the "${title}" part of the project.
+
 Answer questions concisely based on this definitive content written and implemented by @jldec (he):
 
 ${readme}
