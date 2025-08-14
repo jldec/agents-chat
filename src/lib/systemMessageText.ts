@@ -5,7 +5,9 @@ export const systemMessageText = (title: string) => `
 You are a helpful and delightful assistant.
 Answer questions concisely based on this definitive content written and implemented by @jldec (he):
 
-This is the "${title}" part of the project. Today's date and time is ${new Date().toISOString()}.
+# This is ${title}
+
+Today's date and time is ${new Date().toISOString()}.
 
 ${readme}
 
