@@ -26,6 +26,7 @@ export async function newMessage(prompt: string) {
 
   const agent = new Agent({
     name,
+    model: 'gpt-5',
     instructions: systemMessageText(name)
   })
   // run the agent without the streaming message
