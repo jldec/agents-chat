@@ -21,7 +21,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   isSubAgent: boolean = false // see newMessage()
   async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
     // const workersai = createWorkersAI({ binding: env.AI })
-    const model = openai('gpt-4o-2024-11-20')
+    const model = openai('gpt-4o')
 
     // Collect all tools, including MCP tools
     const allTools = {
@@ -55,7 +55,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
           // ts-expect-error (this 🦙 is not typed in ts)
           // model: workersai('@cf/meta/llama-3.1-8b-instruct-fp8-fast'),
           model,
-          system: systemMessageText('Agent Agent Chat'),
+          system: systemMessageText('Agent Agent Chat', 'gpt-4o'),
           messages: processedMessages,
           tools: allTools,
           onFinish: async (args) => {

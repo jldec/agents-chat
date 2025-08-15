@@ -6,11 +6,13 @@ import { Agent, run, type AgentInputItem, user } from '@openai/agents'
 import { type Message } from '../shared/ChatStore'
 import throttle from 'lodash/throttle'
 
+const model = 'gpt-4o'
 const name = 'OpenaAI Agents SDK Chat'
 const throttleUpdatesMs = Number(env.THROTTLE_UPDATES_MS || 100)
 
 export async function newMessage(prompt: string) {
   let updateCount = 0
+  const instructions = systemMessageText(name, model)
   const messages = await getMessages()
   const userMessage = user(prompt)
   messages.push(userMessage)
@@ -26,9 +28,10 @@ export async function newMessage(prompt: string) {
 
   const agent = new Agent({
     name,
-    model: 'gpt-5',
-    instructions: systemMessageText(name)
+    model,
+    instructions
   })
+  console.log('OpenAI agent', instructions)
   // run the agent without the streaming message
   const result = await run(agent, [...messages.slice(0, -1)] as AgentInputItem[], { stream: true })
   streamingMessage.content = ''
