@@ -33,7 +33,7 @@
     "tailwind-merge": "^3.3.1",
     "tinybase": "^6.5.0",
     "workers-ai-provider": "^0.7.2",
-    "zod": "^3.25.76"
+    "zod": "3.25.67"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.10.2",
@@ -58,8 +58,7 @@
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
-        "vite": "7",
-        "zod": "^3.25"
+        "vite": "7"
       }
     },
     "patchedDependencies": {
