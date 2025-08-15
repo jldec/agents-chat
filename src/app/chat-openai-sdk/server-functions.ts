@@ -31,7 +31,6 @@ export async function newMessage(prompt: string) {
     model,
     instructions
   })
-  console.log('OpenAI agent', instructions)
   // run the agent without the streaming message
   const result = await run(agent, [...messages.slice(0, -1)] as AgentInputItem[], { stream: true })
   streamingMessage.content = ''
