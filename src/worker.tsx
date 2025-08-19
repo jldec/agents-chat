@@ -34,15 +34,13 @@ export type AppContext = {
   pageContext?: ContentPageContext
 }
 
-const AppLayout = ({ children }: LayoutProps) => <ContentLayout>{children}</ContentLayout>
-
 const app = defineApp([
   realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
   routeAgents({ prefix: '/agents/' }),
   contentMiddleware({ ignore: '/api/' }),
   render(
     Document,
-    layout(AppLayout, [
+    layout(ContentLayout, [
       route('/chat-rsc', ChatRSC),
       route('/chat-openai-sdk', ChatOpenaiSDK),
       route('/chat-agent', ChatAgent),
@@ -52,7 +50,7 @@ const app = defineApp([
   ),
   render(
     Document,
-    layout(AppLayout, [
+    layout(ContentLayout, [
       // useAgentChat doesn't play well with SSR
       route('/chat-agent-sdk', ChatAgentSDK),
       route('/chat-agent-agent', ChatAgentAgent)
