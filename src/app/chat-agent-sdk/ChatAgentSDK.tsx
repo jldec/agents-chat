@@ -1,7 +1,7 @@
 'use client'
 import { ChatLayout } from '../components/ChatLayout'
 import { MessageInput } from '../components/MessageInput'
-import { MessageList } from '../components/MessageList'
+import { MessageListUI } from '../components/MessageListUI'
 import { useAgent } from 'agents/react'
 import { useAgentChat } from 'agents/ai-react'
 
@@ -17,7 +17,7 @@ export function ChatAgentSDK() {
 
   return (
     <ChatLayout title="RedwoodSDK Agent SDK Chat">
-      <MessageList messages={messages} />
+      <MessageListUI messages={messages} />
       <MessageInput value={input} onChange={handleInputChange} onSubmit={handleSubmit} onClear={clearHistory} />
     </ChatLayout>
   )

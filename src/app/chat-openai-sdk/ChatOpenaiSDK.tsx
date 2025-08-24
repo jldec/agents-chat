@@ -1,4 +1,4 @@
-import { MessageList } from '../components/MessageList'
+import { MessageListOpenAI } from '../components/MessageListOpenAI'
 import { MessageInput } from '../components/MessageInput'
 import { ChatLayout } from '../components/ChatLayout'
 import { getMessages, newMessage, clearMessages } from './server-functions'
@@ -8,7 +8,7 @@ export async function ChatOpenaiSDK() {
   return (
     <ChatLayout title="OpenaAI Chat">
       <Connect />
-      <MessageList messages={await getMessages()} />
+      <MessageListOpenAI messages={await getMessages()} />
       <MessageInput newMessage={newMessage} onClear={clearMessages} />
     </ChatLayout>
   )

@@ -1,6 +1,6 @@
 'use client'
 import { MessageInput } from '../components/MessageInput'
-import { MessageList } from '../components/MessageList'
+import { MessageListUI } from '../components/MessageListUI'
 import { useAgent } from 'agents/react'
 import { useAgentChat } from 'agents/ai-react'
 
@@ -16,7 +16,7 @@ export function ChatAgentAgentClient() {
 
   return (
     <>
-      <MessageList messages={messages} />
+      <MessageListUI messages={messages} />
       <MessageInput value={input} onChange={handleInputChange} onSubmit={handleSubmit} onClear={clearHistory} />
     </>
   )
