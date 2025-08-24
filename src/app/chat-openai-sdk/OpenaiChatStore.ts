@@ -1,9 +1,8 @@
 import { DurableObject } from 'cloudflare:workers'
 import { type AgentInputItem } from '@openai/agents'
-import { type Message } from './ChatStore'
 
 export class OpenaiChatstoreDurableObject extends DurableObject {
-  private messages: (AgentInputItem | Message)[] = []
+  private messages: (AgentInputItem)[] = []
 
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env)
@@ -22,7 +21,7 @@ export class OpenaiChatstoreDurableObject extends DurableObject {
   /**
    * Sets the messages array.
    */
-  setMessages(messages: (AgentInputItem | Message)[]) {
+  setMessages(messages: (AgentInputItem)[]) {
     this.messages = messages
     this.onUpdate()
   }

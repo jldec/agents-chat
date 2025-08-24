@@ -18,7 +18,7 @@ import { timeApiRoutes } from './app/time/api-routes'
 import { tinybaseApiRoutes } from './app/chat-tinybase/api-routes'
 
 export { ChatDurableObject } from './app/shared/ChatStore'
-export { OpenaiChatstoreDurableObject } from './app/shared/OpenaiChatStore'
+export { OpenaiChatstoreDurableObject } from './app/chat-openai-sdk/OpenaiChatStore'
 export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
 export { WebsocketAgent } from './app/chat-agent/WebsocketAgent'
 export { ChatAgentSDKDO } from './app/chat-agent-sdk/ChatAgentSDKDO'
