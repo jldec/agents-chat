@@ -24,12 +24,14 @@ export function MessageInput(props: MessageInputProps | MessageInputPropsAgentSD
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
+    const messageList = document.getElementById('message-list')
+    if (!messageList) throw new Error('message-list not found')
     const observer = new window.ResizeObserver(() => {
       if (inputRef.current) {
         window.scrollTo({ top: document.body.scrollHeight * 2, behavior: 'smooth' })
       }
     })
-    observer.observe(document.getElementById('message-list')!)
+    observer.observe(messageList)
     inputRef.current?.focus()
     return () => observer.disconnect()
   }, [])
