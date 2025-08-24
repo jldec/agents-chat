@@ -7,9 +7,20 @@ import { JsonMessage } from './JsonMessage'
 export function MessageListOpenAI({ messages }: { messages: AgentInputItem[] }) {
   return (
     <MessageListLayout>
-      {messages.map((message, i) => (
-        <JsonMessage key={i} message={message} />
-      ))}
+      {messages.map((message, i) => {
+        if (message.type !== 'message') {
+          return <JsonMessage key={i} message={message} />
+        }
+        if (typeof message.content === 'string') {
+          return <TextMessage key={i} message={message.content} role={message.role} />
+        }
+        return message.content.map((content, j) => {
+          if ('text' in content) {
+            return <TextMessage key={`${i}-${j}`} message={content.text || ''} role={message.role} />
+          }
+          return <JsonMessage key={`${i}-${j}`} message={content} />
+        })
+      })}
     </MessageListLayout>
   )
 }
