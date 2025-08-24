@@ -2,8 +2,7 @@
 import { env } from 'cloudflare:workers'
 import { renderRealtimeClients } from 'rwsdk/realtime/worker'
 import { systemMessageText } from '@/lib/systemMessageText'
-import { Agent, run, type AgentInputItem, user } from '@openai/agents'
-import { type Message } from '../shared/ChatStore'
+import { Agent, run, type AgentInputItem, type AssistantMessageItem, user, assistant } from '@openai/agents'
 import throttle from 'lodash/throttle'
 
 const model = 'gpt-4o'
@@ -14,10 +13,8 @@ export async function newMessage(prompt: string) {
   let updateCount = 0
   const instructions = systemMessageText(name, model)
   const messages = await getMessages()
-  const userMessage = user(prompt)
-  messages.push(userMessage)
-  const streamingMessage: Message = { id: 'streaming', role: 'assistant', content: '...' }
-  messages.push(streamingMessage)
+  messages.push(user(prompt))
+  messages.push(assistant('...')) // to be replaced with streaming text
   await setMessages(messages)
 
   // limit streaming updates to once every 100ms
@@ -31,24 +28,25 @@ export async function newMessage(prompt: string) {
     model,
     instructions
   })
-  // run the agent without the streaming message
-  const result = await run(agent, [...messages.slice(0, -1)] as AgentInputItem[], { stream: true })
-  streamingMessage.content = ''
+  // invoke the agent without the fake assistant message
+  const result = await run(agent, [...messages.slice(0, -1)], { stream: true })
+  let streamingText = ''
   for await (const chunk of result.toTextStream()) {
-    streamingMessage.content += chunk
+    streamingText += chunk
+    messages[messages.length - 1] = assistant(streamingText)
     await throttledUpdate()
   }
   // console.log('newMessage updateCount', updateCount)
   await setMessages(result.history)
 }
 
-export async function getMessages(): Promise<(AgentInputItem | Message)[]> {
+export async function getMessages(): Promise<AgentInputItem[]> {
   const chatStore = resolveChatStore(env.OPENAI_CHATSTORE)
   const messages = await chatStore.getMessages()
   return messages as AgentInputItem[]
 }
 
-export async function setMessages(newMessages: (AgentInputItem | Message)[]): Promise<void> {
+export async function setMessages(newMessages: AgentInputItem[]): Promise<void> {
   const chatStore = resolveChatStore(env.OPENAI_CHATSTORE)
   await chatStore.setMessages(newMessages)
   await syncRealtimeClients()
