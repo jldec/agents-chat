@@ -1,5 +1,5 @@
 import { env } from 'cloudflare:workers'
-import type { Message } from '../app/shared/ChatStore'
+import type { Message } from './types'
 import { systemMessageText } from './systemMessageText'
 
 const model = '@cf/meta/llama-3.1-8b-instruct-fp8-fast'

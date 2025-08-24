@@ -4,7 +4,7 @@ import { createDurableObjectStoragePersister } from 'tinybase/persisters/persist
 import { WsServerDurableObject } from 'tinybase/synchronizers/synchronizer-ws-server-durable-object'
 import { askAI } from '@/lib/askAI'
 import { streamToText } from '@/lib/streamToText'
-import type { Message } from '../shared/ChatStore'
+import type { Message } from '@/lib/types'
 import { nanoid } from 'nanoid'
 
 export class TinyBaseDurableObject extends WsServerDurableObject {
