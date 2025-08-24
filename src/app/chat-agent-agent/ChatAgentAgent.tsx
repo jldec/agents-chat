@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { ChatLayout } from '../shared/ChatLayout'
+import { ChatLayout } from '../components/ChatLayout'
 import { ChatAgentAgentClient } from './ChatAgentAgentClient'
 
 export function ChatAgentAgent() {

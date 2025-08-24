@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 import markdownit from 'markdown-it'
-import type { Message } from './ChatStore'
+import type { Message } from '@/lib/types'
 import type { UIMessage } from 'ai'
 import { AgentInputItem } from '@openai/agents'
 

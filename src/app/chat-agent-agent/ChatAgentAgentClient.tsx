@@ -1,6 +1,6 @@
 'use client'
-import { MessageInput } from '../shared/MessageInput'
-import { MessageList } from '../shared/MessageList'
+import { MessageInput } from '../components/MessageInput'
+import { MessageList } from '../components/MessageList'
 import { useAgent } from 'agents/react'
 import { useAgentChat } from 'agents/ai-react'
 

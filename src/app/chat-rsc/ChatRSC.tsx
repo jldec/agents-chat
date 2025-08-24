@@ -1,6 +1,6 @@
-import { MessageList } from '../shared/MessageList'
-import { MessageInput } from '../shared/MessageInput'
-import { ChatLayout } from '../shared/ChatLayout'
+import { MessageList } from '../components/MessageList'
+import { MessageInput } from '../components/MessageInput'
+import { ChatLayout } from '../components/ChatLayout'
 import { getMessages, newMessage, clearMessages } from './server-functions'
 import { Connect } from './Connect'
 

@@ -31,16 +31,6 @@ export const contentApiRoutes = prefix('/api', [
     } else return Response.json({ error: 'unsupported method' }, { status: 405 })
   }),
 
-  route('/images', async () => {
-    if (requestInfo.request.method === 'GET') {
-      return Response.json(await env.IMAGES.list({ include: ['httpMetadata', 'customMetadata'] }))
-    } else if (requestInfo.request.method === 'DELETE') {
-      let keys = (await env.IMAGES.list()).objects.map((object) => object.key)
-      await env.IMAGES.delete(keys) // TODO: paginate
-      return Response.json(keys)
-    } else return Response.json({ error: 'unsupported method' }, { status: 405 })
-  }),
-
   route('/manifest', async () => {
     if (requestInfo.request.method === 'GET') {
       return Response.json(await getManifest())

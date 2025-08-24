@@ -1,10 +1,5 @@
 import { DurableObject } from 'cloudflare:workers'
-
-export type Message = {
-  id: string
-  role: 'system' | 'user' | 'assistant' | 'data'
-  content: string
-}
+import type { Message } from './types'
 
 export class ChatDurableObject extends DurableObject {
   private messages: Message[] = []

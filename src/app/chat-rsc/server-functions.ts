@@ -2,7 +2,7 @@
 import { env } from 'cloudflare:workers'
 import { renderRealtimeClients } from 'rwsdk/realtime/worker'
 import { nanoid } from 'nanoid'
-import type { Message } from '../shared/ChatStore'
+import type { Message } from '@/lib/types'
 import { askAI } from '@/lib/askAI'
 import { streamToText } from '@/lib/streamToText'
 import throttle from 'lodash/throttle'

@@ -11,7 +11,7 @@ import { processToolCalls } from './utils'
 import { openai } from '@ai-sdk/openai'
 import { nanoid } from 'nanoid'
 import { env } from 'cloudflare:workers'
-import { agentTools } from '../shared/agentTools'
+import { agentTools } from '@/lib/agentTools'
 
 import { systemMessageText } from '@/lib/systemMessageText'
 

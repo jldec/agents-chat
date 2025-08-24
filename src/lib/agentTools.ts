@@ -2,7 +2,7 @@
 import { IS_DEV } from 'rwsdk/constants'
 import { z } from 'zod'
 import { tool } from 'ai'
-import type { ChatAgentAgentDO } from '../chat-agent-agent/ChatAgentAgentDO'
+import type { ChatAgentAgentDO } from '../app/chat-agent-agent/ChatAgentAgentDO'
 
 export function agentTools(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return {
