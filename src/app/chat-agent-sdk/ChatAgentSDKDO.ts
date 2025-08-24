@@ -1,27 +1,35 @@
 import { AIChatAgent } from 'agents/ai-chat-agent'
-import { createWorkersAI } from 'workers-ai-provider'
-import { env } from 'cloudflare:workers'
-import { streamText, type StreamTextOnFinishCallback, type ToolSet } from 'ai'
+import { openai } from '@ai-sdk/openai'
 import { systemMessageText } from '@/lib/systemMessageText'
-const model = '@cf/meta/llama-3.1-8b-instruct-fp8-fast'
+
+// workers-ai not supported yet wil ai sdk v5
+// https://github.com/cloudflare/ai/issues/173
+// import { env } from 'cloudflare:workers'
+// import { createWorkersAI } from 'workers-ai-provider'
+import {
+  convertToModelMessages,
+  createUIMessageStream,
+  createUIMessageStreamResponse,
+  type StreamTextOnFinishCallback,
+  streamText
+} from 'ai'
 
 export class ChatAgentSDKDO extends AIChatAgent<Env> {
-  async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
-    const workersai = createWorkersAI({ binding: env.AI })
-
-    const stream = streamText({
-      // @ts-expect-error (this 🦙 is not typed in ts)
-      model: workersai(model),
-      messages: [
-        {
-          role: 'system',
-          content: systemMessageText('Agent SDK Chat', model)
-        },
-        ...this.messages
-      ],
-      maxTokens: 4096,
-      onFinish
+  async onChatMessage(onFinish: StreamTextOnFinishCallback<{}>) {
+    const systemMessage = systemMessageText('Agent SDK Chat (ai sdk v5)', 'gpt-4o')
+    const stream = createUIMessageStream({
+      execute: async ({ writer }) => {
+        const result = streamText({
+          messages: convertToModelMessages(this.messages),
+          model: openai('gpt-4o'),
+          system: systemMessage,
+          onFinish,
+          tools: {}
+        })
+        writer.merge(result.toUIMessageStream())
+      }
     })
-    return stream.toDataStreamResponse()
+
+    return createUIMessageStreamResponse({ stream })
   }
 }

@@ -13,7 +13,7 @@ interface MessageInputProps {
 interface MessageInputPropsAgentSDK {
   value: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-  onSubmit: (event?: { preventDefault?: () => void }) => void
+  onSubmit: (event: React.FormEvent) => Promise<void>
   onClear: () => void
   isReady?: never
   newMessage?: never
