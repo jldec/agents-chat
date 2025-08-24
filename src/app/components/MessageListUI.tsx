@@ -4,7 +4,8 @@ import { TextMessage } from './TextMessage'
 import { JsonMessage } from './JsonMessage'
 
 function MessageContent({ message, depth }: { message: UIMessage; depth: number }) {
-  return message.parts.map((p, i) => {
+  if (!message.parts) return <TextMessage message={message.content} role={message.role} />
+  return message.parts?.map((p, i) => {
     switch (p.type) {
       case 'text':
         return <TextMessage key={message.id + '-text-' + i} message={p.text} role={message.role} />
