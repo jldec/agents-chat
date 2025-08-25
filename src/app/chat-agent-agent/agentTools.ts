@@ -2,7 +2,7 @@
 import { IS_DEV } from 'rwsdk/constants'
 import { z } from 'zod'
 import { tool } from 'ai'
-import type { ChatAgentAgentDO } from '../app/chat-agent-agent/ChatAgentAgentDO'
+import type { ChatAgentAgentDO } from './ChatAgentAgentDO'
 
 export function agentTools(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return {
@@ -23,7 +23,7 @@ function agentByName(namespace: DurableObjectNamespace<ChatAgentAgentDO>, name: 
 function getAgentTime(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'get the time',
-    parameters: z.object({
+    inputSchema: z.object({
       name: z.string().describe('The name of the agent').default('main')
     }),
     execute: async ({ name }) => {
@@ -41,13 +41,12 @@ function getAgentTime(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
 function subagentGetMessages(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'get the messages of a subagent',
-    parameters: z.object({
+    inputSchema: z.object({
       name: z.string().describe('The name of the subagent').default('subagent')
     }),
     execute: async ({ name }) => {
       try {
         const agent = agentByName(namespace, name)
-        // @ts-ignore
         return await agent.getMessages()
       } catch (error) {
         console.error(`Error calling subagent ${name}`, error)
@@ -60,7 +59,7 @@ function subagentGetMessages(namespace: DurableObjectNamespace<ChatAgentAgentDO>
 function subagentNewMessage(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'send a message to a subagent',
-    parameters: z.object({
+    inputSchema: z.object({
       name: z.string().describe('The name of the subagent').default('subagent'),
       message: z.string().describe('The message to send to the subagent')
     }),
@@ -68,13 +67,12 @@ function subagentNewMessage(namespace: DurableObjectNamespace<ChatAgentAgentDO>)
       const agent = agentByName(namespace, name)
       try {
         if (name === 'main') throw new Error('Cannot recursively message the main agent')
-        // @ts-ignore
         return await agent.newMessage(true, message)
       } catch (error) {
         console.error(`Error calling subagent ${name}`, error)
         return `Error calling subagent ${name}: ${error}`
       } finally {
-        await agent.clearMessages()
+        // await agent.clearMessages()
       }
     }
   })
@@ -83,7 +81,7 @@ function subagentNewMessage(namespace: DurableObjectNamespace<ChatAgentAgentDO>)
 function subagentClearMessages(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'clear the messages of a subagent',
-    parameters: z.object({
+    inputSchema: z.object({
       name: z.string().describe('The name of the subagent').default('subagent')
     }),
     execute: async ({ name }) => {
@@ -102,7 +100,7 @@ function subagentClearMessages(namespace: DurableObjectNamespace<ChatAgentAgentD
 function addMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'add a MCP server URL to the MCP client in the named (or default) agent',
-    parameters: z.object({
+    inputSchema: z.object({
       name: z.string().describe('The name of the subagent, default = main agent').default('main'),
       url: z.string()
     }),
@@ -122,7 +120,7 @@ function addMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
 function removeMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'remove a MCP server by id from the MCP client in the named (or default) agent',
-    parameters: z.object({
+    inputSchema: z.object({
       name: z.string().describe('The name of the subagent, default = main agent').default('main'),
       id: z.string()
     }),
@@ -142,7 +140,7 @@ function removeMCPServerUrl(namespace: DurableObjectNamespace<ChatAgentAgentDO>)
 function listMCPServers(namespace: DurableObjectNamespace<ChatAgentAgentDO>) {
   return tool({
     description: 'List all MCP server URLs known to the MCP client in the named (or default) agent',
-    parameters: z.object({
+    inputSchema: z.object({
       name: z.string().describe('The name of the subagent, default = main agent').default('main')
     }),
     execute: async ({ name }) => {
