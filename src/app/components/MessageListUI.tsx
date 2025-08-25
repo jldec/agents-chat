@@ -7,12 +7,7 @@ function MessageContent({ message, depth }: { message: UIMessage; depth: number 
   if (!message.parts) return <JsonMessage message={message} />
   return message.parts?.map((p, i) => {
     if (p.type === 'step-start') return null
-    if (p.type === 'text') return (
-      <>
-        <TextMessage key={message.id + '-text-' + i} message={p.text} role={message.role} />
-        <JsonMessage key={message.id + '-text-json-' + i} message={message} />
-      </>
-    )
+    if (p.type === 'text') return <TextMessage key={message.id + '-text-' + i} message={p.text} role={message.role} />
     // TODO: refine this not to dump everything for tool calls and subagent responses
     return <JsonMessage key={message.id + '-' + p.type + '-' + i} message={p} />
   })
