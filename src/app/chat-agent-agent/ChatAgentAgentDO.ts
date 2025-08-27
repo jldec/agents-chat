@@ -36,6 +36,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     const stream = createUIMessageStream({
       execute: async ({ writer }) => {
         const lastMessage = this.messages[this.messages.length - 1]
+        console.log('onChatMessage lastMessage', lastMessage)
         if (hasToolConfirmation(lastMessage)) {
           await processToolCalls({ writer, messages: this.messages, tools: allTools }, {})
           return
@@ -67,10 +68,26 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
       role: 'user',
       parts: [{ type: 'text', text: message }]
     }
-
-    // ISSUE: await saveMessages() is returning immediately before the stream is finsished
-    await this.saveMessages([uiMessage])
-
+    try {
+      const response = await this.saveMessages([uiMessage])
+      const reader = response.body.getReader()
+      try {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) {
+            console.log('newMessage response done')
+            break
+          }
+          const chunk = decoder.decode(value)
+          console.log('newMessage response chunk', chunk)
+        }
+      } finally {
+        reader.releaseLock()
+      }
+    } catch (error) {
+      console.error('newMessage saveMessages', error)
+    }
+    // TODO: also capture and return response from saveMessages
     return this.messages
   }
 
