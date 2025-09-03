@@ -14,12 +14,14 @@ export function ChatAgentSDK() {
     name: 'rwsdk-chat-agent-sdk'
   })
 
-  const { messages, sendMessage, clearHistory } = useAgentChat({
+  const { messages, status, error, sendMessage, clearHistory } = useAgentChat({
     agent
   })
 
   return (
     <ChatLayout title="RedwoodSDK Agent SDK Chat (ai sdk v5)">
+      <div className="text-gray-500">Status: {status}</div>
+      { error && <div className="text-red-500 text-sm border border-red-500 rounded-md p-2 my-4">Error: {error.message}</div> }
       <MessageListUI messages={messages} />
       <MessageInput
         value={input}

@@ -69,25 +69,28 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
       parts: [{ type: 'text', text: message }]
     }
     try {
-      const response = await this.saveMessages([uiMessage])
-      const reader = response.body.getReader()
-      try {
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) {
-            console.log('newMessage response done')
-            break
+      await this.saveMessages([uiMessage])
+      // TODO: fix the onFinish callback
+      const response = await this.onChatMessage(() => {})
+      if (response.body) {
+        const reader = response.body.getReader()
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) {
+              console.log('newMessage response done')
+              break
+            }
+            const chunk = decoder.decode(value)
+            console.log('newMessage response chunk', chunk)
           }
-          const chunk = decoder.decode(value)
-          console.log('newMessage response chunk', chunk)
+        } finally {
+          reader.releaseLock()
         }
-      } finally {
-        reader.releaseLock()
       }
     } catch (error) {
       console.error('newMessage saveMessages', error)
     }
-    // TODO: also capture and return response from saveMessages
     return this.messages
   }
 
