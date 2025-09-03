@@ -30,7 +30,7 @@
     "reconnecting-websocket": "^4.4.0",
     "rwsdk": "0.3.0",
     "tinybase": "^6.5.2",
-    "workers-ai-provider": "^0.7.5",
+    "workers-ai-provider": "https://pkg.pr.new/cloudflare/ai/workers-ai-provider@269",
     "zod": "^3.25.76"
   },
   "devDependencies": {

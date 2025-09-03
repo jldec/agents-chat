@@ -27,6 +27,9 @@ export class ChatAgentSDKDO extends AIChatAgent<Env> {
           model: workersai(modelName),
           system: systemMessage,
           onFinish,
+          onError: (error) => {
+            console.error('onChatMessage error', error)
+          },
           tools: {}
         })
         writer.merge(result.toUIMessageStream())
