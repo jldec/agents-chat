@@ -21,7 +21,7 @@
     "@openai/agents": "^0.1.0",
     "@openai/agents-core": "^0.1.0",
     "@std/front-matter": "jsr:^1.0.9",
-    "agents": "file:/Users/jldec/cloudflare/agents/packages/agents/",
+    "agents": "^0.1.0",
     "ai": "^5.0.34",
     "lodash": "^4.17.21",
     "markdown-it": "^14.1.0",
@@ -30,7 +30,7 @@
     "reconnecting-websocket": "^4.4.0",
     "rwsdk": "0.3.7",
     "tinybase": "^6.6.0",
-    "workers-ai-provider": "https://pkg.pr.new/cloudflare/ai/workers-ai-provider@269",
+    "workers-ai-provider": "^2.0.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {

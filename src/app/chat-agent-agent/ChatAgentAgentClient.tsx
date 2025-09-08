@@ -26,7 +26,6 @@ export function ChatAgentAgentClient() {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onSubmit={async (e: React.FormEvent) => {
-          console.log('onSubmit', input)
           e.preventDefault()
           if (!input.trim()) return
           let text = input
