@@ -14,12 +14,10 @@ export class TinyBaseDurableObject extends WsServerDurableObject {
     store.addHasRowListener('messages', null, (store, tableId, rowId, hasRow) => {
       if (hasRow) {
         const message = store.getRow(tableId, rowId)
-        console.log('new message', rowId)
         // only ask agent if no aiRowId yet
         if (message.role === 'user' && !message.aiRowId) {
           // set aiRowId to _ before asking agent to avoid races
           store.setPartialRow(tableId, rowId, { aiRowId: '_' })
-          console.log('asking agent', message.content)
           const messages = Object.values(store.getTable(tableId)) as Message[]
           askAI(messages, 'TinyBase Chat').then(async (stream) => {
             let content = ''
@@ -43,7 +41,6 @@ export class TinyBaseDurableObject extends WsServerDurableObject {
               content += chunk
               store.setPartialRow(tableId, aiRowId, { content })
             }
-            console.log(`agent responded to ${rowId} with ${aiRowId}`)
           })
         }
       } else {

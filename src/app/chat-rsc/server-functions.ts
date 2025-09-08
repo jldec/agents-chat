@@ -42,8 +42,6 @@ export async function newMessage(prompt: string) {
   // the last update may have been throttled
   await chatStore.setMessage(aiResponse)
   await syncRealtimeClients()
-  // console.log('newMessage updateCount', updateCount)
-  // console.log('newMessage aiResponse.content', aiResponse.content)
 }
 
 export async function getMessages(): Promise<Message[]> {
@@ -63,7 +61,6 @@ function resolveChatStore(chatID: string) {
 }
 
 async function syncRealtimeClients() {
-  // console.log('syncRealtimeClients')
   await renderRealtimeClients({
     durableObjectNamespace: env.REALTIME_DURABLE_OBJECT,
     key: env.REALTIME_KEY

@@ -23,7 +23,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     // Collect all tools, including MCP tools
     const allTools = {
       ...agentTools(env.CHAT_AGENT_AGENT_DURABLE_OBJECT),
-      ...this.mcp.unstable_getAITools()
+      ...this.mcp.getAITools()
     }
     // subagents cannot use subagent tools
     Object.keys(allTools).forEach((key) => {
@@ -36,7 +36,6 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     const stream = createUIMessageStream({
       execute: async ({ writer }) => {
         const lastMessage = this.messages[this.messages.length - 1]
-        console.log('onChatMessage lastMessage', lastMessage)
         if (hasToolConfirmation(lastMessage)) {
           await processToolCalls({ writer, messages: this.messages, tools: allTools }, {})
           return
@@ -55,13 +54,11 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   }
 
   async getMessages() {
-    console.log('getMessages', this.messages)
     return this.messages
   }
 
   // packages/agents/src/ai-chat-agent.ts
   async newMessage(isSubAgent: boolean, message: string) {
-    console.log('newMessage', message)
     this.isSubAgent = isSubAgent // racey
     const uiMessage: UIMessage = {
       id: nanoid(8),

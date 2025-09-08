@@ -73,6 +73,5 @@ export async function getManifest(noCache: boolean = false) {
     manifest = []
   }
 
-  console.log('getManifest', source, manifest?.length, 'files')
   return manifest
 }

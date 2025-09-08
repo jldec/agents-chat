@@ -13,7 +13,6 @@ export function routeAgents({ prefix = '/agents/' }: routeAgentsOptions = {}) {
     if (!prefixArray.some((p) => pathname.startsWith(p))) {
       return
     }
-    console.log('routeAgents', request.url)
     const response = await routeAgentRequest(request, env)
     if (response) {
       return response
