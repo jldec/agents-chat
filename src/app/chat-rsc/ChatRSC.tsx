@@ -6,7 +6,7 @@ import { Connect } from './Connect'
 
 export async function ChatRSC() {
   return (
-    <ChatLayout title="RedwoodSDK RSC Chat">
+    <ChatLayout title="RedwoodSDK realtime RSC Chat">
       <Connect />
       <MessageList messages={await getMessages()} />
       <MessageInput newMessage={newMessage} onClear={clearMessages} />
