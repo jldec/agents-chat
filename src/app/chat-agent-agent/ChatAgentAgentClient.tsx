@@ -19,7 +19,7 @@ export function ChatAgentAgentClient() {
 
   return (
     <>
-      <div className="text-gray-500">Status: {status}</div>
+      <div className="text-gray-500 px-2">Status: {status}</div>
       { error && <div className="text-red-500 text-sm border border-red-500 rounded-md p-2 my-4">Error: {error.message}</div> }
       <MessageListUI messages={messages} />
       <MessageInput
