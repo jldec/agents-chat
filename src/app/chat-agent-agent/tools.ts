@@ -3,9 +3,11 @@ import { env } from 'cloudflare:workers'
 import { z } from 'zod'
 import { tool, InferUITools, ToolSet } from 'ai'
 
-function agentByName(name: string) {
+async function agentByName(name: string) {
   const id = env.CHAT_AGENT_AGENT_DURABLE_OBJECT.idFromName(name)
-  return env.CHAT_AGENT_AGENT_DURABLE_OBJECT.get(id)
+  const agent = env.CHAT_AGENT_AGENT_DURABLE_OBJECT.get(id)
+  await agent.setName(name)
+  return agent
 }
 
 const getAgentTime = tool({
@@ -15,7 +17,7 @@ const getAgentTime = tool({
   }),
   execute: async ({ name }) => {
     try {
-      const agent = agentByName(name)
+      const agent = await agentByName(name)
       return await agent.getTime()
     } catch (error) {
       console.error(`Error calling agent ${name}`, error)
@@ -31,7 +33,7 @@ const subagentGetMessages = tool({
   }),
   execute: async ({ name }) => {
     try {
-      const agent = agentByName(name)
+      const agent = await agentByName(name)
       return await agent.getMessages()
     } catch (error) {
       console.error(`Error calling subagent ${name}`, error)
@@ -47,7 +49,7 @@ const subagentNewMessage = tool({
     message: z.string().describe('The message to send to the subagent')
   }),
   execute: async ({ name, message }) => {
-    const agent = agentByName(name)
+    const agent = await agentByName(name)
     try {
       if (name === 'main') throw new Error('Cannot recursively message the main agent')
       return await agent.newMessage(message)
@@ -67,7 +69,7 @@ const subagentClearMessages = tool({
   }),
   execute: async ({ name }) => {
     try {
-      const agent = agentByName(name)
+      const agent = await agentByName(name)
       await agent.clearMessages()
       return `Cleared messages of subagent ${name}`
     } catch (error) {
@@ -85,7 +87,7 @@ const addMCPServerUrl = tool({
   }),
   execute: async ({ name, url }) => {
     try {
-      const agent = agentByName(name)
+      const agent = await agentByName(name)
       const { id } = await agent.addMcpServer(url, url, 'mcp-demo-host')
       return `Added MCP url: ${url} with id: ${id}`
     } catch (error) {
@@ -103,7 +105,7 @@ const removeMCPServerUrl = tool({
   }),
   execute: async ({ name, id }) => {
     try {
-      const agent = agentByName(name)
+      const agent = await agentByName(name)
       await agent.removeMcpServer(id)
       return `Removed MCP server with id: ${id}`
     } catch (error) {
@@ -120,7 +122,7 @@ const listMCPServers = tool({
   }),
   execute: async ({ name }) => {
     try {
-      const agent = agentByName(name)
+      const agent = await agentByName(name)
       return agent.getMcpServers()
     } catch (error) {
       console.error('Error getting MCP servers', error)
