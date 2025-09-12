@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { ChatLayout } from '../components/ChatLayout'
 import { MessageInput } from '../components/MessageInput'
-import { MessageListUI } from '../components/MessageListUI'
+import { UIMessageList } from './UIMessageList'
 import { useAgent } from 'agents/react'
 import { useAgentChat } from 'agents/ai-react'
 
@@ -22,7 +22,7 @@ export function ChatAgentSDK() {
     <ChatLayout title="RedwoodSDK Agent SDK Chat (ai sdk v5)">
       <div className="text-gray-500">Status: {status}</div>
       { error && <div className="text-red-500 text-sm border border-red-500 rounded-md p-2 my-4">Error: {error.message}</div> }
-      <MessageListUI messages={messages} />
+      <UIMessageList messages={messages} />
       <MessageInput
         value={input}
         onChange={(e) => setInput(e.target.value)}

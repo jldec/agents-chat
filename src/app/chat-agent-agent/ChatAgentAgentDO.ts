@@ -9,9 +9,8 @@ import {
 import { hasToolConfirmation, processToolCalls } from './utils'
 import { openai } from '@ai-sdk/openai'
 import { nanoid } from 'nanoid'
-import { env } from 'cloudflare:workers'
-import { agentTools } from './agentTools'
-import type { UIMessage, ModelMessage } from 'ai'
+import { tools } from './tools'
+import type { UIMessage } from 'ai'
 
 import { systemMessageText } from '@/lib/systemMessageText'
 
@@ -22,7 +21,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   async onChatMessage(onFinish: StreamTextOnFinishCallback<{}>) {
     // Collect all tools, including MCP tools
     const allTools = {
-      ...agentTools(env.CHAT_AGENT_AGENT_DURABLE_OBJECT),
+      ...tools,
       ...this.mcp.getAITools()
     }
     // subagents cannot use subagent tools

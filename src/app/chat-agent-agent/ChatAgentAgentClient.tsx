@@ -1,6 +1,6 @@
 'use client'
 import { MessageInput } from '../components/MessageInput'
-import { MessageListUI } from '../components/MessageListUI'
+import { ToolsUIMessageList, ToolsUIMessage } from './ToolsUIMessageList'
 import { useAgent } from 'agents/react'
 import { useAgentChat } from 'agents/ai-react'
 import { useState } from 'react'
@@ -13,15 +13,17 @@ export function ChatAgentAgentClient() {
     name: 'main' // see src/app/chat-agent-agent/tools.ts
   })
 
-  const { messages, status, error, sendMessage, clearHistory } = useAgentChat({
+  const { messages, status, error, sendMessage, clearHistory } = useAgentChat<unknown, ToolsUIMessage>({
     agent
   })
 
   return (
     <>
       <div className="text-gray-500 px-2">Status: {status}</div>
-      { error && <div className="text-red-500 text-sm border border-red-500 rounded-md p-2 my-4">Error: {error.message}</div> }
-      <MessageListUI messages={messages} />
+      {error && (
+        <div className="text-red-500 text-sm border border-red-500 rounded-md p-2 my-4">Error: {error.message}</div>
+      )}
+      <ToolsUIMessageList messages={messages} />
       <MessageInput
         value={input}
         onChange={(e) => setInput(e.target.value)}

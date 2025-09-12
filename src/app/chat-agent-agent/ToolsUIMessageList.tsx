@@ -1,9 +1,12 @@
-import type { UIMessage } from 'ai'
-import { MessageListLayout } from './MessageListLayout'
-import { TextMessage } from './TextMessage'
-import { JsonMessage } from './JsonMessage'
+import type { UIMessage, UIDataTypes } from 'ai'
+import { MessageListLayout } from '../components/MessageListLayout'
+import { TextMessage } from '../components/TextMessage'
+import { JsonMessage } from '../components/JsonMessage'
+import { UITools } from './tools'
 
-function MessageContent({ message, depth }: { message: UIMessage; depth: number }) {
+export type ToolsUIMessage = UIMessage<unknown, UIDataTypes, UITools>
+
+function MessageContent({ message, depth }: { message: ToolsUIMessage; depth: number }) {
   if (!message.parts) return <JsonMessage message={message} />
   return message.parts?.map((p, i) => {
     if (p.type === 'step-start') return null
@@ -14,7 +17,7 @@ function MessageContent({ message, depth }: { message: UIMessage; depth: number 
 }
 
 // No hooks - component can run in both RSC and client
-export function MessageListUI({ messages, depth = 0 }: { messages: UIMessage[]; depth?: number }) {
+export function ToolsUIMessageList({ messages, depth = 0 }: { messages: ToolsUIMessage[]; depth?: number }) {
   return (
     <MessageListLayout depth={depth}>
       {messages.map((message, i) => (

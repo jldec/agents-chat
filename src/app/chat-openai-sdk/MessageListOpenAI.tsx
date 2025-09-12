@@ -1,7 +1,7 @@
 import type { AgentInputItem } from '@openai/agents'
-import { MessageListLayout } from './MessageListLayout'
-import { TextMessage } from './TextMessage'
-import { JsonMessage } from './JsonMessage'
+import { MessageListLayout } from '../components/MessageListLayout'
+import { TextMessage } from '../components/TextMessage'
+import { JsonMessage } from '../components/JsonMessage'
 
 // No hooks - component can run in both RSC and client
 export function MessageListOpenAI({ messages }: { messages: AgentInputItem[] }) {
