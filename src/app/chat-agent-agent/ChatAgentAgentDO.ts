@@ -85,7 +85,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
               break
             }
             const chunk = decoder.decode(value)
-            console.log('newMessage response chunk', chunk)
+            // console.log('newMessage response chunk', chunk)
           }
         } finally {
           reader.releaseLock()
@@ -95,7 +95,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
       console.error('newMessage saveMessages', error)
     }
     const result = await resultPromise
-    console.log('newMessage result', JSON.stringify(result))
+    // console.log('newMessage result', JSON.stringify(result))
     return result
   }
 
