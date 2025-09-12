@@ -59,6 +59,10 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
 
   // packages/agents/src/ai-chat-agent.ts
   async newMessage(isSubAgent: boolean, message: string) {
+    let resolver: (value: UIMessage[]) => void
+    let resultPromise: Promise<UIMessage[]> = new Promise((resolve) => {
+      resolver = resolve
+    })
     this.isSubAgent = isSubAgent // racey
     const uiMessage: UIMessage = {
       id: nanoid(8),
@@ -67,19 +71,21 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     }
     try {
       await this.saveMessages([uiMessage])
-      // TODO: fix the onFinish callback
-      const response = await this.onChatMessage(() => {})
+      const response = await this.onChatMessage((result) => {
+        // @ts-ignore
+        resolver(result.response.messages)
+      })
       if (response.body) {
         const reader = response.body.getReader()
         try {
           while (true) {
             const { done, value } = await reader.read()
             if (done) {
-              console.log('newMessage response done')
+              // console.log('newMessage response done')
               break
             }
             const chunk = decoder.decode(value)
-            console.log('newMessage response chunk', chunk)
+            // console.log('newMessage response chunk', chunk)
           }
         } finally {
           reader.releaseLock()
@@ -88,7 +94,9 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     } catch (error) {
       console.error('newMessage saveMessages', error)
     }
-    return this.messages
+    const result = await resultPromise
+    // console.log('newMessage result', JSON.stringify(result))
+    return result
   }
 
   async clearMessages() {
