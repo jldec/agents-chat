@@ -1,4 +1,4 @@
-import { MessageListOpenAI } from '../components/MessageListOpenAI'
+import { MessageListOpenAI } from './MessageListOpenAI'
 import { MessageInput } from '../components/MessageInput'
 import { ChatLayout } from '../components/ChatLayout'
 import { getMessages, newMessage, clearMessages } from './server-functions'
