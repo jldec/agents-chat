@@ -10,7 +10,7 @@ import { hasToolConfirmation, processToolCalls } from './utils'
 import { openai } from '@ai-sdk/openai'
 import { nanoid } from 'nanoid'
 import { tools } from './tools'
-import type { UIMessage } from 'ai'
+import type { UIMessage, ModelMessage } from 'ai'
 
 import { systemMessageText } from '@/lib/systemMessageText'
 
@@ -24,7 +24,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
       ...tools,
       ...this.mcp.getAITools()
     }
-    // subagents cannot use subagent tools
+    // Prevent recursion - subagents cannot use subagent tools
     Object.keys(allTools).forEach((key) => {
       if (this.isSubAgent && key.startsWith('subagent')) {
         // @ts-ignore
@@ -56,46 +56,25 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     return this.messages
   }
 
-  // packages/agents/src/ai-chat-agent.ts
-  async newMessage(isSubAgent: boolean, message: string) {
-    let resolver: (value: UIMessage[]) => void
-    let resultPromise: Promise<UIMessage[]> = new Promise((resolve) => {
-      resolver = resolve
+  // Non-streaming subagent call
+  async newMessage(message: string) {
+    let whenDone: (value: ModelMessage[]) => void
+    let response = new Promise<ModelMessage[]>((resolve) => {
+      whenDone = resolve
     })
-    this.isSubAgent = isSubAgent // racey
+    this.isSubAgent = true // racey
     const uiMessage: UIMessage = {
       id: nanoid(8),
       role: 'user',
       parts: [{ type: 'text', text: message }]
     }
-    try {
-      await this.saveMessages([uiMessage])
-      const response = await this.onChatMessage((result) => {
-        // @ts-ignore
-        resolver(result.response.messages)
-      })
-      if (response.body) {
-        const reader = response.body.getReader()
-        try {
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) {
-              // console.log('newMessage response done')
-              break
-            }
-            const chunk = decoder.decode(value)
-            // console.log('newMessage response chunk', chunk)
-          }
-        } finally {
-          reader.releaseLock()
-        }
-      }
-    } catch (error) {
-      console.error('newMessage saveMessages', error)
-    }
-    const result = await resultPromise
-    // console.log('newMessage result', JSON.stringify(result))
-    return result
+    await this.saveMessages([uiMessage])
+    // could be improved by processing the response stream returned by onChatMessage
+    await this.onChatMessage((llmResult) => {
+      // block until finished
+      whenDone(llmResult.response.messages)
+    })
+    return JSON.stringify(await response, null, 2)
   }
 
   async clearMessages() {

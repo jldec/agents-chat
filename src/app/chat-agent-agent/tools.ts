@@ -50,12 +50,12 @@ const subagentNewMessage = tool({
     const agent = agentByName(name)
     try {
       if (name === 'main') throw new Error('Cannot recursively message the main agent')
-      return await agent.newMessage(true, message)
+      return await agent.newMessage(message)
     } catch (error) {
       console.error(`Error calling subagent ${name}`, error)
       return `Error calling subagent ${name}: ${error}`
     } finally {
-      // await agent.clearMessages()
+      await agent.clearMessages()
     }
   }
 })
