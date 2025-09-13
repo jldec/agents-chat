@@ -1,9 +1,6 @@
 import { AIChatAgent } from 'agents/ai-chat-agent'
-import { openai } from '@ai-sdk/openai'
 import { systemMessageText } from '@/lib/systemMessageText'
 
-// workers-ai not supported yet wil ai sdk v5
-// https://github.com/cloudflare/ai/issues/173
 import { env } from 'cloudflare:workers'
 import { createWorkersAI } from 'workers-ai-provider'
 const modelName = '@cf/meta/llama-3.1-8b-instruct-fp8-fast'
@@ -24,6 +21,7 @@ export class ChatAgentSDKDO extends AIChatAgent<Env> {
       execute: async ({ writer }) => {
         const result = streamText({
           messages: convertToModelMessages(this.messages),
+          // @ts-expect-error
           model: workersai(modelName),
           system: systemMessage,
           onFinish,

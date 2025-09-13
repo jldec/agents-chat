@@ -9,19 +9,17 @@ import {
 import { hasToolConfirmation, processToolCalls } from './utils'
 import { openai } from '@ai-sdk/openai'
 import { nanoid } from 'nanoid'
-import { tools } from './tools'
+import { agentTools } from './tools'
 import type { UIMessage, ModelMessage } from 'ai'
 
 import { systemMessageText } from '@/lib/systemMessageText'
-
-const decoder = new TextDecoder()
 
 export class ChatAgentAgentDO extends AIChatAgent<Env> {
   isSubAgent: boolean = false // see newMessage()
   async onChatMessage(onFinish: StreamTextOnFinishCallback<{}>) {
     // Collect all tools, including MCP tools
     const allTools = {
-      ...tools,
+      ...agentTools(this),
       ...this.mcp.getAITools()
     }
     // Prevent recursion - subagents cannot use subagent tools
