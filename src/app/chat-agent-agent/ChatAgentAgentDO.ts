@@ -4,7 +4,8 @@ import {
   createUIMessageStream,
   createUIMessageStreamResponse,
   type StreamTextOnFinishCallback,
-  streamText
+  streamText,
+  stepCountIs
 } from 'ai'
 import { hasToolConfirmation, processToolCalls } from './utils'
 import { openai } from '@ai-sdk/openai'
@@ -32,6 +33,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     const systemMessage = systemMessageText('Agent Agent Chat (ai sdk v5)', 'gpt-4o')
     const stream = createUIMessageStream({
       execute: async ({ writer }) => {
+        console.log(`Agent ${this.name} calling gpt-4o with tools ${JSON.stringify(Object.keys(allTools))}`)
         const lastMessage = this.messages[this.messages.length - 1]
         if (hasToolConfirmation(lastMessage)) {
           await processToolCalls({ writer, messages: this.messages, tools: allTools }, {})
@@ -42,7 +44,8 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
           system: systemMessage,
           model: openai('gpt-4o'),
           onFinish,
-          tools: allTools
+          tools: allTools,
+          stopWhen: stepCountIs(5)
         })
         writer.merge(result.toUIMessageStream())
       }
