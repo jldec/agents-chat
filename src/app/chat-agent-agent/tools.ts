@@ -146,7 +146,7 @@ export function agentTools(self: ChatAgentAgentDO) {
     subagentGetMessages,
     subagentNewMessage,
     subagentClearMessages,
-    addMCPServerUrl,
+    ...(import.meta.env.VITE_IS_DEV_SERVER ? { addMCPServerUrl } : {}),
     removeMCPServerUrl,
     listMCPServers
   } satisfies ToolSet
