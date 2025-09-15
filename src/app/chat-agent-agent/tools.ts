@@ -48,7 +48,7 @@ export function agentTools(self: ChatAgentAgentDO) {
   })
 
   const subagentNewMessage = tool({
-    description: 'send a message to this agent or another named agent',
+    description: 'send a message to a named subagent and return the response text',
     inputSchema: z.object({
       name: z.string().describe('The name of the subagent to message'),
       message: z.string().describe('The message to send to the subagent')
