@@ -75,7 +75,54 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
       // block until finished
       whenDone(llmResult.response.messages)
     })
-    return modelMessagesToText(await response)
+    return this.subagentResponseToText(await response)
+  }
+
+  // https://ai-sdk.dev/docs/reference/ai-sdk-core/model-message
+  subagentResponseToText(msgs: ModelMessage[]) {
+    return msgs
+      .map((msg) => {
+        switch (msg.role) {
+          case 'system':
+            return `system: ${msg.content}`
+          case 'user':
+            return `user: ${msg.content}`
+          case 'assistant':
+            switch (typeof msg.content) {
+              case 'string':
+                return `${this.name ?? 'assistant'}: ${msg.content}`
+              case 'object':
+                return msg.content
+                  .map((c) => {
+                    switch (c.type) {
+                      case 'text':
+                        return `${this.name ?? 'assistant'}: ${c.text}`
+                      case 'tool-call':
+                        return `tool-call: ${c.toolName} ${JSON.stringify(c.input)}`
+                      default:
+                        return `${this.name ?? 'assistant'}: ${JSON.stringify(c)}`
+                    }
+                  })
+                  .join('\n')
+              default:
+                return `${this.name ?? 'assistant'}: ${JSON.stringify(msg.content)}`
+            }
+          case 'tool':
+            return msg.content
+              .map((toolResultPart) => {
+                switch (toolResultPart.output.type) {
+                  case 'text':
+                    return `tool-result: ${toolResultPart.output.value}`
+                  default:
+                    return JSON.stringify(toolResultPart.output)
+                }
+              })
+              .join('\n')
+          default:
+            return JSON.stringify(msg)
+        }
+      })
+      .join('\n')
   }
 
   async clearMessages() {
@@ -85,51 +132,4 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   async getTime() {
     return `The current time for the agent is ${new Date().toLocaleTimeString()}`
   }
-}
-
-// https://ai-sdk.dev/docs/reference/ai-sdk-core/model-message
-function modelMessagesToText(msgs: ModelMessage[]) {
-  return msgs
-    .map((msg) => {
-      switch (msg.role) {
-        case 'system':
-          return `system: ${msg.content}`
-        case 'user':
-          return `user: ${msg.content}`
-        case 'assistant':
-          switch (typeof msg.content) {
-            case 'string':
-              return `assistant: ${msg.content}`
-            case 'object':
-              return msg.content
-                .map((c) => {
-                  switch (c.type) {
-                    case 'text':
-                      return `assistant: ${c.text}`
-                    case 'tool-call':
-                      return `tool-call: ${c.toolName} ${JSON.stringify(c.input)}`
-                    default:
-                      return `assistant: ${JSON.stringify(c)}`
-                  }
-                })
-                .join('\n')
-            default:
-              return `assistant: ${JSON.stringify(msg.content)}`
-          }
-        case 'tool':
-          return msg.content
-            .map((toolResultPart) => {
-              switch (toolResultPart.output.type) {
-                case 'text':
-                  return `tool-result: ${toolResultPart.output.value}`
-                default:
-                  return JSON.stringify(toolResultPart.output)
-              }
-            })
-            .join('\n')
-        default:
-          return JSON.stringify(msg)
-      }
-    })
-    .join('\n')
 }
