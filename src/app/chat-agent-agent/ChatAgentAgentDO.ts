@@ -130,6 +130,6 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   }
 
   async getTime() {
-    return `The current time for the agent is ${new Date().toLocaleTimeString()}`
+    return `The current time for ${this.name ?? 'assistant'} is ${new Date().toLocaleTimeString()}`
   }
 }
