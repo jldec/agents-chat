@@ -29,17 +29,71 @@ This is an experimental project, looking at how to live-stream AI responses back
 
 Deployed at https://agents-chat.jldec.me/
 
-> 1. **[RSC Chat](https://agents-chat.jldec.me/chat-rsc)** - Uses RedwoodSDK realtime websockets
->
-> 2. **[OpenAI Chat](https://agents-chat.jldec.me/chat-openai-sdk)** - New! Uses OpenAI Agents SDK
->
-> 3. **[Agent Chat](https://agents-chat.jldec.me/chat-agent)** - Uses Cloudflare Agents websockets
->
-> 4. **[Agent SDK Chat](https://agents-chat.jldec.me/chat-agent-sdk)** - Uses Cloudflare Agents AIChatAgent
->
-> 5. **[TinyBase Chat](https://agents-chat.jldec.me/chat-tinybase)** - Uses TinyBase websockets
->
-> 6. **[Agent Agent Chat](https://agents-chat.jldec.me/chat-agent-agent)** - Cloudflare Agents with subagents and MCP tools
+## Implementation Approaches
+
+Each approach demonstrates different strategies for handling multi-user AI chat streaming:
+
+### 1. [RSC Chat](https://agents-chat.jldec.me/chat-rsc) - RedwoodSDK Realtime
+**Architecture:** React Server Components + Durable Objects + RedwoodSDK Websockets
+- **Streaming Method:** Server-side streaming with automatic UI updates via RedwoodSDK's realtime websockets
+- **Multi-user Support:** All connected clients receive real-time updates as AI responses stream in
+- **Key Features:** 
+  - JSX rendered server-side and pushed to clients
+  - Built-in websocket management with automatic reconnection
+  - Minimal client-side JavaScript required
+- **Best For:** Applications that prefer server-rendered UI updates and want minimal client complexity
+
+### 2. [OpenAI Chat](https://agents-chat.jldec.me/chat-openai-sdk) - OpenAI Agents SDK
+**Architecture:** OpenAI Agents SDK + Durable Objects + Custom Websockets
+- **Streaming Method:** OpenAI's native streaming API with custom websocket distribution
+- **Multi-user Support:** Server-side fan-out to multiple websocket connections per chat room
+- **Key Features:**
+  - Direct integration with OpenAI's latest Agents SDK
+  - Stateful agent conversations with thread management
+  - Requires custom patches for workerd compatibility
+- **Best For:** Applications wanting cutting-edge OpenAI features and willing to handle SDK complexity
+
+### 3. [Agent Chat](https://agents-chat.jldec.me/chat-agent) - Cloudflare Agents Basic
+**Architecture:** Cloudflare Agents + Vercel AI SDK + Custom Websockets
+- **Streaming Method:** AI SDK's streaming responses broadcast via websockets to multiple clients
+- **Multi-user Support:** Durable Object manages room state and distributes messages to all connected users
+- **Key Features:**
+  - Simple websocket-based real-time communication
+  - Integration with Vercel AI SDK for model portability
+  - Clean separation between AI logic and connection management
+- **Best For:** Straightforward multi-user chat with flexible model support
+
+### 4. [Agent SDK Chat](https://agents-chat.jldec.me/chat-agent-sdk) - Cloudflare AIChatAgent
+**Architecture:** Cloudflare Agents AIChatAgent + Built-in Multi-user Support
+- **Streaming Method:** AIChatAgent handles streaming and automatically distributes to connected clients
+- **Multi-user Support:** Built-in room management and client broadcasting
+- **Key Features:**
+  - Minimal setup - AIChatAgent handles most complexity
+  - Automatic client management and message distribution
+  - Tight integration with Cloudflare's agent ecosystem
+- **Best For:** Rapid prototyping and applications that want minimal custom code
+
+### 5. [TinyBase Chat](https://agents-chat.jldec.me/chat-tinybase) - Client-side Sync
+**Architecture:** TinyBase + Durable Objects + Local-first Persistence
+- **Streaming Method:** AI responses written to shared TinyBase store, synced to all clients in real-time
+- **Multi-user Support:** Database synchronization ensures all clients see the same chat state
+- **Key Features:**
+  - Local-first architecture with offline support
+  - Automatic conflict resolution and data synchronization
+  - Client-side persistence and caching
+  - Requires careful validation since DB operations run client-side
+- **Best For:** Apps requiring offline functionality and local-first user experience
+
+### 6. [Agent Agent Chat](https://agents-chat.jldec.me/chat-agent-agent) - Multi-Agent with Tools
+**Architecture:** Cloudflare Agents + Subagents + MCP Tools + Websockets
+- **Streaming Method:** Main agent coordinates subagents, streams responses from multiple AI models
+- **Multi-user Support:** Complex orchestration between multiple agents serving multiple users
+- **Key Features:**
+  - Hierarchical agent system with specialized subagents
+  - Integration with Model Context Protocol (MCP) tools
+  - Advanced AI workflows with agent handoffs
+  - Real-time coordination between multiple AI models
+- **Best For:** Complex AI applications requiring specialized agents and advanced tooling
 
 Companion repo for blog post: [Multi-user AI chat with RedwoodSDK RSC and Cloudflare agents](https://jldec.me/blog/multi-user-ai-chat-with-redwoodsdk-rsc-and-cloudflare-agents).
 
