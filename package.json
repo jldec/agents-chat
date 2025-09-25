@@ -31,7 +31,7 @@
     "react-dom": "19.2.0-canary-3fb190f7-20250908",
     "react-server-dom-webpack": "19.2.0-canary-3fb190f7-20250908",
     "reconnecting-websocket": "^4.4.0",
-    "rwsdk": "1.0.0-alpha.9",
+    "rwsdk": "1.0.0-alpha.14",
     "tinybase": "^6.6.1",
     "workers-ai-provider": "^2.0.0",
     "zod": "^3.25.76"
