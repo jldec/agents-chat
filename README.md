@@ -60,7 +60,6 @@ Companion repo for blog post: [Multi-user AI chat with RedwoodSDK RSC and Cloudf
 - It depends on Vercel's AI SDK for model portabilty, message types, streaming, and tool calling.
 - useChat (AI sdk) and AIChatAgent result in tight coupling between Agents and UI.
 - More work is required to make subagents first-class. The libraries assume single-user streaming, and perform message parsing client-side. The agent-agent implementation has to work around this. See [agents #366](https://github.com/cloudflare/agents/issues/366) and [#368](https://github.com/cloudflare/agents/issues/368).
-- The design for AI chat assumes single-agent, single-user.
 - RSC support in Vercel's AI SDK is [limited](https://ai-sdk.dev/docs/ai-sdk-rsc/migrating-to-ui).
 
 **OpenAI Agents SDK**
