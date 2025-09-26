@@ -55,17 +55,17 @@ Companion repo for blog post: [Multi-user AI chat with RedwoodSDK RSC and Cloudf
 - Had to disable ssr for hooks (e.g. useChat) not designed to run server-side.
 
 **Cloudflare Agents**
-- Cloudflare durable objects (DOs) are ideal for agents and subagents.
-- The agents library wraps DOs with additional classes and react hookk.
+- Cloudflare durable objects (DOs) are ideal for agents and subagents. A model with function calling is used for reliable tool and subagent support in Agent Agent Chat.
+- The agents library wraps DOs with additional classes and react hooks.
 - It depends on Vercel's AI SDK for model portabilty, message types, streaming, and tool calling.
-- useChat and useAgentChat result in tight coupling between Agents and UI.
+- useChat (AI sdk) and AIChatAgent result in tight coupling between Agents and UI.
+- More work is required to make subagents first-class. The libraries assume single-user streaming, and perform message parsing client-side. The agent-agent implementation has to work around this. See [agents #366](https://github.com/cloudflare/agents/issues/366) and [#368](https://github.com/cloudflare/agents/issues/368).
 - The design for AI chat assumes single-agent, single-user.
 - RSC support in Vercel's AI SDK is [limited](https://ai-sdk.dev/docs/ai-sdk-rsc/migrating-to-ui).
 
 **OpenAI Agents SDK**
 - OpenAI Agents SDK is less mature and focuses on model APIs, not UI integration.
 - It offers APIs for realtime, handoffs, and subagents - not used in this project yet.
-- It currently requires [patches](https://github.com/jldec/agents-chat/tree/main/patches) to run in workerd. (from [here](https://github.com/cloudflare/agents/tree/main/patches) 🙏 @threepointone)
 - The stateful Agent abstraction assumes long-running server processes with a single conversation per agent.
 
 **TinyBase:**
@@ -80,5 +80,3 @@ Companion repo for blog post: [Multi-user AI chat with RedwoodSDK RSC and Cloudf
 - **Cloudflare Workers Docs:** https://developers.cloudflare.com/workers/
 - **Cloudflare Agents Docs:** https://developers.cloudflare.com/agents/
 - **OpenAI Agents SDK Docs:** https://openai.github.io/openai-agents-js/
-
-[Test broken link](broken-link)
