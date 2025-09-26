@@ -33,7 +33,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     const systemMessage = systemMessageText('Agent Agent Chat (ai sdk v5)', 'gpt-4o')
     const stream = createUIMessageStream({
       execute: async ({ writer }) => {
-        console.log(`Agent ${this.name} calling gpt-4o with tools ${JSON.stringify(Object.keys(allTools))}`)
+        console.log(`Agent "${this.name}" calling gpt-4o with tools ${JSON.stringify(Object.keys(allTools))}`)
         const lastMessage = this.messages[this.messages.length - 1]
         if (hasToolConfirmation(lastMessage)) {
           await processToolCalls({ writer, messages: this.messages, tools: allTools }, {})
@@ -130,6 +130,6 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
   }
 
   async getTime() {
-    return `The current time for ${this.name ?? 'assistant'} is ${new Date().toLocaleTimeString()}`
+    return `The current time for agent "${this.name ?? 'assistant'}" is ${new Date().toLocaleTimeString()}`
   }
 }

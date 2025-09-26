@@ -24,7 +24,7 @@ export function agentTools(self: ChatAgentAgentDO) {
         console.log('getAgentTime', agent.name)
         return await agent.getTime()
       } catch (error) {
-        console.error(`Error calling agent ${name}`, error)
+        console.error(`Error calling agent "${name}"`, error)
         return `Error calling agent ${name}: ${error}`
       }
     }
@@ -41,7 +41,7 @@ export function agentTools(self: ChatAgentAgentDO) {
         console.log('subagentGetMessages', agent.name)
         return await agent.getMessages()
       } catch (error) {
-        console.error(`Error calling subagent ${name}`, error)
+        console.error(`Error calling subagent "${name}"`, error)
         return `Error calling subagent ${name}: ${error}`
       }
     }
@@ -60,7 +60,7 @@ export function agentTools(self: ChatAgentAgentDO) {
         if (agent === self) throw new Error('Cannot recursively message this agent')
         return await agent.newMessage(message)
       } catch (error) {
-        console.error(`Error calling subagent ${name}`, error)
+        console.error(`Error calling subagent "${name}"`, error)
         return `Error calling subagent ${name}: ${error}`
       } finally {
         await agent.clearMessages()
@@ -80,7 +80,7 @@ export function agentTools(self: ChatAgentAgentDO) {
         await agent.clearMessages()
         return `Cleared messages of subagent ${name}`
       } catch (error) {
-        console.error(`Error calling subagent ${name}`, error)
+        console.error(`Error calling subagent "${name}"`, error)
         return `Error calling subagent ${name}: ${error}`
       }
     }
@@ -116,7 +116,7 @@ export function agentTools(self: ChatAgentAgentDO) {
         const agent = await getAgent(name)
         console.log('removeMCPServerUrl', agent.name)
         await await agent.removeMcpServer(id)
-        return `Removed MCP server with id: ${id} from ${agent.name}`
+        return `Removed MCP server with id: ${id} from "${agent.name}"`
       } catch (error) {
         console.error('Error removing MCP server', error)
         return `Error removing MCP server: ${error}`
