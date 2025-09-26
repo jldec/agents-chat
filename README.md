@@ -40,6 +40,8 @@ Deployed at https://agents-chat.jldec.me/
 > 5. **[TinyBase Chat](https://agents-chat.jldec.me/chat-tinybase)** - Uses TinyBase websockets
 >
 > 6. **[Agent Agent Chat](https://agents-chat.jldec.me/chat-agent-agent)** - Cloudflare Agents with subagents and MCP tools
+>
+> bonus: **[RedwoodSDK minimal Time Demo](https://agents-chat.jldec.me/time)** - My first RedwoodSDK experiment
 
 Companion repo for blog post: [Multi-user AI chat with RedwoodSDK RSC and Cloudflare agents](https://jldec.me/blog/multi-user-ai-chat-with-redwoodsdk-rsc-and-cloudflare-agents).
 
