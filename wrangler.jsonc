@@ -40,17 +40,13 @@
       {
         "name": "REALTIME_DURABLE_OBJECT",
         "class_name": "RealtimeDurableObject"
-      },
-      {
-        "name": "CHATSTORE_DURABLE_OBJECT",
-        "class_name": "ChatDurableObject"
       }
     ]
   },
   "migrations": [
     {
       "tag": "v1",
-      "new_classes": ["RealtimeDurableObject", "ChatDurableObject"]
+      "new_classes": ["RealtimeDurableObject"]
     }
   ]
 }

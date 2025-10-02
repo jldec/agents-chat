@@ -16,10 +16,8 @@
   },
   "dependencies": {
     "@std/front-matter": "jsr:^1.0.9",
-    "lodash": "^4.17.21",
     "markdown-it": "^14.1.0",
     "markdown-it-replace-link": "^1.2.2",
-    "nanoid": "^5.1.6",
     "react": "19.2.0-canary-3fb190f7-20250908",
     "react-dom": "19.2.0-canary-3fb190f7-20250908",
     "react-server-dom-webpack": "19.2.0-canary-3fb190f7-20250908",
@@ -30,7 +28,6 @@
     "@cloudflare/workers-types": "^4.20250927.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.13",
-    "@types/lodash": "^4.17.20",
     "@types/markdown-it": "^14.1.2",
     "@types/mime-types": "^3.0.1",
     "@types/node": "^24.5.2",

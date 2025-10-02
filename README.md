@@ -27,8 +27,4 @@ sociallinks:
 
 See https://github.com/jldec/agents-chat/pull/101
 
-Removed all dependencies except content source/theme and:
-
-> 1. **[RSC Chat](https://agents-chat.jldec.me/chat-rsc)** - Uses RedwoodSDK realtime websockets
->
-> 7. **[Time](https://agents-chat.jldec.me/time)** - Bonus - My very first foray into RSCs and RedwoodSDK
+Removed all dependencies except the content source and theme and the **[Time](https://agents-chat.jldec.me/time)** demo.

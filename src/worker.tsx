@@ -4,12 +4,10 @@ import { defineApp } from 'rwsdk/worker'
 import { realtimeRoute } from 'rwsdk/realtime/worker'
 import { render, route, layout } from 'rwsdk/router'
 
-import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { Document } from './app/Document'
 import { Time } from './app/time/Time'
 import { timeApiRoutes } from './app/time/api-routes'
 
-export { ChatDurableObject } from './lib/ChatStore'
 export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
 
 import type { ContentPageContext } from './app/contentSource/types'
@@ -28,7 +26,6 @@ const app = defineApp([
   render(
     Document,
     layout(ContentLayout, [
-      route('/chat-rsc', ChatRSC),
       route('/time', Time)
     ])
   ),
