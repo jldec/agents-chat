@@ -12,8 +12,6 @@
     "AGENTS_CHATSTORE": "rwsdk-agents-chat",
     "RWSDK_CHATSTORE": "rwsdk-realtime-chat",
     "REALTIME_KEY": "rwsdk-realtime-chat",
-    "OPENAI_CHATSTORE": "openai-realtime-chat",
-    "OPENAI_REALTIME_KEY": "openai-realtime-chat",
     "WEBSOCKET_AGENT_NAME": "rwsdk-chat-agent", // duplicated in ChatAgent.tsx
     "TINYBASE_SYNC_ROUTE": "/tinybase/websocket/sync", // duplicated in ChatTinybase.tsx
     "GH_OWNER": "jldec",
@@ -49,10 +47,6 @@
       {
         "name": "CHATSTORE_DURABLE_OBJECT",
         "class_name": "ChatDurableObject"
-      },
-      {
-        "name": "OPENAI_CHATSTORE_DURABLE_OBJECT",
-        "class_name": "OpenaiChatstoreDurableObject"
       },
       {
         "name": "WEBSOCKET_DURABLE_OBJECT",
@@ -100,10 +94,6 @@
     {
       "tag": "v7",
       "deleted_classes": ["ChatPubsubAgentDO"]
-    },
-    {
-      "tag": "v8",
-      "new_sqlite_classes": ["OpenaiChatstoreDurableObject"]
     }
   ]
 }

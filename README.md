@@ -31,8 +31,6 @@ Deployed at https://agents-chat.jldec.me/
 
 > 1. **[RSC Chat](https://agents-chat.jldec.me/chat-rsc)** - Uses RedwoodSDK realtime websockets
 >
-> 2. **[OpenAI Chat](https://agents-chat.jldec.me/chat-openai-sdk)** - New! Uses OpenAI Agents SDK
->
 > 3. **[Agent Chat](https://agents-chat.jldec.me/chat-agent)** - Uses Cloudflare Agents websockets
 >
 > 4. **[Agent SDK Chat](https://agents-chat.jldec.me/chat-agent-sdk)** - Uses Cloudflare Agents AIChatAgent
@@ -65,9 +63,7 @@ Companion repo for blog post: [Multi-user AI chat with RedwoodSDK RSC and Cloudf
 - RSC support in Vercel's AI SDK is [limited](https://ai-sdk.dev/docs/ai-sdk-rsc/migrating-to-ui).
 
 **OpenAI Agents SDK**
-- OpenAI Agents SDK is less mature and focuses on model APIs, not UI integration.
-- It offers APIs for realtime, handoffs, and subagents - not used in this project yet.
-- The stateful Agent abstraction assumes long-running server processes with a single conversation per agent.
+removed
 
 **TinyBase:**
 - DB sync engines can improve UX with local-first client-side persistence.

@@ -8,7 +8,6 @@ import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { ChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { ChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
-import { ChatOpenaiSDK } from './app/chat-openai-sdk/ChatOpenaiSDK'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
 import { ChatTinybase } from './app/chat-tinybase/ChatTinybase'
 import { Document } from './app/Document'
@@ -18,7 +17,6 @@ import { timeApiRoutes } from './app/time/api-routes'
 import { tinybaseApiRoutes } from './app/chat-tinybase/api-routes'
 
 export { ChatDurableObject } from './lib/ChatStore'
-export { OpenaiChatstoreDurableObject } from './app/chat-openai-sdk/OpenaiChatStore'
 export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
 export { WebsocketAgent } from './app/chat-agent/WebsocketAgent'
 export { ChatAgentSDKDO } from './app/chat-agent-sdk/ChatAgentSDKDO'
@@ -43,7 +41,6 @@ const app = defineApp([
     Document,
     layout(ContentLayout, [
       route('/chat-rsc', ChatRSC),
-      route('/chat-openai-sdk', ChatOpenaiSDK),
       route('/chat-agent', ChatAgent),
       route('/chat-tinybase', ChatTinybase),
       route('/time', Time)
