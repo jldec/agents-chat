@@ -24,7 +24,6 @@
     "react": "19.2.0-canary-3fb190f7-20250908",
     "react-dom": "19.2.0-canary-3fb190f7-20250908",
     "react-server-dom-webpack": "19.2.0-canary-3fb190f7-20250908",
-    "reconnecting-websocket": "^4.4.0",
     "rwsdk": "1.0.0-beta.0"
   },
   "devDependencies": {
