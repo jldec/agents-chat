@@ -9,10 +9,8 @@
   },
   "ai": { "binding": "AI" },
   "vars": {
-    "AGENTS_CHATSTORE": "rwsdk-agents-chat",
     "RWSDK_CHATSTORE": "rwsdk-realtime-chat",
     "REALTIME_KEY": "rwsdk-realtime-chat",
-    "WEBSOCKET_AGENT_NAME": "rwsdk-chat-agent", // duplicated in ChatAgent.tsx
     "GH_OWNER": "jldec",
     "GH_REPO": "agents-chat",
     "GH_BRANCH": "beta-2-client-side-reference-error",
@@ -46,10 +44,6 @@
       {
         "name": "CHATSTORE_DURABLE_OBJECT",
         "class_name": "ChatDurableObject"
-      },
-      {
-        "name": "WEBSOCKET_DURABLE_OBJECT",
-        "class_name": "WebsocketAgent"
       }
     ]
   },
@@ -57,10 +51,6 @@
     {
       "tag": "v1",
       "new_classes": ["RealtimeDurableObject", "ChatDurableObject"]
-    },
-    {
-      "tag": "v2",
-      "new_sqlite_classes": ["WebsocketAgent"]
     }
   ]
 }
