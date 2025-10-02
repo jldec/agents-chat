@@ -15,10 +15,8 @@
     "tail": "wrangler tail"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^2.0.39",
     "@std/front-matter": "jsr:^1.0.9",
     "agents": "^0.2.7",
-    "ai": "^5.0.57",
     "lodash": "^4.17.21",
     "markdown-it": "^14.1.0",
     "markdown-it-replace-link": "^1.2.2",
@@ -27,8 +25,7 @@
     "react-dom": "19.2.0-canary-3fb190f7-20250908",
     "react-server-dom-webpack": "19.2.0-canary-3fb190f7-20250908",
     "reconnecting-websocket": "^4.4.0",
-    "rwsdk": "1.0.0-beta.0",
-    "zod": "^3.25.76"
+    "rwsdk": "1.0.0-beta.0"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.13.7",
