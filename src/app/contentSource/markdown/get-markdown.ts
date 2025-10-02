@@ -2,7 +2,7 @@ import type { PageData } from '../types'
 import { parseFrontmatter } from './parse-frontmatter'
 import { parseMarkdown } from './parse-markdown'
 import { getDirData, getDirs } from './get-dirs'
-import { IS_DEV } from 'rwsdk/constants'
+import { IS_DEV } from '@/lib/isdev'
 import { env } from 'cloudflare:workers'
 import { requestInfo } from 'rwsdk/worker'
 

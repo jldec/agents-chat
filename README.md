@@ -35,8 +35,6 @@ Deployed at https://agents-chat.jldec.me/
 >
 > 4. **[Agent SDK Chat](https://agents-chat.jldec.me/chat-agent-sdk)** - Uses Cloudflare Agents AIChatAgent
 >
-> 5. **[TinyBase Chat](https://agents-chat.jldec.me/chat-tinybase)** - Uses TinyBase websockets
->
 > 6. **[Agent Agent Chat](https://agents-chat.jldec.me/chat-agent-agent)** - Cloudflare Agents with subagents and MCP tools
 >
 > 7. **[Time](https://agents-chat.jldec.me/time)** - Bonus - My very first foray into RSCs and RedwoodSDK
@@ -66,9 +64,7 @@ Companion repo for blog post: [Multi-user AI chat with RedwoodSDK RSC and Cloudf
 removed
 
 **TinyBase:**
-- DB sync engines can improve UX with local-first client-side persistence.
-- The approach requires careful validation since database operations run on the client.
-- The architecture assumes that connected clients sync the same data.
+removed
 
 ### Links
 - **Live Demo:** https://agents-chat.jldec.me/

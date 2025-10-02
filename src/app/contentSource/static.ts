@@ -2,7 +2,7 @@ import { contentType } from 'mime-types'
 import { extname } from 'node:path'
 import { env } from 'cloudflare:workers'
 import { requestInfo } from 'rwsdk/worker'
-import { IS_DEV } from 'rwsdk/constants'
+import { IS_DEV } from '@/lib/isdev'
 
 export async function getStatic(path: string, noCache: boolean = false): Promise<Response | null> {
   if (!noCache) {

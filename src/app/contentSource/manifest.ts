@@ -1,6 +1,6 @@
 import { zapDirCache } from './markdown/get-dirs'
 import { zapRedirectCache } from './redirects'
-import { IS_DEV } from 'rwsdk/constants'
+import { IS_DEV } from '@/lib/isdev'
 import { requestInfo } from 'rwsdk/worker'
 import { env } from 'cloudflare:workers'
 

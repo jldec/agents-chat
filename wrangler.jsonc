@@ -13,10 +13,9 @@
     "RWSDK_CHATSTORE": "rwsdk-realtime-chat",
     "REALTIME_KEY": "rwsdk-realtime-chat",
     "WEBSOCKET_AGENT_NAME": "rwsdk-chat-agent", // duplicated in ChatAgent.tsx
-    "TINYBASE_SYNC_ROUTE": "/tinybase/websocket/sync", // duplicated in ChatTinybase.tsx
     "GH_OWNER": "jldec",
     "GH_REPO": "agents-chat",
-    "GH_BRANCH": "main",
+    "GH_BRANCH": "beta-2-client-side-reference-error",
     "GH_PATH": "content",
     "DEV_CONTENT_DIR": "",
     "GH_TEST": "",
@@ -59,10 +58,6 @@
       {
         "name": "CHAT_AGENT_AGENT_DURABLE_OBJECT",
         "class_name": "ChatAgentAgentDO"
-      },
-      {
-        "name": "TINYBASE_DURABLE_OBJECT",
-        "class_name": "TinyBaseDurableObject"
       }
     ]
   },
@@ -74,10 +69,6 @@
     {
       "tag": "v2",
       "new_sqlite_classes": ["WebsocketAgent"]
-    },
-    {
-      "tag": "v3",
-      "new_sqlite_classes": ["TinyBaseDurableObject"]
     },
     {
       "tag": "v4",

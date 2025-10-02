@@ -9,19 +9,16 @@ import { ChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'
 import { ChatAgentSDK } from './app/chat-agent-sdk/ChatAgentSDK'
 import { ChatRSC } from './app/chat-rsc/ChatRSC'
-import { ChatTinybase } from './app/chat-tinybase/ChatTinybase'
 import { Document } from './app/Document'
 import { routeAgents } from './lib/routeAgents'
 import { Time } from './app/time/Time'
 import { timeApiRoutes } from './app/time/api-routes'
-import { tinybaseApiRoutes } from './app/chat-tinybase/api-routes'
 
 export { ChatDurableObject } from './lib/ChatStore'
 export { RealtimeDurableObject } from 'rwsdk/realtime/durableObject'
 export { WebsocketAgent } from './app/chat-agent/WebsocketAgent'
 export { ChatAgentSDKDO } from './app/chat-agent-sdk/ChatAgentSDKDO'
 export { ChatAgentAgentDO } from './app/chat-agent-agent/ChatAgentAgentDO'
-export { TinyBaseDurableObject } from './app/chat-tinybase/tinybaseDO'
 
 import type { ContentPageContext } from './app/contentSource/types'
 import { ContentLayout } from './app/contentTheme/ContentLayout'
@@ -42,7 +39,6 @@ const app = defineApp([
     layout(ContentLayout, [
       route('/chat-rsc', ChatRSC),
       route('/chat-agent', ChatAgent),
-      route('/chat-tinybase', ChatTinybase),
       route('/time', Time)
     ])
   ),
@@ -56,7 +52,6 @@ const app = defineApp([
     { ssr: false }
   ),
   ...chatAgentApiRoutes,
-  ...tinybaseApiRoutes,
   ...timeApiRoutes,
   ...contentApiRoutes,
   render(Document, [route('*', contentTheme)])
