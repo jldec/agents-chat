@@ -50,14 +50,6 @@
       {
         "name": "WEBSOCKET_DURABLE_OBJECT",
         "class_name": "WebsocketAgent"
-      },
-      {
-        "name": "CHAT_AGENT_SDK_DURABLE_OBJECT",
-        "class_name": "ChatAgentSDKDO"
-      },
-      {
-        "name": "CHAT_AGENT_AGENT_DURABLE_OBJECT",
-        "class_name": "ChatAgentAgentDO"
       }
     ]
   },
@@ -69,22 +61,6 @@
     {
       "tag": "v2",
       "new_sqlite_classes": ["WebsocketAgent"]
-    },
-    {
-      "tag": "v4",
-      "new_sqlite_classes": ["ChatAgentSDKDO"]
-    },
-    {
-      "tag": "v5",
-      "new_sqlite_classes": ["ChatAgentAgentDO"]
-    },
-    {
-      "tag": "v6",
-      "new_sqlite_classes": ["ChatPubsubAgentDO"]
-    },
-    {
-      "tag": "v7",
-      "deleted_classes": ["ChatPubsubAgentDO"]
     }
   ]
 }

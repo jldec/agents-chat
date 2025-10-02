@@ -33,43 +33,6 @@ Deployed at https://agents-chat.jldec.me/
 >
 > 3. **[Agent Chat](https://agents-chat.jldec.me/chat-agent)** - Uses Cloudflare Agents websockets
 >
-> 4. **[Agent SDK Chat](https://agents-chat.jldec.me/chat-agent-sdk)** - Uses Cloudflare Agents AIChatAgent
->
-> 6. **[Agent Agent Chat](https://agents-chat.jldec.me/chat-agent-agent)** - Cloudflare Agents with subagents and MCP tools
->
 > 7. **[Time](https://agents-chat.jldec.me/time)** - Bonus - My very first foray into RSCs and RedwoodSDK
 
 Companion repo for blog post: [Multi-user AI chat with RedwoodSDK RSC and Cloudflare agents](https://jldec.me/blog/multi-user-ai-chat-with-redwoodsdk-rsc-and-cloudflare-agents).
-
-### Takeaways
-**TL;DR**
-- Cloudflare is a great platform for building multi-agent multi-user streaming UX.
-- Current UI tooling is immature e.g. with limiting assumptions which block many-to-many connections.
-
-**RedwoodSDK RSC:**
-- React Server Components provide succinct way to render JSX on the server.
-- RedwoodSDK makes using react with Cloudflare workers easy.
-- The realtime feature of RedwoodSDK pushes updates to connected clients over websockets.
-- Had to disable ssr for hooks (e.g. useChat) not designed to run server-side.
-
-**Cloudflare Agents**
-- Cloudflare durable objects (DOs) are ideal for agents and subagents. A model with function calling is used for reliable tool and subagent support in Agent Agent Chat.
-- The agents library wraps DOs with additional classes and react hooks.
-- It depends on Vercel's AI SDK for model portabilty, message types, streaming, and tool calling.
-- useChat (AI sdk) and AIChatAgent result in tight coupling between Agents and UI.
-- More work is required to make subagents first-class. The libraries assume single-user streaming, and perform message parsing client-side. The agent-agent implementation has to work around this. See [agents #366](https://github.com/cloudflare/agents/issues/366) and [#368](https://github.com/cloudflare/agents/issues/368).
-- RSC support in Vercel's AI SDK is [limited](https://ai-sdk.dev/docs/ai-sdk-rsc/migrating-to-ui).
-
-**OpenAI Agents SDK**
-removed
-
-**TinyBase:**
-removed
-
-### Links
-- **Live Demo:** https://agents-chat.jldec.me/
-- **Blog Post:** https://jldec.me/blog/multi-user-ai-chat-with-redwoodsdk-rsc-and-cloudflare-agents
-- **RedwoodSDK Docs:** https://docs.rwsdk.com/
-- **Cloudflare Workers Docs:** https://developers.cloudflare.com/workers/
-- **Cloudflare Agents Docs:** https://developers.cloudflare.com/agents/
-- **OpenAI Agents SDK Docs:** https://openai.github.io/openai-agents-js/
