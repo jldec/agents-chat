@@ -15,7 +15,7 @@
     "tail": "wrangler tail"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^2.0.52",
+    "@ai-sdk/openai": "^2.0.53",
     "@ai-sdk/react": "^2.0.76",
     "@ai-sdk/ui-utils": "^1.2.11",
     "@openai/agents": "^0.1.10",
@@ -31,30 +31,30 @@
     "react-dom": "^19.2.0",
     "react-server-dom-webpack": "^19.2.0",
     "reconnecting-websocket": "^4.4.0",
-    "rwsdk": "1.0.0-beta.14",
+    "rwsdk": "1.0.0-beta.15",
     "tinybase": "^6.7.1",
     "workers-ai-provider": "^2.0.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.13.13",
-    "@cloudflare/workers-types": "^4.20251011.0",
+    "@cloudflare/vite-plugin": "1.13.14",
+    "@cloudflare/workers-types": "^4.20251014.0",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.1.14",
+    "@tailwindcss/vite": "^4.1.15",
     "@types/lodash": "^4.17.20",
     "@types/markdown-it": "^14.1.2",
     "@types/mime-types": "^3.0.1",
-    "@types/node": "^24.8.1",
+    "@types/node": "^24.9.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "dotenv": "^17.2.3",
     "fast-glob": "^3.3.3",
     "mime-types": "^3.0.1",
-    "tailwindcss": "^4.1.14",
+    "tailwindcss": "^4.1.15",
     "typescript": "^5.9.3",
-    "vite": "^7.1.10",
+    "vite": "^7.1.11",
     "vitest": "^3.2.4",
-    "wrangler": "4.43.0"
+    "wrangler": "4.44.0"
   },
   "prettier": {
     "printWidth": 120,
