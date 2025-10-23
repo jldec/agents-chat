@@ -18,8 +18,8 @@
     "@ai-sdk/openai": "^2.0.53",
     "@ai-sdk/react": "^2.0.76",
     "@ai-sdk/ui-utils": "^1.2.11",
-    "@openai/agents": "^0.1.10",
-    "@openai/agents-core": "^0.1.10",
+    "@openai/agents": "^0.1.11",
+    "@openai/agents-core": "^0.1.11",
     "@std/front-matter": "jsr:^1.0.9",
     "agents": "^0.2.14",
     "ai": "^5.0.76",
@@ -31,7 +31,7 @@
     "react-dom": "^19.2.0",
     "react-server-dom-webpack": "^19.2.0",
     "reconnecting-websocket": "^4.4.0",
-    "rwsdk": "1.0.0-beta.15",
+    "rwsdk": "1.0.0-beta.18",
     "tinybase": "^6.7.1",
     "workers-ai-provider": "^2.0.0",
     "zod": "^3.25.76"
@@ -52,8 +52,8 @@
     "mime-types": "^3.0.1",
     "tailwindcss": "^4.1.15",
     "typescript": "^5.9.3",
-    "vite": "^7.1.11",
-    "vitest": "^3.2.4",
+    "vite": "^7.1.12",
+    "vitest": "^4.0.1",
     "wrangler": "4.44.0"
   },
   "prettier": {
