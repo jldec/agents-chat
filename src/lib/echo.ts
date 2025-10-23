@@ -5,6 +5,7 @@ export async function echoHandler(requestInfo: RequestInfo) {
     url: requestInfo.request.url,
     method: requestInfo.request.method,
     headers: Object.fromEntries(requestInfo.request.headers),
+    cf: requestInfo.request.cf,
     body: await requestInfo.request.text()
   })
 }
