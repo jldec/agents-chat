@@ -11,13 +11,25 @@ export class ChatDurableObject extends DurableObject {
     })
   }
 
-  // fetch /colo
-  async fetch(request: Request) {
-    const url = new URL(request.url)
-    if (url.pathname === '/colo') {
-      return fetch('https://getcolo.jldec.me')
-    }
-    return new Response('Not found', { status: 404 })
+  /**
+   * Returns colo info of nearby worker (proxy for actual DO colo)
+   */
+  async getColo() {
+    const coloWorker = 'https://getcolo.jldec.me'
+    const now = Date.now()
+    const resp = await fetch(coloWorker)
+    const colo: Record<string, string | number> = resp.ok ? await resp.json() : { status: resp.status }
+    colo.worker = coloWorker
+    colo.workerFetchTime = Date.now() - now
+    return colo
+  }
+
+  /**
+   * RPC liveness probe
+   * @returns 'pong'
+   */
+  async ping() {
+    return 'pong'
   }
 
   /**
