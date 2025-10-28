@@ -11,6 +11,15 @@ export class ChatDurableObject extends DurableObject {
     })
   }
 
+  // fetch /colo
+  async fetch(request: Request) {
+    const url = new URL(request.url)
+    if (url.pathname === '/colo') {
+      return fetch('https://getcolo.jldec.me')
+    }
+    return new Response('Not found', { status: 404 })
+  }
+
   /**
    * Returns the messages array.
    */
