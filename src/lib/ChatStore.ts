@@ -15,9 +15,7 @@ export class ChatDurableObject extends DurableObject {
   /**
    * Get colo info of nearby worker
    */
-  async colo() {
-    return getColo()
-  }
+  colo = getColo
 
   /**
    * liveness probe
