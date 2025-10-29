@@ -4,7 +4,7 @@ import { defineApp } from 'rwsdk/worker'
 import { realtimeRoute } from 'rwsdk/realtime/worker'
 import { render, route, layout } from 'rwsdk/router'
 
-import { echoHandler } from './lib/echo'
+import { echoHandler } from './app/echoHandler'
 import { ChatAgent } from './app/chat-agent/ChatAgent'
 import { ChatAgentAgent } from './app/chat-agent-agent/ChatAgentAgent'
 import { chatAgentApiRoutes } from './app/chat-agent/api-routes'

@@ -1,5 +1,6 @@
 import { DurableObject } from 'cloudflare:workers'
 import type { Message } from './types'
+import { getColo } from '@/lib/getColo'
 
 export class ChatDurableObject extends DurableObject {
   private messages: Message[] = []
@@ -12,20 +13,12 @@ export class ChatDurableObject extends DurableObject {
   }
 
   /**
-   * Returns colo info of nearby worker (proxy for actual DO colo)
+   * Get colo info of nearby worker
    */
-  async getColo() {
-    const coloWorker = 'https://getcolo.jldec.me'
-    const now = Date.now()
-    const resp = await fetch(coloWorker)
-    const colo: Record<string, string | number> = resp.ok ? await resp.json() : { status: resp.status }
-    colo.worker = coloWorker
-    colo.workerFetchTime = Date.now() - now
-    return colo
-  }
+  colo = getColo
 
   /**
-   * RPC liveness probe
+   * liveness probe
    * @returns 'pong'
    */
   async ping() {
