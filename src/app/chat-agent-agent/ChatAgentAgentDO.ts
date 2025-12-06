@@ -18,10 +18,12 @@ import { systemMessageText } from '@/lib/systemMessageText'
 export class ChatAgentAgentDO extends AIChatAgent<Env> {
   isSubAgent: boolean = false // see newMessage()
   async onChatMessage(onFinish: StreamTextOnFinishCallback<{}>) {
+    const mcpServers = await this.getMcpServers()
+    console.log('mcpServers', mcpServers)
     // Collect all tools, including MCP tools
     const allTools = {
       ...agentTools(this),
-      ...this.mcp.getAITools()
+      ...(mcpServers.tools.length ? this.mcp.getAITools() : {})
     }
     // Prevent recursion - subagents cannot use subagent tools
     Object.keys(allTools).forEach((key) => {
