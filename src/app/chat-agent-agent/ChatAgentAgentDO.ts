@@ -23,7 +23,7 @@ export class ChatAgentAgentDO extends AIChatAgent<Env> {
     // Collect all tools, including MCP tools
     const allTools = {
       ...agentTools(this),
-      ...(mcpServers.tools.length ? this.mcp.getAITools() : {})
+      ...this.mcp.getAITools() // (mcpServers.tools.length ? this.mcp.getAITools() : {})
     }
     // Prevent recursion - subagents cannot use subagent tools
     Object.keys(allTools).forEach((key) => {
